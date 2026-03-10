@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kora Legend - كورا ليجيند</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="main-header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon"><img src="logo.png" alt="Kora Legend Logo"></div>
+                    <h1 class="logo-text">KORA LEGEND</h1>
+                </div>
+                
+                <nav class="main-nav">
+                    <ul>
+                        <li><a href="index" class="nav-link" data-en="Home" data-ar="الرئيسية">Home</a></li>
+                        <li><a href="matches" class="nav-link" data-en="Matches" data-ar="المباريات">Matches</a></li>
+                        <li><a href="news" class="nav-link" data-en="News" data-ar="الأخبار">News</a></li>
+                        <li><a href="legends" class="nav-link" data-en="Legends" data-ar="الأساطير">Legends</a></li>
+                        <li><a href="leagues" class="nav-link active" data-en="Leagues" data-ar="البطولات">Leagues</a></li>
+                    </ul>
+                </nav>
+                
+                <button class="lang-toggle" id="langToggle">
+                    <span class="lang-option" data-lang="en">EN</span>
+                    <span class="lang-divider">|</span>
+                    <span class="lang-option active" data-lang="ar">AR</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <h1 class="page-title" data-en="Football Leagues" data-ar="البطولات">Football Leagues</h1>
+            <p class="page-subtitle" data-en="Standings, statistics and top scorers" data-ar="الترتيب والإحصائيات والهدافين">Standings, statistics and top scorers</p>
+        </div>
+    </section>
+
+    <!-- League Selector -->
+    <section class="league-selector">
+        <div class="container">
+            <div class="league-tabs">
+                <button class="league-tab active" data-league="premier" data-en="Premier League" data-ar="الدوري الإنجليزي">Premier League</button>
+                <button class="league-tab" data-league="laliga" data-en="La Liga" data-ar="الدوري الإسباني">La Liga</button>
+                <button class="league-tab" data-league="spl" data-en="Saudi Pro League" data-ar="دوري روشن">Saudi Pro League</button>
+                <button class="league-tab" data-league="ucl" data-en="Champions League" data-ar="دوري الأبطال">Champions League</button>
+                <button class="league-tab" data-league="egypt" data-en="Egyptian League" data-ar="الدوري المصري">Egyptian League</button>
+                <button class="league-tab" data-league="caf" data-en="CAF Champions" data-ar="دوري أبطال أفريقيا">CAF Champions</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- League Table -->
+    <section class="league-content">
+        <div class="container">
+            <div class="content-grid">
+                <!-- League Table -->
+                <div class="table-section">
+                    <h2 class="content-title" data-en="League Table" data-ar="جدول الترتيب">League Table</h2>
+                    <div class="standings-table" id="standingsTable">
+                        <!-- Table will be populated by JavaScript -->
+                    </div>
+                </div>
+                
+                <!-- Top Scorers -->
+                <div class="scorers-section">
+                    <h2 class="content-title" data-en="Top Scorers" data-ar="الهدافين">Top Scorers</h2>
+                    <div class="scorers-list" id="scorersList">
+                        <!-- Scorers will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <div class="logo-icon"><img src="logo.png" alt="Kora Legend Logo"></div>
+                    <h3 data-en="KORA LEGEND" data-ar="كورا ليجيند">KORA LEGEND</h3>
+                </div>
+                <p class="footer-text" data-en="© 2024 Kora Legend. All rights reserved." data-ar="© 2024 كورا ليجيند. جميع الحقوق محفوظة.">© 2024 Kora Legend. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="football-api.js"></script>
+    <script src="script.js"></script>
+    <script src="leagues-data.js"></script>
+</body>
+</html>
