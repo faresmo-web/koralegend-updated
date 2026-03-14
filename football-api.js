@@ -1,60 +1,56 @@
 // ============================================================
-// Football API Service Layer — API-Sports v3
+// Football API Service Layer — Multi-Provider Support
 // ============================================================
 
 const FootballAPI = (() => {
-    const BASE_URL = 'https://v3.football.api-sports.io';
-    const API_KEY = '9fccff2cb2df2727ab9424e52546cffb';
+    const PRIMARY_API = {
+        name: 'API-Football',
+        baseUrl: 'https://v3.football.api-sports.io',
+        key: '9fccff2cb2df2727ab9424e52546cffb', // Restoring original API-Sports key
+        header: 'x-apisports-key'
+    };
+
+    const SECONDARY_API = {
+        name: 'Football-Data.org',
+        baseUrl: 'https://api.football-data.org/v4',
+        key: '6219455164e8e1a1c176cc8fe3dc2a90', // User's key for Football-Data
+        header: 'X-Auth-Token'
+    };
+
     const TSDB_BASE_URL = 'https://www.thesportsdb.com/api/v1/json/3';
     const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
 
-    // TheSportsDB League IDs
     const TSDB_LEAGUE_IDS = {
-        39: 4328,   // Premier League
-        140: 4335,  // La Liga
-        307: 4668,  // Saudi Pro League
-        2: 4480,    // UEFA Champions League
-        233: 4829   // Egyptian Premier League
+        39: 4328, 140: 4335, 307: 4668, 2: 4480, 233: 4829
     };
 
-    // Allowed league IDs — only these leagues will be displayed
-    const ALLOWED_LEAGUES = [
-        39,   // Premier League (England)
-        140,  // La Liga (Spain)
-        307,  // Saudi Pro League
-        2,    // UEFA Champions League
-        233,  // Egyptian Premier League
-        12,   // CAF Champions League (Africa clubs)
-        6     // Africa Cup of Nations (national teams)
-    ];
+    const ALLOWED_LEAGUES = [39, 140, 307, 2, 233, 12, 6];
+    const FBD_LEAGUE_CODES = {
+        39: 'PL', 140: 'PD', 2: 'CL'
+    };
 
-    /**
-     * Filter API fixtures array to only include allowed leagues.
-     */
-    function filterByAllowedLeagues(fixtures) {
-        if (!fixtures || !Array.isArray(fixtures)) return [];
-        return fixtures.filter(f => ALLOWED_LEAGUES.includes(f.league?.id));
-    }
+    const TSDB_NAME_TO_ID = {
+        'English Premier League': 39,
+        'Spanish La Liga': 140,
+        'Saudi Arabian Pro League': 307,
+        'UEFA Champions League': 2,
+        'Egyptian Premier League': 233,
+        'African Nations Cup': 6,
+        'CAF Champions League': 12
+    };
+
+    let activeProvider = 'primary';
 
     // ── Helpers ──────────────────────────────────────────────
-
-    function todayDate() {
-        return new Date().toISOString().slice(0, 10);
-    }
-
+    function todayDate() { return new Date().toISOString().slice(0, 10); }
     function yesterdayDate() {
-        const d = new Date();
-        d.setDate(d.getDate() - 1);
+        const d = new Date(); d.setDate(d.getDate() - 1);
         return d.toISOString().slice(0, 10);
     }
-
     function tomorrowDate() {
-        const d = new Date();
-        d.setDate(d.getDate() + 1);
+        const d = new Date(); d.setDate(d.getDate() + 1);
         return d.toISOString().slice(0, 10);
     }
-
-    // ── Cache ────────────────────────────────────────────────
 
     function cacheGet(key) {
         try {
@@ -70,325 +66,259 @@ const FootballAPI = (() => {
     }
 
     function cacheSet(key, data) {
-        try {
-            localStorage.setItem('fapi_' + key, JSON.stringify({ data, ts: Date.now() }));
-        } catch { /* quota exceeded — ignore */ }
+        try { localStorage.setItem('fapi_' + key, JSON.stringify({ data, ts: Date.now() })); } catch {}
     }
 
-    // ── Core Fetch ───────────────────────────────────────────
-
-    async function apiFetch(endpoint, params = {}) {
-        const qs = new URLSearchParams(params).toString();
-        const url = `${BASE_URL}/${endpoint}?${qs}`;
-        return await baseFetch(url, { 'x-apisports-key': API_KEY });
-    }
-
-    async function tsdbFetch(endpoint, params = {}) {
-        const qs = new URLSearchParams(params).toString();
-        const url = `${TSDB_BASE_URL}/${endpoint}?${qs}`;
-        return await baseFetch(url);
-    }
-
-    async function baseFetch(url, headers = {}) {
-        // Use full URL as cache key to avoid collisions
-        const cacheKey = btoa(url);
+    /**
+     * core fetcher — returns RAW JSON or fallback object
+     */
+    async function baseFetch(url, headers = {}, providerName = 'primary') {
+        const cacheKey = btoa(url.substring(0, 240)); 
         const cached = cacheGet(cacheKey);
         if (cached) return cached;
 
         try {
             const res = await fetch(url, { method: 'GET', headers });
-            if (!res.ok) throw new Error(`API ${res.status}`);
-            const json = await res.json();
             
-            // API-Sports specific error check
-            if (json.errors && Object.keys(json.errors).length > 0 && url.includes('api-sports')) {
-                console.warn('API-Sports errors:', json.errors);
-                throw new Error('API returned errors');
+            if (res.status === 429 || res.status === 403 || res.status === 401) {
+                console.warn(`${providerName} error ${res.status}.`);
+                return { _fallback: true, status: res.status };
             }
 
-            const result = json.response || json.table || json; 
-            cacheSet(cacheKey, result);
-            return result;
+            if (!res.ok) throw new Error(`API returned ${res.status}`);
+            const json = await res.json();
+            
+            // API-Sports error check
+            if (json.errors && Object.keys(json.errors).length > 0 && url.includes('api-sports')) {
+                const errStr = JSON.stringify(json.errors).toLowerCase();
+                if (errStr.includes('limit') || errStr.includes('subscription')) {
+                    return { _fallback: true, reason: 'limit' };
+                }
+            }
+
+            cacheSet(cacheKey, json);
+            return json;
         } catch (err) {
             console.error('Fetch error:', err);
-            return null;
+            return { _fallback: true, error: err.message };
         }
     }
 
-    // ── Public Methods ───────────────────────────────────────
-
     /**
-     * Fetch fixtures for a given date string (YYYY-MM-DD).
-     * Returns array of fixture objects or null on error.
+     * Tries primary, falls back to secondary if primary indicates _fallback
      */
-    async function fetchFixturesByDate(dateStr) {
-        return await apiFetch('fixtures', { date: dateStr });
-    }
+    async function smartFetch(options) {
+        const { primary, secondary } = options;
 
-    /** Fetch today's fixtures */
-    async function fetchTodayFixtures() {
-        return await fetchFixturesByDate(todayDate());
-    }
-
-    /** Fetch yesterday's fixtures */
-    async function fetchYesterdayFixtures() {
-        return await fetchFixturesByDate(yesterdayDate());
-    }
-
-    /** Fetch tomorrow's fixtures */
-    async function fetchTomorrowFixtures() {
-        return await fetchFixturesByDate(tomorrowDate());
-    }
-
-    /** Fetch live fixtures */
-    async function fetchLiveFixtures() {
-        return await apiFetch('fixtures', { live: 'all' });
-    }
-
-    /** Fetch recent transfers (latest 20) */
-    async function fetchTransfers() {
-        // We get transfers for some popular teams
-        const teams = [33, 34, 40, 42, 47, 49, 50, 529, 530, 541]; // top PL/La Liga teams
-        const randomTeam = teams[Math.floor(Math.random() * teams.length)];
-        return await apiFetch('transfers', { team: randomTeam });
-    }
-
-    /**
-     * Calculate current football season year.
-     * E.g., in March 2026, we are in the 2025/26 season (year 2025).
-     * In August 2026, we start the 2026/27 season (year 2026).
-     */
-    function getCurrentSeasonYear() {
-        const now = new Date();
-        const month = now.getMonth(); // 0-indexed
-        return month < 6 ? now.getFullYear() - 1 : now.getFullYear();
-    }
-
-    /** Fetch standings for a league */
-    async function fetchStandings(leagueId) {
-        const tsdbId = TSDB_LEAGUE_IDS[leagueId];
-        const year = getCurrentSeasonYear();
-        
-        if (tsdbId) {
-            const seasonStr = `${year}-${year + 1}`;
-            console.log(`Fetching standings from TheSportsDB for league ${tsdbId}, season ${seasonStr}`);
-            let data = await tsdbFetch('lookuptable.php', { l: tsdbId, s: seasonStr });
+        if (activeProvider === 'primary') {
+            const qs = new URLSearchParams(primary.params).toString();
+            const url = `${PRIMARY_API.baseUrl}/${primary.endpoint}?${qs}`;
+            const result = await baseFetch(url, { [PRIMARY_API.header]: PRIMARY_API.key }, 'primary');
             
-            // TSDB Fallback to previous season if requested one is empty
-            if (!data || !Array.isArray(data) || data.length === 0) {
-                const prevSeason = `${year - 1}-${year}`;
-                console.log(`TSDB fallback to season ${prevSeason}`);
-                data = await tsdbFetch('lookuptable.php', { l: tsdbId, s: prevSeason });
-            }
+            if (result && !result._fallback) return result;
 
-            if (data && Array.isArray(data)) {
-                // Transform TSDB format to a normalized format
+            if (SECONDARY_API.key) {
+                console.log('API-Football limit reached. Switching provider...');
+                activeProvider = 'secondary';
+            } else {
+                return result; // return the error/fallback object
+            }
+        }
+
+        if (activeProvider === 'secondary' && secondary) {
+            const qs = new URLSearchParams(secondary.params).toString();
+            const url = `${SECONDARY_API.baseUrl}/${secondary.endpoint}?${qs}`;
+            const result = await baseFetch(url, { [SECONDARY_API.header]: SECONDARY_API.key }, 'secondary');
+            return result;
+        }
+        return { _fallback: true };
+    }
+
+    // ── Normalization Helpers ────────────────────────────────
+
+    function normalizeFBDMatches(matches) {
+        if (!matches || !Array.isArray(matches)) return [];
+        return matches.map(m => ({
+            fixture: {
+                id: m.id, date: m.utcDate,
+                timestamp: Math.floor(new Date(m.utcDate).getTime() / 1000),
+                status: { short: m.status === 'FINISHED' ? 'FT' : (m.status === 'IN_PLAY' ? 'LIVE' : 'NS') }
+            },
+            league: { id: null, name: m.competition?.name, logo: m.competition?.emblem },
+            teams: {
+                home: { name: m.homeTeam.name, logo: m.homeTeam.crest },
+                away: { name: m.awayTeam.name, logo: m.awayTeam.crest }
+            },
+            goals: { home: m.score?.fullTime?.home, away: m.score?.fullTime?.away }
+        }));
+    }
+
+    function normalizeTSDBMatches(events) {
+        if (!events || !Array.isArray(events)) return [];
+        return events.map(e => ({
+            fixture: {
+                id: e.idEvent, date: e.strTimestamp || `${e.dateEvent}T${e.strTime}`,
+                timestamp: e.strTimestamp ? Math.floor(new Date(e.strTimestamp).getTime() / 1000) : null,
+                status: { short: e.strStatus === 'Match Finished' ? 'FT' : 'NS' }
+            },
+            league: { id: TSDB_NAME_TO_ID[e.strLeague] || null, name: e.strLeague },
+            teams: {
+                home: { name: e.strHomeTeam, logo: e.strHomeTeamBadge },
+                away: { name: e.strAwayTeam, logo: e.strAwayTeamBadge }
+            },
+            goals: { home: parseInt(e.intHomeScore), away: parseInt(e.intAwayScore) }
+        }));
+    }
+
+    // ── Public API ───────────────────────────────────────────
+
+    async function fetchFixturesByDate(dateStr) {
+        const result = await smartFetch({
+            primary: { endpoint: 'fixtures', params: { date: dateStr } },
+            secondary: { endpoint: 'matches', params: { dateFrom: dateStr, dateTo: dateStr } }
+        });
+        if (result?.response) return result.response;
+        if (result?.matches) return normalizeFBDMatches(result.matches);
+        
+        // TSDB Fallback
+        const url = `${TSDB_BASE_URL}/eventsday.php?d=${dateStr}`;
+        const tsdb = await baseFetch(url);
+        if (tsdb?.events) return normalizeTSDBMatches(tsdb.events);
+
+        return [];
+    }
+
+    async function fetchLiveFixtures() {
+        const result = await smartFetch({
+            primary: { endpoint: 'fixtures', params: { live: 'all' } },
+            secondary: { endpoint: 'matches', params: { status: 'LIVE' } }
+        });
+        if (result?.response) return result.response;
+        if (result?.matches) return normalizeFBDMatches(result.matches);
+        return [];
+    }
+
+    async function fetchStandings(leagueId) {
+        const year = new Date().getMonth() < 6 ? new Date().getFullYear() - 1 : new Date().getFullYear();
+        const fbdCode = FBD_LEAGUE_CODES[leagueId];
+
+        const result = await smartFetch({
+            primary: { endpoint: 'standings', params: { league: leagueId, season: year } },
+            secondary: fbdCode ? { endpoint: `competitions/${fbdCode}/standings`, params: { season: year } } : null
+        });
+
+        // 1. Primary Success
+        if (result?.response) return result.response;
+
+        // 2. Secondary Success
+        if (result?.standings) {
+            const table = result.standings.find(s => s.type === 'TOTAL')?.table;
+            if (table) {
                 return [{
-                    league: { id: leagueId, season: year, standings: [data.map(t => ({
-                        rank: parseInt(t.intRank),
-                        team: { name: t.strTeam, logo: t.strBadge || 'https://www.thesportsdb.com/images/media/team/badge/placeholder.png' },
-                        all: { played: parseInt(t.intPlayed), win: parseInt(t.intWin), draw: parseInt(t.intDraw), lose: parseInt(t.intLoss) },
-                        points: parseInt(t.intPoints),
-                        group: t.strGroup
+                    league: { id: leagueId, season: year, standings: [table.map(t => ({
+                        rank: t.position,
+                        team: { name: t.team.name, logo: t.team.crest },
+                        all: { played: t.playedGames, win: t.won, draw: t.draw, lose: t.lost },
+                        points: t.points, goalsDiff: t.goalDifference
                     }))] }
                 }];
             }
         }
 
-        // Fallback to API-Sports if TSDB fails or isn't supported for this league
-        let data = await apiFetch('standings', { league: leagueId, season: year });
-        if (!data || data.length === 0) {
-            console.log(`API-Sports fallback to season ${year - 1} for standings...`);
-            data = await apiFetch('standings', { league: leagueId, season: year - 1 });
+        // 3. Last Resort: TSDB
+        const tsdbId = TSDB_LEAGUE_IDS[leagueId];
+        if (tsdbId) {
+            const s = `${year}-${year+1}`;
+            const url = `${TSDB_BASE_URL}/lookuptable.php?l=${tsdbId}&s=${s}`;
+            const tsdb = await baseFetch(url);
+            if (tsdb?.table) {
+                return [{
+                    league: { id: leagueId, season: year, standings: [tsdb.table.map(t => ({
+                        rank: parseInt(t.intRank), team: { name: t.strTeam, logo: t.strBadge },
+                        all: { played: parseInt(t.intPlayed), win: parseInt(t.intWin), draw: parseInt(t.intDraw), lose: parseInt(t.intLoss) },
+                        points: parseInt(t.intPoints), goalsDiff: parseInt(t.intGoalDifference)
+                    }))] }
+                }];
+            }
         }
-        return data;
+        return [];
     }
 
-    /** Fetch top scorers for a league */
     async function fetchTopScorers(leagueId) {
-        const year = getCurrentSeasonYear();
-        let data = await apiFetch('players/topscorers', { league: leagueId, season: year });
-        if (!data || data.length === 0) {
-            console.log(`Falling back to previous season for scorers...`);
-            data = await apiFetch('players/topscorers', { league: leagueId, season: year - 1 });
-        }
-        return data;
-    }
+        const year = new Date().getMonth() < 6 ? new Date().getFullYear() - 1 : new Date().getFullYear();
+        const fbdCode = FBD_LEAGUE_CODES[leagueId];
 
-    // ── Data Transformers ────────────────────────────────────
+        const result = await smartFetch({
+            primary: { endpoint: 'players/topscorers', params: { league: leagueId, season: year } },
+            secondary: fbdCode ? { endpoint: `competitions/${fbdCode}/scorers`, params: { season: year } } : null
+        });
 
-    /**
-     * Transform API fixture to our match card format.
-     */
-    function transformFixture(fixture) {
-        const f = fixture.fixture;
-        const teams = fixture.teams;
-        const goals = fixture.goals;
-        const league = fixture.league;
-
-        // Determine status
-        let status, statusKey, time;
-        const shortStatus = f.status?.short || '';
-
-        if (['1H', '2H', 'HT', 'ET', 'P', 'BT', 'LIVE'].includes(shortStatus)) {
-            status = 'Live';
-            statusKey = 'live';
-            time = f.status?.elapsed ? `${f.status.elapsed}'` : 'LIVE';
-        } else if (['FT', 'AET', 'PEN'].includes(shortStatus)) {
-            status = 'Finished';
-            statusKey = 'finished';
-            time = 'FT';
-        } else {
-            // Not started / scheduled
-            status = 'Upcoming';
-            statusKey = 'upcoming';
-            const matchDate = new Date(f.date);
-            time = matchDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        if (result?.response) return result.response;
+        if (result?.scorers) {
+            return result.scorers.map(s => ({
+                player: { name: s.player.name, photo: s.player.photo },
+                statistics: [{ team: { name: s.team.name, logo: s.team.crest }, goals: { total: s.goals } }]
+            }));
         }
 
-        return {
-            id: f.id,
-            league: league.name || '',
-            leagueLogo: league.logo || '',
-            leagueId: league.id,
-            homeTeam: teams.home.name,
-            homeLogo: teams.home.logo,
-            homeScore: goals.home ?? null,
-            awayTeam: teams.away.name,
-            awayLogo: teams.away.logo,
-            awayScore: goals.away ?? null,
-            status,
-            statusKey,
-            time,
-            date: new Date(f.date).toLocaleDateString(),
-            timestamp: f.timestamp
-        };
-    }
-
-    /**
-     * Generate news item from a finished fixture.
-     */
-    function fixtureToNews(fixture, lang) {
-        const m = transformFixture(fixture);
-        if (m.homeScore === null) return null;
-
-        const totalGoals = m.homeScore + m.awayScore;
-        let icon = '⚽';
-        let category, title, description;
-
-        if (lang === 'ar') {
-            category = 'نتائج';
-            if (m.homeScore === m.awayScore) {
-                title = `تعادل مثير بين ${m.homeTeam} و ${m.awayTeam}`;
-                description = `انتهت المباراة بالتعادل ${m.homeScore}-${m.awayScore} في ${m.league}.`;
-            } else {
-                const winner = m.homeScore > m.awayScore ? m.homeTeam : m.awayTeam;
-                const loser = m.homeScore > m.awayScore ? m.awayTeam : m.homeTeam;
-                title = `${winner} يتغلب على ${loser}`;
-                description = `فاز ${winner} بنتيجة ${m.homeScore}-${m.awayScore} في مباراة ضمن ${m.league}.`;
-            }
-            if (totalGoals >= 5) { icon = '🔥'; category = 'مباراة مثيرة'; }
-        } else {
-            category = 'Results';
-            if (m.homeScore === m.awayScore) {
-                title = `Thrilling Draw: ${m.homeTeam} vs ${m.awayTeam}`;
-                description = `The match ended ${m.homeScore}-${m.awayScore} in ${m.league}.`;
-            } else {
-                const winner = m.homeScore > m.awayScore ? m.homeTeam : m.awayTeam;
-                const loser = m.homeScore > m.awayScore ? m.awayTeam : m.homeTeam;
-                title = `${winner} Defeats ${loser}`;
-                description = `${winner} won ${m.homeScore}-${m.awayScore} in a ${m.league} clash.`;
-            }
-            if (totalGoals >= 5) { icon = '🔥'; category = 'Thriller'; }
+        // TSDB Fallback for scorers
+        const tsdbId = TSDB_LEAGUE_IDS[leagueId];
+        if (tsdbId) {
+            // TSDB doesn't have a direct "top scorers" endpoint for all leagues in free version, 
+            // but we can try to look at players in teams or general sports data.
+            // For now, we return empty if primary/secondary fail as TSDB scorers is high-tier or limited.
         }
 
-        return {
-            category,
-            title,
-            description,
-            date: m.date,
-            icon,
-            type: 'results',
-            leagueId: m.leagueId,
-            homeLogo: m.homeLogo,
-            awayLogo: m.awayLogo
-        };
+        return [];
     }
-
-    /**
-     * Generate news from transfer data.
-     */
-    function transferToNews(transfer, lang) {
-        const t = transfer.transfers?.[0];
-        if (!t) return null;
-        const playerName = transfer.player?.name || 'Unknown';
-        const teamIn = t.teams?.in?.name || '';
-        const teamOut = t.teams?.out?.name || '';
-
-        if (lang === 'ar') {
-            return {
-                category: 'انتقالات',
-                title: `${playerName} ينتقل إلى ${teamIn}`,
-                description: `${playerName} ينتقل من ${teamOut} إلى ${teamIn}.`,
-                date: t.date || '',
-                icon: '💰',
-                type: 'transfers'
-            };
-        } else {
-            return {
-                category: 'Transfer',
-                title: `${playerName} Joins ${teamIn}`,
-                description: `${playerName} moves from ${teamOut} to ${teamIn}.`,
-                date: t.date || '',
-                icon: '💰',
-                type: 'transfers'
-            };
-        }
-    }
-
-    // ── Loading / Error UI Helpers ───────────────────────────
-
-    function showLoading(container) {
-        if (!container) return;
-        container.innerHTML = `
-            <div class="api-loading">
-                <div class="loading-spinner"></div>
-                <p class="loading-text">Loading...</p>
-            </div>
-        `;
-    }
-
-    function showError(container, lang) {
-        if (!container) return;
-        const msg = lang === 'ar' ? 'حدث خطأ في تحميل البيانات' : 'Failed to load data';
-        container.innerHTML = `
-            <div class="api-error-toast">
-                <span>⚠️</span>
-                <p>${msg}</p>
-            </div>
-        `;
-    }
-
-    // ── Date Helpers (exposed) ───────────────────────────────
 
     return {
-        ALLOWED_LEAGUES,
-        filterByAllowedLeagues,
-        fetchTodayFixtures,
-        fetchYesterdayFixtures,
-        fetchTomorrowFixtures,
+        fetchTodayFixtures: () => fetchFixturesByDate(todayDate()),
+        fetchYesterdayFixtures: () => fetchFixturesByDate(yesterdayDate()),
+        fetchTomorrowFixtures: () => fetchFixturesByDate(tomorrowDate()),
         fetchLiveFixtures,
         fetchFixturesByDate,
-        fetchTransfers,
         fetchStandings,
         fetchTopScorers,
-        transformFixture,
-        fixtureToNews,
-        transferToNews,
-        showLoading,
-        showError,
-        todayDate,
-        yesterdayDate,
-        tomorrowDate
+        ALLOWED_LEAGUES,
+        filterByAllowedLeagues: (fixts) => Array.isArray(fixts) ? fixts.filter(f => ALLOWED_LEAGUES.includes(f?.league?.id)) : [],
+        transformFixture: (fixture) => {
+            if (!fixture || !fixture.fixture) return null;
+            const f = fixture.fixture;
+            const teams = fixture.teams;
+            const goals = fixture.goals;
+            const league = fixture.league;
+            const short = f.status?.short || '';
+            let status = 'Upcoming', statusKey = 'upcoming', time = '';
+            
+            if (['1H', '2H', 'HT', 'ET', 'P', 'LIVE'].includes(short)) {
+                status = 'Live'; statusKey = 'live'; time = f.status?.elapsed ? `${f.status.elapsed}'` : 'LIVE';
+            } else if (['FT', 'AET', 'PEN'].includes(short)) {
+                status = 'Finished'; statusKey = 'finished'; time = 'FT';
+            } else {
+                const d = new Date(f.date);
+                time = d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            }
+
+            return {
+                id: f.id, league: league?.name, leagueLogo: league?.logo, leagueId: league?.id,
+                homeTeam: teams?.home?.name, homeLogo: teams?.home?.logo, homeScore: goals?.home,
+                awayTeam: teams?.away?.name, awayLogo: teams?.away?.logo, awayScore: goals?.away,
+                status, statusKey, time, date: new Date(f.date).toLocaleDateString()
+            };
+        },
+        fixtureToNews: (fixture, lang) => {
+            const m = FootballAPI.transformFixture(fixture);
+            if (!m || m.homeScore === null) return null;
+            let category = lang === 'ar' ? 'نتائج' : 'Results';
+            return { category, title: `${m.homeTeam} vs ${m.awayTeam}`, description: `Ended ${m.homeScore}-${m.awayScore}`, date: m.date, icon: '⚽', type: 'results' };
+        },
+        showLoading: (container) => {
+            if (container) container.innerHTML = '<div class="api-loading"><div class="loading-spinner"></div><p>Loading...</p></div>';
+        },
+        showError: (container, lang) => {
+            if (container) container.innerHTML = `<div class="api-error-toast"><p>${lang === 'ar' ? 'خطأ في التحميل' : 'Load Error'}</p></div>`;
+        },
+        todayDate, yesterdayDate, tomorrowDate
     };
 })();

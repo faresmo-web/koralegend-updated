@@ -1,0 +1,33 @@
+/* League Grouping Modern Styles */
+.league-group {
+    margin-bottom: 3rem;
+    width: 100%;
+}
+
+.league-group:last-child {
+    margin-bottom: 0;
+}
+
+.league-group-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #0077ff;
+    margin-bottom: 2rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid rgba(0, 119, 255, 0.2);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.league-group-title::before {
+    content: '🏆';
+    font-size: 1.2rem;
+}
+
+[dir="rtl"] .league-group-title::before {
+    margin-left: 0;
+}

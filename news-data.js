@@ -46,14 +46,15 @@ async function loadNewsContent() {
 
     // Fetch today's fixtures and generate news from results
     const todayRaw = await FootballAPI.fetchTodayFixtures();
-    if (todayRaw && todayRaw.length > 0) {
+    if (todayRaw && Array.isArray(todayRaw) && todayRaw.length > 0) {
         const filteredRaw = FootballAPI.filterByAllowedLeagues(todayRaw);
+        
         const finished = filteredRaw.filter(f => {
-            const s = f.fixture?.status?.short || '';
+            const s = f?.fixture?.status?.short || '';
             return ['FT', 'AET', 'PEN'].includes(s);
         });
         const live = filteredRaw.filter(f => {
-            const s = f.fixture?.status?.short || '';
+            const s = f?.fixture?.status?.short || '';
             return ['1H', '2H', 'HT', 'ET', 'P', 'BT', 'LIVE'].includes(s);
         });
 
@@ -65,30 +66,22 @@ async function loadNewsContent() {
         // Generate news from live games
         const liveNews = live.map(f => {
             const m = FootballAPI.transformFixture(f);
-            if (currentLang === 'ar') {
-                return {
-                    category: 'مباشر',
-                    title: `${m.homeTeam} ${m.homeScore ?? 0} - ${m.awayScore ?? 0} ${m.awayTeam}`,
-                    description: `مباراة جارية الآن في ${m.league} - الدقيقة ${m.time}`,
-                    date: currentLang === 'ar' ? 'الآن' : 'Now',
-                    icon: '🔴',
-                    type: 'local',
-                    homeLogo: m.homeLogo,
-                    awayLogo: m.awayLogo
-                };
-            } else {
-                return {
-                    category: 'Live',
-                    title: `${m.homeTeam} ${m.homeScore ?? 0} - ${m.awayScore ?? 0} ${m.awayTeam}`,
-                    description: `Match in progress in ${m.league} - Minute ${m.time}`,
-                    date: 'Now',
-                    icon: '🔴',
-                    type: 'local',
-                    homeLogo: m.homeLogo,
-                    awayLogo: m.awayLogo
-                };
-            }
-        });
+            if (!m) return null;
+            
+            const isAr = currentLang === 'ar';
+            return {
+                category: isAr ? 'مباشر' : 'Live',
+                title: `${m.homeTeam} ${m.homeScore ?? 0} - ${m.awayScore ?? 0} ${m.awayTeam}`,
+                description: isAr 
+                    ? `مباراة جارية الآن في ${m.league} - الدقيقة ${m.time}`
+                    : `Match in progress in ${m.league} - Minute ${m.time}`,
+                date: isAr ? 'الآن' : 'Now',
+                icon: '🔴',
+                type: 'local',
+                homeLogo: m.homeLogo,
+                awayLogo: m.awayLogo
+            };
+        }).filter(Boolean);
 
         newsItems = [...liveNews, ...resultNews];
     }

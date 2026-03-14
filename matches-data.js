@@ -75,7 +75,9 @@ async function loadMatchesContent() {
     const container = document.getElementById('matchesList');
     if (!container) return;
     
-    FootballAPI.showLoading(container);
+    if (typeof FootballAPI !== 'undefined') {
+        FootballAPI.showLoading(container);
+    }
 
     // Determine which date to fetch
     let dateStr;
@@ -84,11 +86,13 @@ async function loadMatchesContent() {
     else dateStr = FootballAPI.tomorrowDate();
 
     const raw = await FootballAPI.fetchFixturesByDate(dateStr);
-    let matches;
+    let matches = [];
 
-    if (raw && raw.length > 0) {
+    if (raw && Array.isArray(raw) && raw.length > 0) {
         const filteredRaw = FootballAPI.filterByAllowedLeagues(raw);
-        matches = filteredRaw.map(f => FootballAPI.transformFixture(f));
+        matches = filteredRaw
+            .map(f => FootballAPI.transformFixture(f))
+            .filter(Boolean); // Remove any null transformations
 
         // Apply league filter
         if (selectedLeague !== 'all' && leagueIdMap[selectedLeague]) {
@@ -110,18 +114,44 @@ async function loadMatchesContent() {
     container.innerHTML = '';
 
     if (matches.length === 0) {
-        container.innerHTML = `
-            <div style="text-align: center; padding: 3rem; color: var(--text-secondary);">
-                <h3>${currentLang === 'en' ? 'No matches found' : 'لا توجد مباريات'}</h3>
-            </div>
-        `;
+        if (typeof renderEmptyState === 'function') {
+            renderEmptyState(container, 'No matches found for the selected filters.', 'لا توجد مباريات تطابق الفلاتر المختارة.');
+        } else {
+            container.innerHTML = `
+                <div style="text-align: center; padding: 3rem; color: var(--text-secondary);">
+                    <h3>${currentLang === 'en' ? 'No matches found' : 'لا توجد مباريات'}</h3>
+                </div>
+            `;
+        }
         return;
     }
 
-    matches.forEach((match, index) => {
-        const card = createMatchCardDetailed(match, selectedDate);
-        card.style.animationDelay = `${index * 0.1}s`;
-        container.appendChild(card);
+    // Grouping by league
+    const grouped = matches.reduce((acc, m) => {
+        if (!acc[m.league]) acc[m.league] = [];
+        acc[m.league].push(m);
+        return acc;
+    }, {});
+
+    Object.entries(grouped).forEach(([leagueName, leagueMatches], groupIndex) => {
+        const leagueSection = document.createElement('div');
+        leagueSection.className = 'league-group';
+        leagueSection.style.animation = 'slideUp 0.6s ease-out backwards';
+        leagueSection.style.animationDelay = `${groupIndex * 0.1}s`;
+
+        leagueSection.innerHTML = `
+            <h3 class="league-group-title">${leagueName}</h3>
+            <div class="matches-grid"></div>
+        `;
+
+        const grid = leagueSection.querySelector('.matches-grid');
+        leagueMatches.forEach((match, i) => {
+            const card = createMatchCardDetailed(match, selectedDate);
+            card.style.animationDelay = `${(groupIndex * 0.1) + (i * 0.05)}s`;
+            grid.appendChild(card);
+        });
+
+        container.appendChild(leagueSection);
     });
 }
 

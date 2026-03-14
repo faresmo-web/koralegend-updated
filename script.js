@@ -83,6 +83,18 @@ function loadHomeContent() {
     loadBreakingNews();
 }
 
+// ── Empty State UI Helper ────────────────────────────────
+function renderEmptyState(container, messageEn, messageAr) {
+    if (!container) return;
+    const message = currentLang === 'en' ? messageEn : messageAr;
+    container.innerHTML = `
+        <div class="empty-state" style="grid-column: 1 / -1; text-align: center; padding: 4rem 2rem; background: var(--card-bg); border-radius: 1.5rem; border: 1px solid rgba(255,255,255,0.05); animation: slideUp 0.8s ease-out; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%;">
+            <div class="empty-icon" style="font-size: 4rem; margin-bottom: 1.5rem; opacity: 0.2; filter: grayscale(1);">⚽</div>
+            <p class="empty-text" style="font-size: 1.2rem; color: var(--text-secondary); font-family: var(--font-display); letter-spacing: 1px; max-width: 400px; line-height: 1.5;">${message}</p>
+        </div>
+    `;
+}
+
 // ── Helper: render a team logo (img or emoji fallback) ───
 function renderTeamLogo(logo) {
     if (logo && logo.startsWith('http')) {
@@ -203,27 +215,62 @@ async function loadTodayResults() {
     FootballAPI.showLoading(container);
 
     const raw = await FootballAPI.fetchTodayFixtures();
-    let matches;
+    let matches = [];
 
-    if (raw && raw.length > 0) {
+    // Check for API limits/errors
+    if (raw && raw._fallback) {
+        const warning = document.createElement('div');
+        warning.className = 'api-warning';
+        warning.style = 'background: rgba(255,165,0,0.1); border: 1px solid orange; padding: 10px; border-radius: 8px; margin-bottom: 20px; color: orange; text-align: center; font-size: 0.9rem;';
+        warning.innerHTML = currentLang === 'ar' 
+            ? '⚠️ تم الوصول للحد الأقصى لطلبات اليوم في API. يتم عرض بيانات افتراضية حالياً.' 
+            : '⚠️ API Request limit reached for today. Displaying fallback data.';
+        container.parentNode.insertBefore(warning, container);
+    }
+
+    if (raw && Array.isArray(raw) && raw.length > 0) {
         const filtered = FootballAPI.filterByAllowedLeagues(raw);
         matches = filtered
             .map(f => FootballAPI.transformFixture(f))
-            .filter(m => m.statusKey === 'finished' || m.statusKey === 'live')
-            .slice(0, 6);
+            .filter(m => m && (m.statusKey === 'finished' || m.statusKey === 'live'))
+            .slice(0, 10);
+    }
+    
+    if (matches.length === 0) {
+        renderEmptyState(container, 'No match results available for today.', 'لا توجد نتائج مباريات متاحة لليوم حالياً.');
+        return;
     }
 
-    if (!matches || matches.length === 0) {
-        matches = fallbackResults[currentLang];
-    }
+    // Grouping by league
+    const grouped = matches.reduce((acc, m) => {
+        if (!acc[m.league]) acc[m.league] = [];
+        acc[m.league].push(m);
+        return acc;
+    }, {});
 
     container.innerHTML = '';
-    matches.forEach((match, i) => {
-        const card = createMatchCard(match, match.statusKey === 'live' ? 'live' : 'result');
-        card.style.animationDelay = `${i * 0.1}s`;
-        container.appendChild(card);
+    Object.entries(grouped).forEach(([leagueName, leagueMatches], groupIndex) => {
+        const leagueSection = document.createElement('div');
+        leagueSection.className = 'league-group';
+        leagueSection.style.animation = 'slideUp 0.6s ease-out backwards';
+        leagueSection.style.animationDelay = `${groupIndex * 0.1}s`;
+
+        leagueSection.innerHTML = `
+            <h3 class="league-group-title">${leagueName}</h3>
+            <div class="results-grid"></div>
+        `;
+
+        const grid = leagueSection.querySelector('.results-grid');
+        leagueMatches.forEach((match, i) => {
+            const card = createMatchCard(match, match.statusKey === 'live' ? 'live' : 'result');
+            card.style.animationDelay = `${(groupIndex * 0.1) + (i * 0.05)}s`;
+            grid.appendChild(card);
+        });
+
+        container.appendChild(leagueSection);
     });
 }
+
 
 // ── Upcoming Matches (API → fallback) ────────────────────
 async function loadUpcomingMatches() {
@@ -233,25 +280,48 @@ async function loadUpcomingMatches() {
     FootballAPI.showLoading(container);
 
     const raw = await FootballAPI.fetchTomorrowFixtures();
-    let matches;
+    let matches = [];
 
-    if (raw && raw.length > 0) {
+    if (raw && Array.isArray(raw) && raw.length > 0) {
         const filtered = FootballAPI.filterByAllowedLeagues(raw);
         matches = filtered
             .map(f => FootballAPI.transformFixture(f))
-            .filter(m => m.statusKey === 'upcoming')
-            .slice(0, 6);
+            .filter(m => m && m.statusKey === 'upcoming')
+            .slice(0, 10);
+    }
+    
+    if (matches.length === 0) {
+        renderEmptyState(container, 'No upcoming matches scheduled for tomorrow.', 'لا توجد مباريات قادمة مجدولة لغداً.');
+        return;
     }
 
-    if (!matches || matches.length === 0) {
-        matches = fallbackUpcoming[currentLang];
-    }
+    // Grouping by league
+    const grouped = matches.reduce((acc, m) => {
+        if (!acc[m.league]) acc[m.league] = [];
+        acc[m.league].push(m);
+        return acc;
+    }, {});
 
     container.innerHTML = '';
-    matches.forEach((match, i) => {
-        const card = createMatchCard(match, 'upcoming');
-        card.style.animationDelay = `${i * 0.1}s`;
-        container.appendChild(card);
+    Object.entries(grouped).forEach(([leagueName, leagueMatches], groupIndex) => {
+        const leagueSection = document.createElement('div');
+        leagueSection.className = 'league-group';
+        leagueSection.style.animation = 'slideUp 0.6s ease-out backwards';
+        leagueSection.style.animationDelay = `${groupIndex * 0.1}s`;
+
+        leagueSection.innerHTML = `
+            <h3 class="league-group-title">${leagueName}</h3>
+            <div class="matches-grid"></div>
+        `;
+
+        const grid = leagueSection.querySelector('.matches-grid');
+        leagueMatches.forEach((match, i) => {
+            const card = createMatchCard(match, 'upcoming');
+            card.style.animationDelay = `${(groupIndex * 0.1) + (i * 0.05)}s`;
+            grid.appendChild(card);
+        });
+
+        container.appendChild(leagueSection);
     });
 }
 
@@ -280,7 +350,8 @@ async function loadBreakingNews() {
     }
 
     if (newsItems.length === 0) {
-        newsItems = fallbackNews[currentLang];
+        renderEmptyState(container, 'No breaking news at the moment.', 'لا توجد أخبار عاجلة في الوقت الحالي.');
+        return;
     }
 
     container.innerHTML = '';
