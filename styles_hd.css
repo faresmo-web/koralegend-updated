@@ -101,7 +101,6 @@ body {
     width: 100%;
     height: auto;
     filter: drop-shadow(0 0 30px rgba(255, 77, 0, 0.5));
-    mix-blend-mode: screen; /* Remove black background from the logo */
 }
 
 /* Three Orbital Rings */
@@ -185,8 +184,8 @@ body {
     backdrop-filter: none;
     border-bottom: none;
     position: fixed;
-    top: auto;
-    bottom: 20px; /* Moved to bottom with a small offset for floating effect */
+    top: 0;
+    bottom: auto;
     left: 0;
     width: 100%;
     z-index: 10000;
@@ -242,7 +241,6 @@ body {
     width: 100%;
     height: 100%;
     object-fit: contain;
-    mix-blend-mode: screen; /* Ensure logo background is transparent */
 }
 
 .logo:hover .logo-icon {
@@ -265,7 +263,8 @@ body {
 
 /* Global Header & Nav Structure */
 body {
-    padding-bottom: 110px; /* Changed from padding-top to padding-bottom */
+    padding-top: 110px;
+    padding-bottom: 0;
 }
 
 .header-content {
@@ -335,21 +334,6 @@ body {
     transition: transform 0.3s ease;
 }
 
-@media (max-width: 768px) {
-    .main-nav {
-        min-width: 95%;
-        bottom: 20px;
-        padding: 6px 10px;
-    }
-    .nav-link {
-        padding: 8px 12px;
-        min-width: 70px;
-        font-size: 0.6rem;
-    }
-    .nav-icon {
-        font-size: 1.2rem;
-    }
-}
 
 /* Language Toggle */
 
@@ -1274,122 +1258,6 @@ body {
 }
 
 /* Cleaned up medium screen rules - Header now uses global Flex space-between */
-@media (max-width: 1250px) {
-    .logo-text {
-        font-size: 1.3rem;
-        white-space: nowrap;
-    }
-
-    .logo-text small {
-        display: inline !important;
-        margin-left: 10px;
-    }
-
-    [dir="rtl"] .logo-text small {
-        margin-left: 0;
-        margin-right: 10px;
-    }
-}
-
-/* Mobile & Tablet Floating Navigation (Floating Dock) */
-@media (max-width: 1250px) {
-    .main-header {
-        border-bottom: 1px solid rgba(255, 77, 0, 0.2);
-        position: absolute;
-        width: 100%;
-        top: 0;
-        z-index: 10;
-        background: rgba(10, 14, 39, 0.8);
-    }
-
-    .header-content {
-        padding: 15px var(--spacing-md);
-        justify-content: space-between;
-    }
-
-    /* Primary Nav moves to Floating Dock */
-    .main-nav {
-        position: fixed !important;
-        top: auto !important;
-        bottom: 25px !important; 
-        left: 50% !important;
-        transform: translateX(-50%) !important;
-        width: 94%;
-        max-width: 500px;
-        background: rgba(13, 17, 45, 0.95);
-        backdrop-filter: blur(25px);
-        border: 1.5px solid rgba(255, 77, 0, 0.5);
-        border-radius: 80px;
-        padding: 10px 15px; /* Tighter for mobile */
-        z-index: 3000;
-        box-shadow: 0 15px 45px rgba(0, 0, 0, 0.9);
-    }
-
-    .main-nav ul {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 0;
-        width: 100%;
-    }
-
-    .nav-link {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 3px;
-        font-size: 0.75rem; /* Slightly larger text */
-        font-weight: 700;
-        padding: 4px;
-        color: var(--text-secondary);
-        min-width: 50px;
-        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    }
-
-    .nav-icon {
-        display: block !important;
-        font-size: 1.4rem; /* Scaled down for mobile */
-        margin-bottom: 0;
-    }
-
-    .nav-link::after {
-        display: none;
-    }
-
-    .nav-link.active {
-        color: var(--primary-color);
-        transform: scale(1.1) translateY(-5px);
-    }
-
-    .nav-link.active .nav-icon {
-        transform: scale(1.1);
-        filter: drop-shadow(0 0 12px var(--primary-color));
-    }
-
-    /* Add space at bottom of page so content isn't hidden by dock */
-    body {
-        padding-bottom: 120px;
-    }
-}
-
-/* Desktop Navigation Overrides */
-@media (min-width: 1251px) {
-    .nav-icon {
-        display: none !important;
-    }
-    
-    .nav-link {
-        transition: color 0.3s ease !important;
-        padding-bottom: 5px !important;
-    }
-    
-    .nav-link.active,
-    .nav-link:hover {
-        transform: none !important; /* Cancel the jumping animation */
-        color: var(--primary-color) !important;
-        border-bottom: 2px solid var(--primary-color) !important; /* Elegant static indicator */
-    }
-}
 
 @media (max-width: 768px) {
     .header-content {
@@ -1587,31 +1455,113 @@ body {
     width: 100%;
 }
 
-@media (max-width: 768px) {
-    .main-nav {
-        min-width: 95%;
-        bottom: 20px;
-        padding: 6px 10px;
+/* ============================================================ */
+/* Consolidated Responsive Layouts */
+/* ============================================================ */
+
+/* Desktop Layout (1261px and above) */
+@media (min-width: 1261px) {
+    .main-header {
+        position: fixed;
+        top: 0;
+        bottom: auto;
+        height: 110px;
+        background: transparent;
     }
-    .nav-link {
-        padding: 8px 12px;
-        min-width: 70px;
-        font-size: 0.6rem;
+
+    .main-header .container {
+        background: rgba(10, 14, 39, 0.96);
+        border: 2px solid var(--primary-color);
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.8);
     }
+
     .nav-icon {
-        font-size: 1.2rem;
-    }
-
-
-    .nav-link span:not(.nav-icon) {
-        display: block !important;
-    }
-
-    .nav-link::after {
         display: none !important;
+    }
+
+    body {
+        padding-top: 110px;
+        padding-bottom: 0;
+    }
+}
+
+/* Mobile & Tablet Layout (1260px and below) */
+@media (max-width: 1260px) {
+    /* Top Bar for Logo & Language Toggle */
+    .main-header {
+        position: absolute !important;
+        top: 0 !important;
+        bottom: auto !important;
+        height: 70px !important;
+        background: rgba(10, 14, 39, 0.98) !important;
+        backdrop-filter: none !important; /* FIXED: Removed to allow fixed children to anchor to viewport */
+        border-bottom: 1px solid rgba(255, 77, 0, 0.4) !important;
+        z-index: 5000 !important;
+    }
+
+    .main-header .container {
+        background: transparent !important;
+        backdrop-filter: none !important;
+        border: none !important;
+        box-shadow: none !important;
+        width: 100% !important;
+        height: 100% !important;
+    }
+
+    .header-content {
+        justify-content: space-between;
+    }
+
+    /* Floating Navigation Dock (Bottom) */
+    .main-nav {
+        position: fixed !important;
+        top: auto !important;
+        bottom: 25px !important; 
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        width: 95% !important;
+        max-width: 550px !important;
+        background: rgba(13, 17, 45, 0.98) !important;
+        backdrop-filter: blur(30px) !important;
+        border: 2px solid rgba(255, 77, 0, 0.7) !important;
+        border-radius: 80px !important;
+        padding: 6px 20px !important;
+        z-index: 9999 !important;
+        display: flex !important;
+        justify-content: center !important;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.9) !important;
+    }
+
+    .main-nav ul {
+        display: flex !important;
+        justify-content: space-between !important;
+        width: 100% !important;
+        gap: 0 !important;
+    }
+
+    .nav-icon {
+        display: block !important;
+        font-size: 1.25rem !important;
+        margin-bottom: 2px !important;
+    }
+
+    .nav-link {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        font-size: 0.75rem !important;
+        font-weight: 700 !important;
+        color: var(--text-secondary) !important;
+        min-width: 60px !important;
     }
 
     .nav-link.active {
         color: var(--primary-color) !important;
+        transform: translateY(-5px) scale(1.1) !important;
+    }
+
+    body {
+        padding-top: 80px !important;
+        padding-bottom: 130px !important;
     }
 }

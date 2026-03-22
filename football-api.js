@@ -60,6 +60,11 @@ const FootballAPI = (() => {
         const d = new Date(); d.setDate(d.getDate() + 1);
         return d.toISOString().slice(0, 10);
     }
+    
+    function getCurrentSeason() {
+        let year = new Date().getMonth() < 6 ? new Date().getFullYear() - 1 : new Date().getFullYear();
+        return year > 2024 ? 2024 : year;
+    }
 
     function cacheGet(key) {
         try {
@@ -217,7 +222,7 @@ const FootballAPI = (() => {
     }
 
     async function fetchStandings(leagueId) {
-        const year = new Date().getMonth() < 6 ? new Date().getFullYear() - 1 : new Date().getFullYear();
+        const year = getCurrentSeason();
         const fbdCode = FBD_LEAGUE_CODES[leagueId];
 
         const result = await smartFetch({
@@ -263,7 +268,7 @@ const FootballAPI = (() => {
     }
 
     async function fetchTopScorers(leagueId) {
-        const year = new Date().getMonth() < 6 ? new Date().getFullYear() - 1 : new Date().getFullYear();
+        const year = getCurrentSeason();
         const fbdCode = FBD_LEAGUE_CODES[leagueId];
 
         const result = await smartFetch({
@@ -331,7 +336,7 @@ const FootballAPI = (() => {
     }
 
     async function fetchPlayerById(playerId) {
-        const year = new Date().getFullYear();
+        const year = getCurrentSeason();
         let stats = await fetchPlayerStats(playerId, year);
         if (!stats || stats.length === 0) {
             // Fallback to previous season if current is empty
@@ -353,7 +358,7 @@ const FootballAPI = (() => {
     }
 
     async function fetchTournamentBracket(leagueId) {
-        const year = new Date().getMonth() < 6 ? new Date().getFullYear() - 1 : new Date().getFullYear();
+        const year = getCurrentSeason();
         const fbdCode = FBD_LEAGUE_CODES[leagueId];
         
         const result = await smartFetch({
