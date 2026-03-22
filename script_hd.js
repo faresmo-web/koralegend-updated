@@ -18,6 +18,21 @@ document.addEventListener('DOMContentLoaded', function() {
     loadPageContent();
 });
 
+// Preloader removal
+window.addEventListener('load', function() {
+    const preloader = document.getElementById('preloader');
+    if (preloader) {
+        // Ensure the preloader stays for at least 300ms for visual effect
+        setTimeout(() => {
+            preloader.classList.add('fade-out');
+            // Remove from DOM after transition
+            setTimeout(() => {
+                preloader.remove();
+            }, 800);
+        }, 300);
+    }
+});
+
 function switchLanguage() {
     currentLang = currentLang === 'en' ? 'ar' : 'en';
     localStorage.setItem('language', currentLang);
