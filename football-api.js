@@ -18,7 +18,9 @@ const FootballAPI = (() => {
     };
 
     const TSDB_BASE_URL = 'https://www.thesportsdb.com/api/v1/json/3';
-    const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+    const TTL_LIVE = 2 * 60 * 1000; // 2 minutes
+    const TTL_FIXTURES = 1 * 60 * 60 * 1000; // 1 hour
+    const TTL_STANDINGS = 24 * 60 * 60 * 1000; // 24 hours
 
     const TSDB_LEAGUE_IDS = {
         39: 4328, 140: 4335, 307: 4668, 2: 4480, 233: 4829
@@ -69,20 +71,53 @@ const FootballAPI = (() => {
         try {
             const raw = localStorage.getItem('fapi_' + key);
             if (!raw) return null;
-            const { data, ts } = JSON.parse(raw);
-            if (Date.now() - ts > CACHE_TTL) {
+            const parsed = JSON.parse(raw);
+            if (parsed.ts) {
+                if (Date.now() - parsed.ts > TTL_FIXTURES) {
+                    localStorage.removeItem('fapi_' + key);
+                    return null;
+                }
+                return parsed.data;
+            }
+            if (Date.now() > parsed.expiresAt) {
                 localStorage.removeItem('fapi_' + key);
                 return null;
             }
-            return data;
+            return parsed.data;
         } catch { return null; }
     }
 
-    function cacheSet(key, data) {
-        try { localStorage.setItem('fapi_' + key, JSON.stringify({ data, ts: Date.now() })); } catch {}
+    function cacheSet(key, data, ttl) {
+        try { 
+            const expiresAt = Date.now() + (ttl || TTL_FIXTURES);
+            localStorage.setItem('fapi_' + key, JSON.stringify({ data, expiresAt })); 
+        } catch {}
     }
 
-    async function baseFetch(url, headers = {}, providerName = 'primary') {
+    function isLimitReached(provider) {
+        try {
+            const resetTime = localStorage.getItem('fapi_limit_' + provider);
+            if (resetTime && Date.now() < parseInt(resetTime)) return true;
+            if (resetTime) localStorage.removeItem('fapi_limit_' + provider);
+        } catch {}
+        return false;
+    }
+
+    function setLimitReached(provider) {
+        try {
+            // Block further requests to this provider until Midnight UTC (00:00 GMT), which is when the API quota refreshes.
+            const now = new Date();
+            const tomorrowUTC = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + 1, 0, 0, 0, 0);
+            localStorage.setItem('fapi_limit_' + provider, tomorrowUTC.toString());
+        } catch {}
+    }
+
+    async function baseFetch(url, headers = {}, providerName = 'primary', ttl = null) {
+        if (isLimitReached(providerName)) {
+            console.warn(`[API] ${providerName} is currently blocked due to limits. Using fallback immediately.`);
+            return { _fallback: true, reason: 'rate-limit-blocked', provider: providerName };
+        }
+
         // Apply CORS Proxy for Football-Data.org (always in dev or if CORS suspected)
         let finalUrl = url;
         const isFBD = url.includes('api.football-data.org');
@@ -101,7 +136,13 @@ const FootballAPI = (() => {
         try {
             const res = await fetch(finalUrl, { method: 'GET', headers });
             
-            if (res.status === 429 || res.status === 403 || res.status === 401) {
+            if (res.status === 429) {
+                console.warn(`[API] ${providerName} hit 429 Rate Limit:`, url);
+                setLimitReached(providerName);
+                return { _fallback: true, status: res.status, provider: providerName };
+            }
+
+            if (res.status === 403 || res.status === 401) {
                 console.warn(`[API] ${providerName} error ${res.status}:`, url);
                 return { _fallback: true, status: res.status, provider: providerName };
             }
@@ -114,13 +155,14 @@ const FootballAPI = (() => {
                 const errStr = JSON.stringify(json.errors).toLowerCase();
                 console.warn(`[API] API-Sports internal error:`, json.errors);
                 
-                if (errStr.includes('suspended') || errStr.includes('limit') || errStr.includes('access')) {
+                if (errStr.includes('suspended') || errStr.includes('limit') || errStr.includes('access') || errStr.includes('reached')) {
+                    setLimitReached(providerName);
                     return { _fallback: true, reason: 'api-sports-blocked', details: json.errors };
                 }
             }
 
             // Successfully fetched data
-            cacheSet(cacheKey, json);
+            cacheSet(cacheKey, json, ttl);
             return json;
         } catch (err) {
             console.error(`[API] Fetch error for ${providerName}:`, err);
@@ -132,14 +174,14 @@ const FootballAPI = (() => {
      * Tries primary, falls back to secondary if primary indicates _fallback
      */
     async function smartFetch(options) {
-        const { primary, secondary } = options;
+        const { primary, secondary, ttl } = options;
         let result = null;
 
         // 1. Try Primary
         if (primary && PRIMARY_API.key) {
             const qs = new URLSearchParams(primary.params).toString();
             const url = `${PRIMARY_API.baseUrl}/${primary.endpoint}?${qs}`;
-            result = await baseFetch(url, { [PRIMARY_API.header]: PRIMARY_API.key }, 'primary');
+            result = await baseFetch(url, { [PRIMARY_API.header]: PRIMARY_API.key }, 'primary', ttl);
             if (result && !result._fallback) return result;
         }
 
@@ -147,7 +189,7 @@ const FootballAPI = (() => {
         if (secondary && SECONDARY_API.key) {
             const qs = new URLSearchParams(secondary.params).toString();
             const url = `${SECONDARY_API.baseUrl}/${secondary.endpoint}?${qs}`;
-            result = await baseFetch(url, { [SECONDARY_API.header]: SECONDARY_API.key }, 'secondary');
+            result = await baseFetch(url, { [SECONDARY_API.header]: SECONDARY_API.key }, 'secondary', ttl);
             if (result && !result._fallback) return result;
         }
 
@@ -197,7 +239,8 @@ const FootballAPI = (() => {
     async function fetchFixturesByDate(dateStr) {
         const result = await smartFetch({
             primary: { endpoint: 'fixtures', params: { date: dateStr } },
-            secondary: { endpoint: 'matches', params: { dateFrom: dateStr, dateTo: dateStr } }
+            secondary: { endpoint: 'matches', params: { dateFrom: dateStr, dateTo: dateStr } },
+            ttl: dateStr === todayDate() ? TTL_FIXTURES : TTL_STANDINGS
         });
         if (result?.response) return result.response;
         if (result?.matches) return normalizeFBDMatches(result.matches);
@@ -213,7 +256,8 @@ const FootballAPI = (() => {
     async function fetchLiveFixtures() {
         const result = await smartFetch({
             primary: { endpoint: 'fixtures', params: { live: 'all' } },
-            secondary: { endpoint: 'matches', params: { status: 'LIVE' } }
+            secondary: { endpoint: 'matches', params: { status: 'LIVE' } },
+            ttl: TTL_LIVE
         });
         if (result?.response) return result.response;
         if (result?.matches) return normalizeFBDMatches(result.matches);
@@ -226,7 +270,8 @@ const FootballAPI = (() => {
 
         const result = await smartFetch({
             primary: { endpoint: 'standings', params: { league: leagueId, season: year } },
-            secondary: fbdCode ? { endpoint: `competitions/${fbdCode}/standings`, params: { season: year } } : null
+            secondary: fbdCode ? { endpoint: `competitions/${fbdCode}/standings`, params: { season: year } } : null,
+            ttl: TTL_STANDINGS
         });
 
         // 1. Success from API-Sports (now primary)
@@ -272,7 +317,8 @@ const FootballAPI = (() => {
 
         const result = await smartFetch({
             primary: { endpoint: 'players/topscorers', params: { league: leagueId, season: year } },
-            secondary: fbdCode ? { endpoint: `competitions/${fbdCode}/scorers`, params: { season: year } } : null
+            secondary: fbdCode ? { endpoint: `competitions/${fbdCode}/scorers`, params: { season: year } } : null,
+            ttl: TTL_STANDINGS
         });
 
         // 1. Success from API-Sports (now primary)
@@ -301,7 +347,8 @@ const FootballAPI = (() => {
     async function fetchFixtureLineups(fixtureId) {
         const result = await smartFetch({
             primary: { endpoint: 'fixtures/lineups', params: { fixture: fixtureId } },
-            secondary: null
+            secondary: null,
+            ttl: TTL_FIXTURES
         });
         if (result?.response) return result.response;
         return [];
@@ -310,7 +357,8 @@ const FootballAPI = (() => {
     async function fetchFixtureEvents(fixtureId) {
         const result = await smartFetch({
             primary: { endpoint: 'fixtures/events', params: { fixture: fixtureId } },
-            secondary: null
+            secondary: null,
+            ttl: TTL_FIXTURES
         });
         if (result?.response) return result.response;
         return [];
@@ -319,7 +367,8 @@ const FootballAPI = (() => {
     async function fetchFixtureStatistics(fixtureId) {
         const result = await smartFetch({
             primary: { endpoint: 'fixtures/statistics', params: { fixture: fixtureId } },
-            secondary: null
+            secondary: null,
+            ttl: TTL_FIXTURES
         });
         if (result?.response) return result.response;
         return [];
@@ -328,7 +377,8 @@ const FootballAPI = (() => {
     async function fetchPlayerStats(playerId, season) {
         const result = await smartFetch({
             primary: { endpoint: 'players', params: { id: playerId, season: season } },
-            secondary: null
+            secondary: null,
+            ttl: TTL_STANDINGS
         });
         if (result?.response) return result.response;
         return [];
@@ -350,7 +400,8 @@ const FootballAPI = (() => {
         if (teamId) params.team = teamId;
         const result = await smartFetch({
             primary: { endpoint: 'players', params },
-            secondary: null
+            secondary: null,
+            ttl: TTL_STANDINGS
         });
         if (result?.response) return result.response;
         return [];
@@ -362,7 +413,8 @@ const FootballAPI = (() => {
         
         const result = await smartFetch({
             primary: { endpoint: 'fixtures', params: { league: leagueId, season: year } },
-            secondary: fbdCode ? { endpoint: `competitions/${fbdCode}/matches`, params: { season: year } } : null
+            secondary: fbdCode ? { endpoint: `competitions/${fbdCode}/matches`, params: { season: year } } : null,
+            ttl: TTL_STANDINGS
         });
 
         const allowedRounds = ['Quarter-finals', 'Semi-finals', 'Final'];
