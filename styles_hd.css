@@ -1525,7 +1525,8 @@ body {
         backdrop-filter: blur(30px) !important;
         border: 2px solid rgba(255, 77, 0, 0.7) !important;
         border-radius: 80px !important;
-        padding: 6px 20px !important;
+        padding: 6px 10px !important;
+        box-sizing: border-box !important;
         z-index: 9999 !important;
         display: flex !important;
         justify-content: center !important;
@@ -1537,6 +1538,11 @@ body {
         justify-content: space-between !important;
         width: 100% !important;
         gap: 0 !important;
+    }
+
+    .main-nav ul li {
+        flex: 1 !important;
+        min-width: 0 !important;
     }
 
     .nav-icon {
@@ -1552,7 +1558,7 @@ body {
         font-size: 0.75rem !important;
         font-weight: 700 !important;
         color: var(--text-secondary) !important;
-        min-width: 60px !important;
+        width: 100% !important;
     }
 
     .nav-link.active {
