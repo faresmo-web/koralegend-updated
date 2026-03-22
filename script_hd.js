@@ -170,27 +170,27 @@ function createMatchCard(match, type) {
 // ── Fallback static data (used when API fails) ───────────
 const fallbackResults = {
     en: [
-        { league: 'Premier League', homeTeam: 'Liverpool', homeLogo: '🔴', homeScore: 3, awayTeam: 'Manchester City', awayLogo: '🔵', awayScore: 1, status: 'Finished', statusKey: 'finished', time: 'FT' },
-        { league: 'La Liga', homeTeam: 'Real Madrid', homeLogo: '⚪', homeScore: 2, awayTeam: 'Barcelona', awayLogo: '🔴', awayScore: 2, status: 'Finished', statusKey: 'finished', time: 'FT' },
-        { league: 'Saudi Pro League', homeTeam: 'Al Nassr', homeLogo: '💛', homeScore: 4, awayTeam: 'Al Hilal', awayLogo: '🔵', awayScore: 2, status: 'Finished', statusKey: 'finished', time: 'FT' }
+        { league: 'Premier League', homeTeam: 'Liverpool', homeLogo: 'https://media.api-sports.io/football/teams/40.png', homeScore: 3, awayTeam: 'Manchester City', awayLogo: 'https://media.api-sports.io/football/teams/50.png', awayScore: 1, status: 'Finished', statusKey: 'finished', time: 'FT' },
+        { league: 'La Liga', homeTeam: 'Real Madrid', homeLogo: 'https://media.api-sports.io/football/teams/541.png', homeScore: 2, awayTeam: 'Barcelona', awayLogo: 'https://media.api-sports.io/football/teams/529.png', awayScore: 2, status: 'Finished', statusKey: 'finished', time: 'FT' },
+        { league: 'Saudi Pro League', homeTeam: 'Al Nassr', homeLogo: 'https://media.api-sports.io/football/teams/2939.png', homeScore: 4, awayTeam: 'Al Hilal', awayLogo: 'https://media.api-sports.io/football/teams/2930.png', awayScore: 2, status: 'Finished', statusKey: 'finished', time: 'FT' }
     ],
     ar: [
-        { league: 'الدوري الإنجليزي', homeTeam: 'ليفربول', homeLogo: '🔴', homeScore: 3, awayTeam: 'مانشستر سيتي', awayLogo: '🔵', awayScore: 1, status: 'انتهت', statusKey: 'finished', time: 'نهاية' },
-        { league: 'الدوري الإسباني', homeTeam: 'ريال مدريد', homeLogo: '⚪', homeScore: 2, awayTeam: 'برشلونة', awayLogo: '🔴', awayScore: 2, status: 'انتهت', statusKey: 'finished', time: 'نهاية' },
-        { league: 'دوري روشن السعودي', homeTeam: 'النصر', homeLogo: '💛', homeScore: 4, awayTeam: 'الهلال', awayLogo: '🔵', awayScore: 2, status: 'انتهت', statusKey: 'finished', time: 'نهاية' }
+        { league: 'الدوري الإنجليزي', homeTeam: 'ليفربول', homeLogo: 'https://media.api-sports.io/football/teams/40.png', homeScore: 3, awayTeam: 'مانشستر سيتي', awayLogo: 'https://media.api-sports.io/football/teams/50.png', awayScore: 1, status: 'انتهت', statusKey: 'finished', time: 'نهاية' },
+        { league: 'الدوري الإسباني', homeTeam: 'ريال مدريد', homeLogo: 'https://media.api-sports.io/football/teams/541.png', homeScore: 2, awayTeam: 'برشلونة', awayLogo: 'https://media.api-sports.io/football/teams/529.png', awayScore: 2, status: 'انتهت', statusKey: 'finished', time: 'نهاية' },
+        { league: 'دوري روشن السعودي', homeTeam: 'النصر', homeLogo: 'https://media.api-sports.io/football/teams/2939.png', homeScore: 4, awayTeam: 'الهلال', awayLogo: 'https://media.api-sports.io/football/teams/2930.png', awayScore: 2, status: 'انتهت', statusKey: 'finished', time: 'نهاية' }
     ]
 };
 
 const fallbackUpcoming = {
     en: [
-        { league: 'Champions League', homeTeam: 'Bayern Munich', homeLogo: '🔴', awayTeam: 'Paris SG', awayLogo: '🔵', date: 'Tomorrow', time: '20:00', statusKey: 'upcoming' },
-        { league: 'Premier League', homeTeam: 'Arsenal', homeLogo: '🔴', awayTeam: 'Chelsea', awayLogo: '🔵', date: 'Tomorrow', time: '17:30', statusKey: 'upcoming' },
-        { league: 'Saudi Pro League', homeTeam: 'Al Ittihad', homeLogo: '⚫', awayTeam: 'Al Ahli', awayLogo: '💚', date: 'Tomorrow', time: '19:00', statusKey: 'upcoming' }
+        { league: 'Champions League', homeTeam: 'Bayern Munich', homeLogo: 'https://media.api-sports.io/football/teams/157.png', awayTeam: 'Paris SG', awayLogo: 'https://media.api-sports.io/football/teams/85.png', date: 'Tomorrow', time: '20:00', statusKey: 'upcoming' },
+        { league: 'Premier League', homeTeam: 'Arsenal', homeLogo: 'https://media.api-sports.io/football/teams/42.png', awayTeam: 'Chelsea', awayLogo: 'https://media.api-sports.io/football/teams/49.png', date: 'Tomorrow', time: '17:30', statusKey: 'upcoming' },
+        { league: 'Saudi Pro League', homeTeam: 'Al Ittihad', homeLogo: 'https://media.api-sports.io/football/teams/2931.png', awayTeam: 'Al Ahli', awayLogo: 'https://media.api-sports.io/football/teams/2931.png', date: 'Tomorrow', time: '19:00', statusKey: 'upcoming' }
     ],
     ar: [
-        { league: 'دوري أبطال أوروبا', homeTeam: 'بايرن ميونخ', homeLogo: '🔴', awayTeam: 'باريس سان جيرمان', awayLogo: '🔵', date: 'غداً', time: '20:00', statusKey: 'upcoming' },
-        { league: 'الدوري الإنجليزي', homeTeam: 'أرسنال', homeLogo: '🔴', awayTeam: 'تشيلسي', awayLogo: '🔵', date: 'غداً', time: '17:30', statusKey: 'upcoming' },
-        { league: 'دوري روشن السعودي', homeTeam: 'الاتحاد', homeLogo: '⚫', awayTeam: 'الأهلي', awayLogo: '💚', date: 'غداً', time: '19:00', statusKey: 'upcoming' }
+        { league: 'دوري أبطال أوروبا', homeTeam: 'بايرن ميونخ', homeLogo: 'https://media.api-sports.io/football/teams/157.png', awayTeam: 'باريس سان جيرمان', awayLogo: 'https://media.api-sports.io/football/teams/85.png', date: 'غداً', time: '20:00', statusKey: 'upcoming' },
+        { league: 'الدوري الإنجليزي', homeTeam: 'أرسنال', homeLogo: 'https://media.api-sports.io/football/teams/42.png', awayTeam: 'تشيلسي', awayLogo: 'https://media.api-sports.io/football/teams/49.png', date: 'غداً', time: '17:30', statusKey: 'upcoming' },
+        { league: 'دوري روشن السعودي', homeTeam: 'الاتحاد', homeLogo: 'https://media.api-sports.io/football/teams/2931.png', awayTeam: 'الأهلي', awayLogo: 'https://media.api-sports.io/football/teams/2931.png', date: 'غداً', time: '19:00', statusKey: 'upcoming' }
     ]
 };
 
@@ -214,18 +214,18 @@ async function loadTodayResults() {
 
     FootballAPI.showLoading(container);
 
-    const raw = await FootballAPI.fetchTodayFixtures();
+    let raw = await FootballAPI.fetchTodayFixtures();
     let matches = [];
 
-    // Check for API limits/errors
-    if (raw && raw._fallback) {
-        const warning = document.createElement('div');
-        warning.className = 'api-warning';
-        warning.style = 'background: rgba(255,165,0,0.1); border: 1px solid orange; padding: 10px; border-radius: 8px; margin-bottom: 20px; color: orange; text-align: center; font-size: 0.9rem;';
-        warning.innerHTML = currentLang === 'ar' 
-            ? '⚠️ تم الوصول للحد الأقصى لطلبات اليوم في API. يتم عرض بيانات افتراضية حالياً.' 
-            : '⚠️ API Request limit reached for today. Displaying fallback data.';
-        container.parentNode.insertBefore(warning, container);
+    // If today is empty, try to fetch recent results from the last 3 days
+    if (!raw || raw.length === 0 || raw._fallback) {
+        console.log('[Home] Today is empty, fetching recent results...');
+        const d = new Date();
+        const dateTo = d.toISOString().slice(0, 10);
+        d.setDate(d.getDate() - 3);
+        const dateFrom = d.toISOString().slice(0, 10);
+        // We use fetchFixturesByDate but we'll modify it to support ranges if possible, or just fetch yesterday
+        raw = await FootballAPI.fetchFixturesByDate(FootballAPI.yesterdayDate());
     }
 
     if (raw && Array.isArray(raw) && raw.length > 0) {
@@ -233,12 +233,16 @@ async function loadTodayResults() {
         matches = filtered
             .map(f => FootballAPI.transformFixture(f))
             .filter(m => m && (m.statusKey === 'finished' || m.statusKey === 'live'))
-            .slice(0, 10);
+            .slice(0, 15);
     }
     
     if (matches.length === 0) {
-        renderEmptyState(container, 'No match results available for today.', 'لا توجد نتائج مباريات متاحة لليوم حالياً.');
-        return;
+        // Restore Static Fallback for Home Page
+        matches = fallbackResults[currentLang] || [];
+        if (matches.length === 0) {
+            renderEmptyState(container, 'No match results available for today.', 'لا توجد نتائج مباريات متاحة لليوم حالياً.');
+            return;
+        }
     }
 
     // Grouping by league
@@ -291,8 +295,12 @@ async function loadUpcomingMatches() {
     }
     
     if (matches.length === 0) {
-        renderEmptyState(container, 'No upcoming matches scheduled for tomorrow.', 'لا توجد مباريات قادمة مجدولة لغداً.');
-        return;
+        // Restore Static Fallback for Home Page
+        matches = fallbackUpcoming[currentLang] || [];
+        if (matches.length === 0) {
+            renderEmptyState(container, 'No upcoming matches scheduled for tomorrow.', 'لا توجد مباريات قادمة مجدولة لغداً.');
+            return;
+        }
     }
 
     // Grouping by league

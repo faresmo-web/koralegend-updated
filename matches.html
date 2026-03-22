@@ -4,28 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kora Legend - كورا ليجيند</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="stylesheet" href="styles_hd.css">
     <link rel="stylesheet" href="league-styles.css">
+    <link rel="stylesheet" href="matches-style.css">
 </head>
 <body>
+    <nav class="main-nav">
+        <ul>
+            <li><a href="index" class="nav-link" data-en="Home" data-ar="الرئيسية"><span class="nav-icon">🏠</span>Home</a></li>
+            <li><a href="matches" class="nav-link active" data-en="Matches" data-ar="المباريات"><span class="nav-icon">⚽</span>Matches</a></li>
+            <li><a href="news" class="nav-link" data-en="News" data-ar="الأخبار"><span class="nav-icon">📰</span>News</a></li>
+            <li><a href="legends" class="nav-link" data-en="Legends" data-ar="الأساطير"><span class="nav-icon">👑</span>Legends</a></li>
+            <li><a href="leagues" class="nav-link" data-en="Leagues" data-ar="البطولات"><span class="nav-icon">🏆</span>Leagues</a></li>
+        </ul>
+    </nav>
     <!-- Header -->
     <header class="main-header">
         <div class="container">
             <div class="header-content">
                 <div class="logo">
                     <div class="logo-icon"><img src="logo.png" alt="Kora Legend Logo"></div>
-                    <h1 class="logo-text" >KORA LEGEND</h1>
+                    <h1 class="logo-text">KORA LEGEND <small style="font-size: 0.6rem; opacity: 0.7; display: block; margin-top: -5px;">BY ESSAM</small></h1>
                 </div>
                 
-                <nav class="main-nav">
-                    <ul>
-                        <li><a href="index" class="nav-link" data-en="Home" data-ar="الرئيسية">Home</a></li>
-                        <li><a href="matches" class="nav-link active" data-en="Matches" data-ar="المباريات">Matches</a></li>
-                        <li><a href="news" class="nav-link" data-en="News" data-ar="الأخبار">News</a></li>
-                        <li><a href="legends" class="nav-link" data-en="Legends" data-ar="الأساطير">Legends</a></li>
-                        <li><a href="leagues" class="nav-link" data-en="Leagues" data-ar="البطولات">Leagues</a></li>
-                    </ul>
-                </nav>
                 
                 <button class="lang-toggle" id="langToggle">
                     <span class="lang-option" data-lang="en">EN</span>
@@ -36,33 +38,28 @@
         </div>
     </header>
 
-    <!-- Page Header -->
-    <section class="page-header">
+    <!-- Yallakora-Style Matches Header -->
+    <section class="yk-matches-header-section">
         <div class="container">
-            <h1 class="page-title" data-en="Football Matches" data-ar="مباريات كرة القدم">Football Matches</h1>
-            <p class="page-subtitle" data-en="Stay updated with live scores and schedules" data-ar="ابق على اطلاع بالنتائج المباشرة والجداول">Stay updated with live scores and schedules</p>
-        </div>
-    </section>
-
-    <!-- Filters -->
-    <section class="filters-section">
-        <div class="container">
-            <div class="filters">
-                <select id="leagueFilter" class="filter-select">
-                    <option value="all" data-en="All Leagues" data-ar="جميع البطولات">All Leagues</option>
-                    <option value="premier" data-en="Premier League" data-ar="الدوري الإنجليزي">Premier League</option>
-                    <option value="laliga" data-en="La Liga" data-ar="الدوري الإسباني">La Liga</option>
-                    <option value="spl" data-en="Saudi Pro League" data-ar="دوري روشن السعودي">Saudi Pro League</option>
-                    <option value="ucl" data-en="Champions League" data-ar="دوري أبطال أوروبا">Champions League</option>
-                    <option value="egyptian" data-en="Egyptian League" data-ar="الدوري المصري">Egyptian League</option>
-                    <option value="africa" data-en="Africa Cup" data-ar="كأس أفريقيا">Africa Cup</option>
-                </select>
-                
-                <select id="dateFilter" class="filter-select">
-                    <option value="today" data-en="Today" data-ar="اليوم">Today</option>
-                    <option value="yesterday" data-en="Yesterday" data-ar="أمس">Yesterday</option>
-                    <option value="tomorrow" data-en="Tomorrow" data-ar="غداً">Tomorrow</option>
-                </select>
+            <div class="yk-matches-header">
+                <button class="yk-nav-arrow yk-nav-prev" id="datePrev">&#10094;</button>
+                <h2 class="yk-matches-title" id="matchesDateTitle" data-en="Today's Matches" data-ar="مباريات اليوم">Today's Matches</h2>
+                <button class="yk-nav-arrow yk-nav-next" id="dateNext">&#10095;</button>
+            </div>
+            <div class="yk-filter-tabs">
+                <button class="yk-filter-tab active" data-filter="all" data-en="All" data-ar="الكل">All</button>
+                <button class="yk-filter-tab" data-filter="live" data-en="🔴 Live" data-ar="🔴 مباشر">🔴 Live</button>
+                <button class="yk-filter-tab" data-filter="finished" data-en="Finished" data-ar="انتهت">Finished</button>
+                <button class="yk-filter-tab" data-filter="upcoming" data-en="Upcoming" data-ar="لم تبدأ">Upcoming</button>
+            </div>
+            <div class="yk-league-filter-tabs" id="leagueFilterTabs">
+                <button class="yk-league-tab active" data-league="all" data-en="All Leagues" data-ar="جميع البطولات">All Leagues</button>
+                <button class="yk-league-tab" data-league="premier" data-en="Premier League" data-ar="الإنجليزي">Premier League</button>
+                <button class="yk-league-tab" data-league="laliga" data-en="La Liga" data-ar="الإسباني">La Liga</button>
+                <button class="yk-league-tab" data-league="spl" data-en="Saudi Pro" data-ar="السعودي">Saudi Pro</button>
+                <button class="yk-league-tab" data-league="ucl" data-en="UCL" data-ar="أبطال أوروبا">UCL</button>
+                <button class="yk-league-tab" data-league="egyptian" data-en="Egyptian" data-ar="المصري">Egyptian</button>
+                <button class="yk-league-tab" data-league="africa" data-en="Africa" data-ar="أفريقيا">Africa</button>
             </div>
         </div>
     </section>
@@ -84,13 +81,14 @@
                     <div class="logo-icon"><img src="logo.png" alt="Kora Legend Logo"></div>
                     <h3 data-en="KORA LEGEND" data-ar="كورا ليجيند">KORA LEGEND</h3>
                 </div>
-                <p class="footer-text" data-en="© 2024 Kora Legend. All rights reserved." data-ar="© 2024 كورا ليجيند. جميع الحقوق محفوظة.">© 2024 Kora Legend. All rights reserved.</p>
+                <p class="footer-text" data-en="© 2024 Kora Legend. Developed by EssaM. All rights reserved." data-ar="© 2024 كورا ليجيند. تم التطوير بواسطة عصام. جميع الحقوق محفوظة.">© 2024 Kora Legend. Developed by EssaM. All rights reserved.</p>
             </div>
         </div>
     </footer>
 
     <script src="football-api.js"></script>
+    <script src="match-detail.js"></script>
     <script src="matches-data.js"></script>
-    <script src="script.js"></script>
+    <script src="script_hd.js"></script>
 </body>
 </html>

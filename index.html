@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kora Legend - كورا ليجيند</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="stylesheet" href="styles_hd.css">
     <link rel="stylesheet" href="league-styles.css">
 </head>
 <body>
@@ -14,18 +15,8 @@
             <div class="header-content">
                 <div class="logo">
                     <div class="logo-icon"><img src="logo.png" alt="Kora Legend Logo"></div>
-                    <h1 class="logo-text">KORA LEGEND</h1>
+                    <h1 class="logo-text">KORA LEGEND <small style="font-size: 0.6rem; opacity: 0.7; display: block; margin-top: -5px;">BY ESSAM</small></h1>
                 </div>
-                
-                <nav class="main-nav">
-                    <ul>
-                        <li><a href="index" class="nav-link active" data-en="Home" data-ar="الرئيسية">Home</a></li>
-                        <li><a href="matches" class="nav-link" data-en="Matches" data-ar="المباريات">Matches</a></li>
-                        <li><a href="news" class="nav-link" data-en="News" data-ar="الأخبار">News</a></li>
-                        <li><a href="legends" class="nav-link" data-en="Legends" data-ar="الأساطير">Legends</a></li>
-                        <li><a href="leagues" class="nav-link" data-en="Leagues" data-ar="البطولات">Leagues</a></li>
-                    </ul>
-                </nav>
                 
                 <button class="lang-toggle" id="langToggle">
                     <span class="lang-option" data-lang="en">EN</span>
@@ -97,12 +88,22 @@
                     <div class="logo-icon"><img src="logo.png" alt="Kora Legend Logo"></div>
                     <h3 data-en="KORA LEGEND" data-ar="كورا ليجيند">KORA LEGEND</h3>
                 </div>
-                <p class="footer-text" data-en="© 2024 Kora Legend. All rights reserved." data-ar="© 2024 كورا ليجيند. جميع الحقوق محفوظة.">© 2024 Kora Legend. All rights reserved.</p>
+                <p class="footer-text" data-en="© 2024 Kora Legend. Developed by EssaM. All rights reserved." data-ar="© 2024 كورا ليجيند. تم التطوير بواسطة عصام. جميع الحقوق محفوظة.">© 2024 Kora Legend. Developed by EssaM. All rights reserved.</p>
             </div>
         </div>
     </footer>
 
+    <nav class="main-nav">
+        <ul>
+            <li><a href="index" class="nav-link active" data-en="Home" data-ar="الرئيسية"><span class="nav-icon">🏠</span>Home</a></li>
+            <li><a href="matches" class="nav-link" data-en="Matches" data-ar="المباريات"><span class="nav-icon">⚽</span>Matches</a></li>
+            <li><a href="news" class="nav-link" data-en="News" data-ar="الأخبار"><span class="nav-icon">📰</span>News</a></li>
+            <li><a href="legends" class="nav-link" data-en="Legends" data-ar="الأساطير"><span class="nav-icon">👑</span>Legends</a></li>
+            <li><a href="leagues" class="nav-link" data-en="Leagues" data-ar="البطولات"><span class="nav-icon">🏆</span>Leagues</a></li>
+        </ul>
+    </nav>
+
     <script src="football-api.js"></script>
-    <script src="script.js"></script>
+    <script src="script_hd.js"></script>
 </body>
 </html>

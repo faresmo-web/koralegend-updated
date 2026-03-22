@@ -12,18 +12,18 @@ const leaguesDatabase = {
                 { rank: 6, team: 'Tottenham', icon: 'https://media.api-sports.io/football/teams/47.png', played: 30, won: 13, drawn: 5, lost: 12, points: 44 },
                 { rank: 7, team: 'Manchester United', icon: 'https://media.api-sports.io/football/teams/33.png', played: 29, won: 14, drawn: 9, lost: 6, points: 51 },
                 { rank: 8, team: 'Newcastle', icon: 'https://media.api-sports.io/football/teams/34.png', played: 29, won: 12, drawn: 6, lost: 11, points: 42 },
-                { rank: 9, team: 'West Ham', icon: '⚒️', played: 30, won: 11, drawn: 8, lost: 11, points: 41 },
-                { rank: 10, team: 'Brighton', icon: '🔵', played: 29, won: 10, drawn: 9, lost: 10, points: 39 },
-                { rank: 11, team: 'Wolves', icon: '🟡', played: 29, won: 10, drawn: 7, lost: 12, points: 37 },
-                { rank: 12, team: 'Bournemouth', icon: '🔴', played: 30, won: 10, drawn: 6, lost: 14, points: 36 },
-                { rank: 13, team: 'Fulham', icon: '⚪', played: 29, won: 9, drawn: 8, lost: 12, points: 35 },
-                { rank: 14, team: 'Brentford', icon: '🔴', played: 29, won: 9, drawn: 5, lost: 15, points: 32 },
-                { rank: 15, team: 'Everton', icon: '🔵', played: 30, won: 8, drawn: 8, lost: 14, points: 32 },
-                { rank: 16, team: 'Crystal Palace', icon: '🔴', played: 30, won: 7, drawn: 9, lost: 14, points: 30 },
-                { rank: 17, team: 'Nottm Forest', icon: '🔴', played: 29, won: 7, drawn: 7, lost: 15, points: 28 },
-                { rank: 18, team: 'Leicester', icon: '🔵', played: 30, won: 6, drawn: 8, lost: 16, points: 26 },
-                { rank: 19, team: 'Ipswich', icon: '🔵', played: 29, won: 5, drawn: 8, lost: 16, points: 23 },
-                { rank: 20, team: 'Southampton', icon: '🔴', played: 30, won: 4, drawn: 6, lost: 20, points: 18 }
+                { rank: 9, team: 'West Ham', icon: 'âڑ’ï¸ڈ', played: 30, won: 11, drawn: 8, lost: 11, points: 41 },
+                { rank: 10, team: 'Brighton', icon: 'ًں”µ', played: 29, won: 10, drawn: 9, lost: 10, points: 39 },
+                { rank: 11, team: 'Wolves', icon: 'ًںں،', played: 29, won: 10, drawn: 7, lost: 12, points: 37 },
+                { rank: 12, team: 'Bournemouth', icon: 'ًں”´', played: 30, won: 10, drawn: 6, lost: 14, points: 36 },
+                { rank: 13, team: 'Fulham', icon: 'âڑھ', played: 29, won: 9, drawn: 8, lost: 12, points: 35 },
+                { rank: 14, team: 'Brentford', icon: 'ًں”´', played: 29, won: 9, drawn: 5, lost: 15, points: 32 },
+                { rank: 15, team: 'Everton', icon: 'ًں”µ', played: 30, won: 8, drawn: 8, lost: 14, points: 32 },
+                { rank: 16, team: 'Crystal Palace', icon: 'ًں”´', played: 30, won: 7, drawn: 9, lost: 14, points: 30 },
+                { rank: 17, team: 'Nottm Forest', icon: 'ًں”´', played: 29, won: 7, drawn: 7, lost: 15, points: 28 },
+                { rank: 18, team: 'Leicester', icon: 'ًں”µ', played: 30, won: 6, drawn: 8, lost: 16, points: 26 },
+                { rank: 19, team: 'Ipswich', icon: 'ًں”µ', played: 29, won: 5, drawn: 8, lost: 16, points: 23 },
+                { rank: 20, team: 'Southampton', icon: 'ًں”´', played: 30, won: 4, drawn: 6, lost: 20, points: 18 }
             ],
             scorers: [
                 { rank: 1, name: 'Bukayo Saka', team: 'Arsenal', goals: 19, photo: 'https://media.api-sports.io/football/players/1460.png' },
@@ -43,11 +43,11 @@ const leaguesDatabase = {
                 { rank: 5, team: 'Real Betis', icon: 'https://media.api-sports.io/football/teams/543.png', played: 27, won: 12, drawn: 7, lost: 8, points: 43 },
                 { rank: 6, team: 'Real Sociedad', icon: 'https://media.api-sports.io/football/teams/548.png', played: 27, won: 9, drawn: 8, lost: 10, points: 35 },
                 { rank: 9, team: 'Getafe', icon: 'https://media.api-sports.io/football/teams/546.png', played: 27, won: 9, drawn: 8, lost: 10, points: 35 },
-                { rank: 10, team: 'Athletic Bilbao', icon: '🔴', played: 27, won: 9, drawn: 8, lost: 10, points: 35 }
+                { rank: 10, team: 'Athletic Bilbao', icon: 'ًں”´', played: 27, won: 9, drawn: 8, lost: 10, points: 35 }
             ],
             scorers: [
                 { rank: 1, name: 'Robert Lewandowski', team: 'Barcelona', goals: 21, photo: 'https://media.api-sports.io/football/players/521.png', teamLogo: 'https://media.api-sports.io/football/teams/529.png' },
-                { rank: 2, name: 'Kylian Mbappé', team: 'Real Madrid', goals: 19, photo: 'https://media.api-sports.io/football/players/276.png', teamLogo: 'https://media.api-sports.io/football/teams/541.png' },
+                { rank: 2, name: 'Kylian Mbappأ©', team: 'Real Madrid', goals: 19, photo: 'https://media.api-sports.io/football/players/276.png', teamLogo: 'https://media.api-sports.io/football/teams/541.png' },
                 { rank: 3, name: 'Lamine Yamal', team: 'Barcelona', goals: 14, photo: 'https://media.api-sports.io/football/players/341908.png', teamLogo: 'https://media.api-sports.io/football/teams/529.png' }
             ]
         },
@@ -57,13 +57,13 @@ const leaguesDatabase = {
                 { rank: 1, team: 'Al Nassr', icon: 'https://media.api-sports.io/football/teams/2939.png', played: 25, won: 21, drawn: 1, lost: 3, points: 64 },
                 { rank: 2, team: 'Al Ahli', icon: 'https://media.api-sports.io/football/teams/2931.png', played: 26, won: 19, drawn: 5, lost: 2, points: 62 },
                 { rank: 3, team: 'Al Hilal', icon: 'https://media.api-sports.io/football/teams/2930.png', played: 25, won: 18, drawn: 7, lost: 0, points: 61 },
-                { rank: 4, team: 'Al Qadsiah', icon: '🔵', played: 26, won: 18, drawn: 6, lost: 2, points: 60 },
-                { rank: 5, team: 'Al Taawoun', icon: '🔵', played: 26, won: 13, drawn: 6, lost: 7, points: 45 },
-                { rank: 6, team: 'Al Ittihad', icon: '⚫', played: 26, won: 12, drawn: 6, lost: 8, points: 42 },
-                { rank: 7, team: 'Al Ettifaq', icon: '🟢', played: 26, won: 11, drawn: 6, lost: 9, points: 39 },
-                { rank: 8, team: 'Neom', icon: '🔵', played: 26, won: 9, drawn: 6, lost: 11, points: 33 },
-                { rank: 9, team: 'Al Fayha', icon: '🟠', played: 26, won: 9, drawn: 6, lost: 11, points: 33 },
-                { rank: 10, team: 'Al Hazem', icon: '🟢', played: 26, won: 8, drawn: 7, lost: 11, points: 31 }
+                { rank: 4, team: 'Al Qadsiah', icon: 'ًں”µ', played: 26, won: 18, drawn: 6, lost: 2, points: 60 },
+                { rank: 5, team: 'Al Taawoun', icon: 'ًں”µ', played: 26, won: 13, drawn: 6, lost: 7, points: 45 },
+                { rank: 6, team: 'Al Ittihad', icon: 'âڑ«', played: 26, won: 12, drawn: 6, lost: 8, points: 42 },
+                { rank: 7, team: 'Al Ettifaq', icon: 'ًںں¢', played: 26, won: 11, drawn: 6, lost: 9, points: 39 },
+                { rank: 8, team: 'Neom', icon: 'ًں”µ', played: 26, won: 9, drawn: 6, lost: 11, points: 33 },
+                { rank: 9, team: 'Al Fayha', icon: 'ًںں ', played: 26, won: 9, drawn: 6, lost: 11, points: 33 },
+                { rank: 10, team: 'Al Hazem', icon: 'ًںں¢', played: 26, won: 8, drawn: 7, lost: 11, points: 31 }
             ],
             scorers: [
                 { rank: 1, name: 'Cristiano Ronaldo', team: 'Al Nassr', goals: 28 },
@@ -73,14 +73,14 @@ const leaguesDatabase = {
         ucl: {
             name: 'Champions League',
             standings: [
-                { rank: 1, team: 'Arsenal', icon: '🔴', played: 8, won: 8, drawn: 0, lost: 0, points: 24, group: 'League Phase' },
-                { rank: 2, team: 'Bayern Munich', icon: '🔴', played: 8, won: 7, drawn: 0, lost: 1, points: 21, group: 'League Phase' },
-                { rank: 3, team: 'Liverpool', icon: '🔴', played: 8, won: 6, drawn: 0, lost: 2, points: 18, group: 'League Phase' },
-                { rank: 4, team: 'Tottenham', icon: '⚪', played: 8, won: 5, drawn: 2, lost: 1, points: 17, group: 'League Phase' },
-                { rank: 5, team: 'Barcelona', icon: '🔴', played: 8, won: 5, drawn: 1, lost: 2, points: 16, group: 'League Phase' },
-                { rank: 6, team: 'Chelsea', icon: '🔵', played: 8, won: 5, drawn: 1, lost: 2, points: 16, group: 'League Phase' },
-                { rank: 7, team: 'Sporting CP', icon: '🟢', played: 8, won: 5, drawn: 1, lost: 2, points: 16, group: 'League Phase' },
-                { rank: 8, team: 'Man City', icon: '🔵', played: 8, won: 5, drawn: 1, lost: 2, points: 16, group: 'League Phase' }
+                { rank: 1, team: 'Arsenal', icon: 'https://media.api-sports.io/football/teams/42.png', played: 8, won: 8, drawn: 0, lost: 0, points: 24, group: 'League Phase' },
+                { rank: 2, team: 'Bayern Munich', icon: 'https://media.api-sports.io/football/teams/157.png', played: 8, won: 7, drawn: 0, lost: 1, points: 21, group: 'League Phase' },
+                { rank: 3, team: 'Liverpool', icon: 'https://media.api-sports.io/football/teams/40.png', played: 8, won: 6, drawn: 0, lost: 2, points: 18, group: 'League Phase' },
+                { rank: 4, team: 'Tottenham', icon: 'https://media.api-sports.io/football/teams/47.png', played: 8, won: 5, drawn: 2, lost: 1, points: 17, group: 'League Phase' },
+                { rank: 5, team: 'Barcelona', icon: 'https://media.api-sports.io/football/teams/529.png', played: 8, won: 5, drawn: 1, lost: 2, points: 16, group: 'League Phase' },
+                { rank: 6, team: 'Chelsea', icon: 'https://media.api-sports.io/football/teams/49.png', played: 8, won: 5, drawn: 1, lost: 2, points: 16, group: 'League Phase' },
+                { rank: 7, team: 'Sporting CP', icon: 'https://media.api-sports.io/football/teams/228.png', played: 8, won: 5, drawn: 1, lost: 2, points: 16, group: 'League Phase' },
+                { rank: 8, team: 'Man City', icon: 'https://media.api-sports.io/football/teams/50.png', played: 8, won: 5, drawn: 1, lost: 2, points: 16, group: 'League Phase' }
             ],
             scorers: [
                 { rank: 1, name: 'Harry Kane', team: 'Bayern', goals: 9 },
@@ -93,30 +93,33 @@ const leaguesDatabase = {
                 { rank: 1, team: 'Zamalek', icon: 'https://media.api-sports.io/football/teams/1024.png', played: 20, won: 13, drawn: 4, lost: 3, points: 43 },
                 { rank: 2, team: 'Pyramids', icon: 'https://media.api-sports.io/football/teams/1025.png', played: 20, won: 13, drawn: 4, lost: 3, points: 43 },
                 { rank: 3, team: 'Al Ahly', icon: 'https://media.api-sports.io/football/teams/1028.png', played: 20, won: 11, drawn: 7, lost: 2, points: 40 },
-                { rank: 4, team: 'Ceramica Cleopatra', icon: '🔴', played: 20, won: 11, drawn: 5, lost: 4, points: 38 },
-                { rank: 5, team: 'Al Masry', icon: '🟢', played: 20, won: 8, drawn: 8, lost: 4, points: 32 },
-                { rank: 6, team: 'Smouha', icon: '🔵', played: 20, won: 8, drawn: 7, lost: 5, points: 31 },
-                { rank: 7, team: 'Enppi', icon: '🔵', played: 20, won: 7, drawn: 9, lost: 4, points: 30 },
-                { rank: 8, team: 'Wadi Degla', icon: '🟡', played: 20, won: 8, drawn: 5, lost: 7, points: 29 },
-                { rank: 9, team: 'ZED FC', icon: '🟡', played: 20, won: 7, drawn: 8, lost: 5, points: 29 },
-                { rank: 10, team: 'El Gouna', icon: '🟠', played: 20, won: 7, drawn: 7, lost: 6, points: 28 }
+                { rank: 4, team: 'Ceramica Cleopatra', icon: 'ًں”´', played: 20, won: 11, drawn: 5, lost: 4, points: 38 },
+                { rank: 5, team: 'Al Masry', icon: 'ًںں¢', played: 20, won: 8, drawn: 8, lost: 4, points: 32 },
+                { rank: 6, team: 'Smouha', icon: 'ًں”µ', played: 20, won: 8, drawn: 7, lost: 5, points: 31 },
+                { rank: 7, team: 'Enppi', icon: 'ًں”µ', played: 20, won: 7, drawn: 9, lost: 4, points: 30 },
+                { rank: 8, team: 'Wadi Degla', icon: 'ًںں،', played: 20, won: 8, drawn: 5, lost: 7, points: 29 },
+                { rank: 9, team: 'ZED FC', icon: 'ًںں،', played: 20, won: 7, drawn: 8, lost: 5, points: 29 },
+                { rank: 10, team: 'El Gouna', icon: 'ًںں ', played: 20, won: 7, drawn: 7, lost: 6, points: 28 }
             ],
             scorers: [
-                { rank: 1, name: 'Wessam Abou Ali', team: 'Al Ahly', goals: 14 },
-                { rank: 2, name: 'Fiston Mayele', team: 'Pyramids', goals: 12 }
+                { rank: 1, name: 'Nasser Maher', team: 'Zamalek', goals: 7 },
+                { rank: 2, name: 'Salah Mohsen', team: 'Al Masry', goals: 7 },
+                { rank: 3, name: 'Oday Dabbagh', team: 'Zamalek', goals: 6 },
+                { rank: 4, name: 'S. Ougola', team: 'Ceramica', goals: 6 },
+                { rank: 5, name: 'Fagrie Lakay', team: 'Ceramica', goals: 5 }
             ]
         },
         caf: {
             name: 'CAF Champions League',
             standings: [
-                { rank: 1, team: 'RS Berkane', icon: '🟠', played: 3, won: 2, drawn: 1, lost: 0, points: 7, group: 'Group A' },
-                { rank: 2, team: 'Pyramids FC', icon: '🔵', played: 3, won: 2, drawn: 1, lost: 0, points: 7, group: 'Group A' },
-                { rank: 1, team: 'Al Ahly', icon: '🔴', played: 3, won: 2, drawn: 1, lost: 0, points: 7, group: 'Group B' },
-                { rank: 2, team: 'Young Africans', icon: '🟢', played: 3, won: 1, drawn: 1, lost: 1, points: 4, group: 'Group B' },
-                { rank: 1, team: 'Sundowns', icon: '🟡', played: 3, won: 1, drawn: 2, lost: 0, points: 5, group: 'Group C' },
-                { rank: 2, team: 'Al Hilal', icon: '🔵', played: 3, won: 1, drawn: 2, lost: 0, points: 5, group: 'Group C' },
-                { rank: 1, team: 'Stade Malien', icon: '⚪', played: 3, won: 2, drawn: 1, lost: 0, points: 7, group: 'Group D' },
-                { rank: 2, team: 'Espérance', icon: '🔴', played: 3, won: 1, drawn: 2, lost: 0, points: 5, group: 'Group D' }
+                { rank: 1, team: 'RS Berkane', icon: 'ًںں ', played: 3, won: 2, drawn: 1, lost: 0, points: 7, group: 'Group A' },
+                { rank: 2, team: 'Pyramids FC', icon: 'ًں”µ', played: 3, won: 2, drawn: 1, lost: 0, points: 7, group: 'Group A' },
+                { rank: 1, team: 'Al Ahly', icon: 'ًں”´', played: 3, won: 2, drawn: 1, lost: 0, points: 7, group: 'Group B' },
+                { rank: 2, team: 'Young Africans', icon: 'ًںں¢', played: 3, won: 1, drawn: 1, lost: 1, points: 4, group: 'Group B' },
+                { rank: 1, team: 'Sundowns', icon: 'ًںں،', played: 3, won: 1, drawn: 2, lost: 0, points: 5, group: 'Group C' },
+                { rank: 2, team: 'Al Hilal', icon: 'ًں”µ', played: 3, won: 1, drawn: 2, lost: 0, points: 5, group: 'Group C' },
+                { rank: 1, team: 'Stade Malien', icon: 'âڑھ', played: 3, won: 2, drawn: 1, lost: 0, points: 7, group: 'Group D' },
+                { rank: 2, team: 'Espأ©rance', icon: 'ًں”´', played: 3, won: 1, drawn: 2, lost: 0, points: 5, group: 'Group D' }
             ],
             scorers: [
                 { rank: 1, name: 'Hussein El Shahat', team: 'Al Ahly', goals: 4 }
@@ -125,107 +128,110 @@ const leaguesDatabase = {
     },
     ar: {
         premier: {
-            name: 'الدوري الإنجليزي',
+            name: 'ط§ظ„ط¯ظˆط±ظٹ ط§ظ„ط¥ظ†ط¬ظ„ظٹط²ظٹ',
             standings: [
-                { rank: 1, team: 'آرسنال', icon: '🔴', played: 30, won: 20, drawn: 7, lost: 3, points: 67 },
-                { rank: 2, team: 'مانشستر سيتي', icon: '🔵', played: 29, won: 18, drawn: 6, lost: 5, points: 60 },
-                { rank: 3, team: 'مانشستر يونايتد', icon: '🔴', played: 29, won: 14, drawn: 9, lost: 6, points: 51 },
-                { rank: 4, team: 'أستون فيلا', icon: '🔴', played: 29, won: 14, drawn: 9, lost: 6, points: 51 },
-                { rank: 5, team: 'تشيلسي', icon: '🔵', played: 29, won: 14, drawn: 6, lost: 9, points: 48 },
-                { rank: 6, team: 'ليفربول', icon: '🔴', played: 29, won: 13, drawn: 9, lost: 7, points: 48 },
-                { rank: 7, team: 'توتنهام', icon: '⚪', played: 30, won: 13, drawn: 5, lost: 12, points: 44 },
-                { rank: 8, team: 'نيوكاسل', icon: '⚫', played: 29, won: 12, drawn: 6, lost: 11, points: 42 },
-                { rank: 9, team: 'وست هام', icon: '⚒️', played: 30, won: 11, drawn: 8, lost: 11, points: 41 },
-                { rank: 10, team: 'برايتون', icon: '🔵', played: 29, won: 10, drawn: 9, lost: 10, points: 39 }
+                { rank: 1, team: 'ط¢ط±ط³ظ†ط§ظ„', icon: 'ًں”´', played: 30, won: 20, drawn: 7, lost: 3, points: 67 },
+                { rank: 2, team: 'ظ…ط§ظ†ط´ط³طھط± ط³ظٹطھظٹ', icon: 'ًں”µ', played: 29, won: 18, drawn: 6, lost: 5, points: 60 },
+                { rank: 3, team: 'ظ…ط§ظ†ط´ط³طھط± ظٹظˆظ†ط§ظٹطھط¯', icon: 'ًں”´', played: 29, won: 14, drawn: 9, lost: 6, points: 51 },
+                { rank: 4, team: 'ط£ط³طھظˆظ† ظپظٹظ„ط§', icon: 'ًں”´', played: 29, won: 14, drawn: 9, lost: 6, points: 51 },
+                { rank: 5, team: 'طھط´ظٹظ„ط³ظٹ', icon: 'ًں”µ', played: 29, won: 14, drawn: 6, lost: 9, points: 48 },
+                { rank: 6, team: 'ظ„ظٹظپط±ط¨ظˆظ„', icon: 'ًں”´', played: 29, won: 13, drawn: 9, lost: 7, points: 48 },
+                { rank: 7, team: 'طھظˆطھظ†ظ‡ط§ظ…', icon: 'âڑھ', played: 30, won: 13, drawn: 5, lost: 12, points: 44 },
+                { rank: 8, team: 'ظ†ظٹظˆظƒط§ط³ظ„', icon: 'âڑ«', played: 29, won: 12, drawn: 6, lost: 11, points: 42 },
+                { rank: 9, team: 'ظˆط³طھ ظ‡ط§ظ…', icon: 'âڑ’ï¸ڈ', played: 30, won: 11, drawn: 8, lost: 11, points: 41 },
+                { rank: 10, team: 'ط¨ط±ط§ظٹطھظˆظ†', icon: 'ًں”µ', played: 29, won: 10, drawn: 9, lost: 10, points: 39 }
             ],
             scorers: [
-                { rank: 1, name: 'بوكايو ساكا', team: 'آرسنال', goals: 19, photo: 'https://media.api-sports.io/football/players/1460.png' },
-                { rank: 2, name: 'إيرلينج هالاند', team: 'مانشستر سيتي', goals: 18, photo: 'https://media.api-sports.io/football/players/1100.png' },
-                { rank: 3, name: 'محمد صلاح', team: 'ليفربول', goals: 17, photo: 'https://media.api-sports.io/football/players/306.png' },
-                { rank: 4, name: 'أولي واتكينز', team: 'أستون فيلا', goals: 16, photo: 'https://media.api-sports.io/football/players/19134.png' }
+                { rank: 1, name: 'ط¨ظˆظƒط§ظٹظˆ ط³ط§ظƒط§', team: 'ط¢ط±ط³ظ†ط§ظ„', goals: 19, photo: 'https://media.api-sports.io/football/players/1460.png' },
+                { rank: 2, name: 'ط¥ظٹط±ظ„ظٹظ†ط¬ ظ‡ط§ظ„ط§ظ†ط¯', team: 'ظ…ط§ظ†ط´ط³طھط± ط³ظٹطھظٹ', goals: 18, photo: 'https://media.api-sports.io/football/players/1100.png' },
+                { rank: 3, name: 'ظ…ط­ظ…ط¯ طµظ„ط§ط­', team: 'ظ„ظٹظپط±ط¨ظˆظ„', goals: 17, photo: 'https://media.api-sports.io/football/players/306.png' },
+                { rank: 4, name: 'ط£ظˆظ„ظٹ ظˆط§طھظƒظٹظ†ط²', team: 'ط£ط³طھظˆظ† ظپظٹظ„ط§', goals: 16, photo: 'https://media.api-sports.io/football/players/19134.png' }
             ]
         },
         laliga: {
-            name: 'الدوري الإسباني',
+            name: 'ط§ظ„ط¯ظˆط±ظٹ ط§ظ„ط¥ط³ط¨ط§ظ†ظٹ',
             standings: [
-                { rank: 1, team: 'برشلونة', icon: '🔴', played: 27, won: 22, drawn: 1, lost: 4, points: 67 },
-                { rank: 2, team: 'ريال مدريد', icon: '⚪', played: 27, won: 20, drawn: 3, lost: 4, points: 63 },
-                { rank: 3, team: 'فياريال', icon: '🟡', played: 28, won: 17, drawn: 4, lost: 7, points: 55 },
-                { rank: 4, team: 'أتلتيكو مدريد', icon: '🔴', played: 27, won: 16, drawn: 6, lost: 5, points: 54 },
-                { rank: 5, team: 'ريال بيتيس', icon: '🟢', played: 27, won: 12, drawn: 7, lost: 8, points: 43 },
-                { rank: 6, team: 'سيلتا فيغو', icon: '🔵', played: 27, won: 11, drawn: 7, lost: 9, points: 40 },
-                { rank: 7, team: 'إسبانيول', icon: '🔵', played: 27, won: 10, drawn: 7, lost: 10, points: 37 },
-                { rank: 8, team: 'ريال سوسيداد', icon: '🔵', played: 27, won: 9, drawn: 8, lost: 10, points: 35 }
+                { rank: 1, team: 'ط¨ط±ط´ظ„ظˆظ†ط©', icon: 'ًں”´', played: 27, won: 22, drawn: 1, lost: 4, points: 67 },
+                { rank: 2, team: 'ط±ظٹط§ظ„ ظ…ط¯ط±ظٹط¯', icon: 'âڑھ', played: 27, won: 20, drawn: 3, lost: 4, points: 63 },
+                { rank: 3, team: 'ظپظٹط§ط±ظٹط§ظ„', icon: 'ًںں،', played: 28, won: 17, drawn: 4, lost: 7, points: 55 },
+                { rank: 4, team: 'ط£طھظ„طھظٹظƒظˆ ظ…ط¯ط±ظٹط¯', icon: 'ًں”´', played: 27, won: 16, drawn: 6, lost: 5, points: 54 },
+                { rank: 5, team: 'ط±ظٹط§ظ„ ط¨ظٹطھظٹط³', icon: 'ًںں¢', played: 27, won: 12, drawn: 7, lost: 8, points: 43 },
+                { rank: 6, team: 'ط³ظٹظ„طھط§ ظپظٹط؛ظˆ', icon: 'ًں”µ', played: 27, won: 11, drawn: 7, lost: 9, points: 40 },
+                { rank: 7, team: 'ط¥ط³ط¨ط§ظ†ظٹظˆظ„', icon: 'ًں”µ', played: 27, won: 10, drawn: 7, lost: 10, points: 37 },
+                { rank: 8, team: 'ط±ظٹط§ظ„ ط³ظˆط³ظٹط¯ط§ط¯', icon: 'ًں”µ', played: 27, won: 9, drawn: 8, lost: 10, points: 35 }
             ],
             scorers: [
-                { rank: 1, name: 'روبرت ليفاندوفسكي', team: 'برشلونة', goals: 21 },
-                { rank: 2, name: 'كيليان مبابي', team: 'ريال مدريد', goals: 19 }
+                { rank: 1, name: 'ط±ظˆط¨ط±طھ ظ„ظٹظپط§ظ†ط¯ظˆظپط³ظƒظٹ', team: 'ط¨ط±ط´ظ„ظˆظ†ط©', goals: 21 },
+                { rank: 2, name: 'ظƒظٹظ„ظٹط§ظ† ظ…ط¨ط§ط¨ظٹ', team: 'ط±ظٹط§ظ„ ظ…ط¯ط±ظٹط¯', goals: 19 }
             ]
         },
         spl: {
-            name: 'دوري روشن السعودي',
+            name: 'ط¯ظˆط±ظٹ ط±ظˆط´ظ† ط§ظ„ط³ط¹ظˆط¯ظٹ',
             standings: [
-                { rank: 1, team: 'النصر', icon: '💛', played: 25, won: 21, drawn: 1, lost: 3, points: 64 },
-                { rank: 2, team: 'الأهلي', icon: '💚', played: 26, won: 19, drawn: 5, lost: 2, points: 62 },
-                { rank: 3, team: 'الهلال', icon: '🔵', played: 25, won: 18, drawn: 7, lost: 0, points: 61 },
-                { rank: 4, team: 'القادسية', icon: '🔵', played: 26, won: 18, drawn: 6, lost: 2, points: 60 },
-                { rank: 5, team: 'التعاون', icon: '🔵', played: 26, won: 13, drawn: 6, lost: 7, points: 45 },
-                { rank: 6, team: 'الاتحاد', icon: '⚫', played: 26, won: 12, drawn: 6, lost: 8, points: 42 },
-                { rank: 7, team: 'الاتفاق', icon: '🟢', played: 26, won: 11, drawn: 6, lost: 9, points: 39 }
+                { rank: 1, team: 'ط§ظ„ظ†طµط±', icon: 'ًں’›', played: 25, won: 21, drawn: 1, lost: 3, points: 64 },
+                { rank: 2, team: 'ط§ظ„ط£ظ‡ظ„ظٹ', icon: 'ًں’ڑ', played: 26, won: 19, drawn: 5, lost: 2, points: 62 },
+                { rank: 3, team: 'ط§ظ„ظ‡ظ„ط§ظ„', icon: 'ًں”µ', played: 25, won: 18, drawn: 7, lost: 0, points: 61 },
+                { rank: 4, team: 'ط§ظ„ظ‚ط§ط¯ط³ظٹط©', icon: 'ًں”µ', played: 26, won: 18, drawn: 6, lost: 2, points: 60 },
+                { rank: 5, team: 'ط§ظ„طھط¹ط§ظˆظ†', icon: 'ًں”µ', played: 26, won: 13, drawn: 6, lost: 7, points: 45 },
+                { rank: 6, team: 'ط§ظ„ط§طھط­ط§ط¯', icon: 'âڑ«', played: 26, won: 12, drawn: 6, lost: 8, points: 42 },
+                { rank: 7, team: 'ط§ظ„ط§طھظپط§ظ‚', icon: 'ًںں¢', played: 26, won: 11, drawn: 6, lost: 9, points: 39 }
             ],
             scorers: [
-                { rank: 1, name: 'كريستيانو رونالدو', team: 'النصر', goals: 28 },
-                { rank: 2, name: 'ألكساندر ميتروفيتش', team: 'الهلال', goals: 22 }
+                { rank: 1, name: 'ظƒط±ظٹط³طھظٹط§ظ†ظˆ ط±ظˆظ†ط§ظ„ط¯ظˆ', team: 'ط§ظ„ظ†طµط±', goals: 28 },
+                { rank: 2, name: 'ط£ظ„ظƒط³ط§ظ†ط¯ط± ظ…ظٹطھط±ظˆظپظٹطھط´', team: 'ط§ظ„ظ‡ظ„ط§ظ„', goals: 22 }
             ]
         },
         ucl: {
-            name: 'دوري أبطال أوروبا',
+            name: 'ط¯ظˆط±ظٹ ط£ط¨ط·ط§ظ„ ط£ظˆط±ظˆط¨ط§',
             standings: [
-                { rank: 1, team: 'آرسنال', icon: '🔴', played: 8, won: 8, drawn: 0, lost: 0, points: 24, group: 'مرحلة الدوري' },
-                { rank: 2, team: 'بايرن ميونخ', icon: '🔴', played: 8, won: 7, drawn: 0, lost: 1, points: 21, group: 'مرحلة الدوري' },
-                { rank: 3, team: 'ليفربول', icon: '🔴', played: 8, won: 6, drawn: 0, lost: 2, points: 18, group: 'مرحلة الدوري' },
-                { rank: 4, team: 'توتنهام', icon: '⚪', played: 8, won: 5, drawn: 2, lost: 1, points: 17, group: 'مرحلة الدوري' },
-                { rank: 5, team: 'برشلونة', icon: '🔴', played: 8, won: 5, drawn: 1, lost: 2, points: 16, group: 'مرحلة الدوري' },
-                { rank: 6, team: 'تشيلسي', icon: '🔵', played: 8, won: 5, drawn: 1, lost: 2, points: 16, group: 'مرحلة الدوري' }
+                { rank: 1, team: 'ط¢ط±ط³ظ†ط§ظ„', icon: 'ًں”´', played: 8, won: 8, drawn: 0, lost: 0, points: 24, group: 'ظ…ط±ط­ظ„ط© ط§ظ„ط¯ظˆط±ظٹ' },
+                { rank: 2, team: 'ط¨ط§ظٹط±ظ† ظ…ظٹظˆظ†ط®', icon: 'ًں”´', played: 8, won: 7, drawn: 0, lost: 1, points: 21, group: 'ظ…ط±ط­ظ„ط© ط§ظ„ط¯ظˆط±ظٹ' },
+                { rank: 3, team: 'ظ„ظٹظپط±ط¨ظˆظ„', icon: 'ًں”´', played: 8, won: 6, drawn: 0, lost: 2, points: 18, group: 'ظ…ط±ط­ظ„ط© ط§ظ„ط¯ظˆط±ظٹ' },
+                { rank: 4, team: 'طھظˆطھظ†ظ‡ط§ظ…', icon: 'âڑھ', played: 8, won: 5, drawn: 2, lost: 1, points: 17, group: 'ظ…ط±ط­ظ„ط© ط§ظ„ط¯ظˆط±ظٹ' },
+                { rank: 5, team: 'ط¨ط±ط´ظ„ظˆظ†ط©', icon: 'ًں”´', played: 8, won: 5, drawn: 1, lost: 2, points: 16, group: 'ظ…ط±ط­ظ„ط© ط§ظ„ط¯ظˆط±ظٹ' },
+                { rank: 6, team: 'طھط´ظٹظ„ط³ظٹ', icon: 'ًں”µ', played: 8, won: 5, drawn: 1, lost: 2, points: 16, group: 'ظ…ط±ط­ظ„ط© ط§ظ„ط¯ظˆط±ظٹ' }
             ],
             scorers: [
-                { rank: 1, name: 'هاري كين', team: 'بايرن', goals: 9 },
-                { rank: 2, name: 'إيرلينج هالاند', team: 'مانشستر سيتي', goals: 8 }
+                { rank: 1, name: 'ظ‡ط§ط±ظٹ ظƒظٹظ†', team: 'ط¨ط§ظٹط±ظ†', goals: 9 },
+                { rank: 2, name: 'ط¥ظٹط±ظ„ظٹظ†ط¬ ظ‡ط§ظ„ط§ظ†ط¯', team: 'ظ…ط§ظ†ط´ط³طھط± ط³ظٹطھظٹ', goals: 8 }
             ]
         },
         egypt: {
-            name: 'الدوري المصري',
+            name: 'ط§ظ„ط¯ظˆط±ظٹ ط§ظ„ظ…طµط±ظٹ',
             standings: [
-                { rank: 1, team: 'الزمالك', icon: '⚪', played: 20, won: 13, drawn: 4, lost: 3, points: 43 },
-                { rank: 2, team: 'بيراميدز', icon: '🔵', played: 20, won: 13, drawn: 4, lost: 3, points: 43 },
-                { rank: 3, team: 'الأهلي', icon: '🔴', played: 20, won: 11, drawn: 7, lost: 2, points: 40 },
-                { rank: 4, team: 'سيراميكا كليوباترا', icon: '🔴', played: 20, won: 11, drawn: 5, lost: 4, points: 38 },
-                { rank: 5, team: 'المصري', icon: '🟢', played: 20, won: 8, drawn: 8, lost: 4, points: 32 },
-                { rank: 6, team: 'سموحة', icon: '🔵', played: 20, won: 8, drawn: 7, lost: 5, points: 31 },
-                { rank: 7, team: 'إنبي', icon: '🔵', played: 20, won: 7, drawn: 9, lost: 4, points: 30 },
-                { rank: 8, team: 'وادي دجلة', icon: '🟡', played: 20, won: 8, drawn: 5, lost: 7, points: 29 },
-                { rank: 9, team: 'زد', icon: '🟡', played: 20, won: 7, drawn: 8, lost: 5, points: 29 },
-                { rank: 10, team: 'الجونة', icon: '🟠', played: 20, won: 7, drawn: 7, lost: 6, points: 28 }
+                { rank: 1, team: 'ط§ظ„ط²ظ…ط§ظ„ظƒ', icon: 'âڑھ', played: 20, won: 13, drawn: 4, lost: 3, points: 43 },
+                { rank: 2, team: 'ط¨ظٹط±ط§ظ…ظٹط¯ط²', icon: 'ًں”µ', played: 20, won: 13, drawn: 4, lost: 3, points: 43 },
+                { rank: 3, team: 'ط§ظ„ط£ظ‡ظ„ظٹ', icon: 'ًں”´', played: 20, won: 11, drawn: 7, lost: 2, points: 40 },
+                { rank: 4, team: 'ط³ظٹط±ط§ظ…ظٹظƒط§ ظƒظ„ظٹظˆط¨ط§طھط±ط§', icon: 'ًں”´', played: 20, won: 11, drawn: 5, lost: 4, points: 38 },
+                { rank: 5, team: 'ط§ظ„ظ…طµط±ظٹ', icon: 'ًںں¢', played: 20, won: 8, drawn: 8, lost: 4, points: 32 },
+                { rank: 6, team: 'ط³ظ…ظˆط­ط©', icon: 'ًں”µ', played: 20, won: 8, drawn: 7, lost: 5, points: 31 },
+                { rank: 7, team: 'ط¥ظ†ط¨ظٹ', icon: 'ًں”µ', played: 20, won: 7, drawn: 9, lost: 4, points: 30 },
+                { rank: 8, team: 'ظˆط§ط¯ظٹ ط¯ط¬ظ„ط©', icon: 'ًںں،', played: 20, won: 8, drawn: 5, lost: 7, points: 29 },
+                { rank: 9, team: 'ط²ط¯', icon: 'ًںں،', played: 20, won: 7, drawn: 8, lost: 5, points: 29 },
+                { rank: 10, team: 'ط§ظ„ط¬ظˆظ†ط©', icon: 'ًںں ', played: 20, won: 7, drawn: 7, lost: 6, points: 28 }
             ],
             scorers: [
-                { rank: 1, name: 'وسام أبو علي', team: 'الأهلي', goals: 14 },
-                { rank: 2, name: 'فيستون ماييلي', team: 'بيراميدز', goals: 12 }
+                { rank: 1, name: 'ناصر ماهر', team: 'الزمالك', goals: 7 },
+                { rank: 2, name: 'صلاح محسن', team: 'المصري', goals: 7 },
+                { rank: 3, name: 'عدي الدباغ', team: 'الزمالك', goals: 6 },
+                { rank: 4, name: 'صديق أوجولا', team: 'سيراميكا', goals: 6 },
+                { rank: 5, name: 'فخري لاكاي', team: 'سيراميكا', goals: 5 }
             ]
         },
         caf: {
-            name: 'دوري أبطال أفريقيا',
+            name: 'ط¯ظˆط±ظٹ ط£ط¨ط·ط§ظ„ ط£ظپط±ظٹظ‚ظٹط§',
             standings: [
-                { rank: 1, team: 'نهضة بركان', icon: '🟠', played: 3, won: 2, drawn: 1, lost: 0, points: 7, group: 'المجموعة أ' },
-                { rank: 2, team: 'بيراميدز', icon: '🔵', played: 3, won: 2, drawn: 1, lost: 0, points: 7, group: 'المجموعة أ' },
-                { rank: 1, team: 'الأهلي', icon: '🔴', played: 3, won: 2, drawn: 1, lost: 0, points: 7, group: 'المجموعة ب' },
-                { rank: 2, team: 'يانغ أفريكانز', icon: '🟢', played: 3, won: 1, drawn: 1, lost: 1, points: 4, group: 'المجموعة ب' },
-                { rank: 1, team: 'صنداونز', icon: '🟡', played: 3, won: 1, drawn: 2, lost: 0, points: 5, group: 'المجموعة ج' },
-                { rank: 2, team: 'الهلال السوداني', icon: '🔵', played: 3, won: 1, drawn: 2, lost: 0, points: 5, group: 'المجموعة ج' },
-                { rank: 1, team: 'ستاد مالي', icon: '⚪', played: 3, won: 2, drawn: 1, lost: 0, points: 7, group: 'المجموعة د' },
-                { rank: 2, team: 'الترجي البديل', icon: '🔴', played: 3, won: 1, drawn: 2, lost: 0, points: 5, group: 'المجموعة د' }
+                { rank: 1, team: 'ظ†ظ‡ط¶ط© ط¨ط±ظƒط§ظ†', icon: 'ًںں ', played: 3, won: 2, drawn: 1, lost: 0, points: 7, group: 'ط§ظ„ظ…ط¬ظ…ظˆط¹ط© ط£' },
+                { rank: 2, team: 'ط¨ظٹط±ط§ظ…ظٹط¯ط²', icon: 'ًں”µ', played: 3, won: 2, drawn: 1, lost: 0, points: 7, group: 'ط§ظ„ظ…ط¬ظ…ظˆط¹ط© ط£' },
+                { rank: 1, team: 'ط§ظ„ط£ظ‡ظ„ظٹ', icon: 'ًں”´', played: 3, won: 2, drawn: 1, lost: 0, points: 7, group: 'ط§ظ„ظ…ط¬ظ…ظˆط¹ط© ط¨' },
+                { rank: 2, team: 'ظٹط§ظ†ط؛ ط£ظپط±ظٹظƒط§ظ†ط²', icon: 'ًںں¢', played: 3, won: 1, drawn: 1, lost: 1, points: 4, group: 'ط§ظ„ظ…ط¬ظ…ظˆط¹ط© ط¨' },
+                { rank: 1, team: 'طµظ†ط¯ط§ظˆظ†ط²', icon: 'ًںں،', played: 3, won: 1, drawn: 2, lost: 0, points: 5, group: 'ط§ظ„ظ…ط¬ظ…ظˆط¹ط© ط¬' },
+                { rank: 2, team: 'ط§ظ„ظ‡ظ„ط§ظ„ ط§ظ„ط³ظˆط¯ط§ظ†ظٹ', icon: 'ًں”µ', played: 3, won: 1, drawn: 2, lost: 0, points: 5, group: 'ط§ظ„ظ…ط¬ظ…ظˆط¹ط© ط¬' },
+                { rank: 1, team: 'ط³طھط§ط¯ ظ…ط§ظ„ظٹ', icon: 'âڑھ', played: 3, won: 2, drawn: 1, lost: 0, points: 7, group: 'ط§ظ„ظ…ط¬ظ…ظˆط¹ط© ط¯' },
+                { rank: 2, team: 'ط§ظ„طھط±ط¬ظٹ ط§ظ„ط¨ط¯ظٹظ„', icon: 'ًں”´', played: 3, won: 1, drawn: 2, lost: 0, points: 5, group: 'ط§ظ„ظ…ط¬ظ…ظˆط¹ط© ط¯' }
             ],
             scorers: [
-                { rank: 1, name: 'حسين الشحات', team: 'الأهلي', goals: 4 }
+                { rank: 1, name: 'ط­ط³ظٹظ† ط§ظ„ط´ط­ط§طھ', team: 'ط§ظ„ط£ظ‡ظ„ظٹ', goals: 4 }
             ]
         }
     }
@@ -265,10 +271,10 @@ document.addEventListener('DOMContentLoaded', function() {
         table.classList.toggle('is-expanded');
 
         if (table.classList.contains('is-expanded')) {
-            if (btnSpan) btnSpan.innerText = currentLang === 'ar' ? 'عرض أقل' : 'Show Less';
+            if (btnSpan) btnSpan.innerText = currentLang === 'ar' ? 'ط¹ط±ط¶ ط£ظ‚ظ„' : 'Show Less';
             if (icon) icon.style.transform = 'rotate(180deg)';
         } else {
-            if (btnSpan) btnSpan.innerText = currentLang === 'ar' ? 'عرض المزيد' : 'Show More';
+            if (btnSpan) btnSpan.innerText = currentLang === 'ar' ? 'ط¹ط±ط¶ ط§ظ„ظ…ط²ظٹط¯' : 'Show More';
             if (icon) icon.style.transform = 'rotate(0deg)';
             table.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
@@ -341,7 +347,7 @@ function loadStandingsTable(apiData) {
                     return {
                         rank: s.rank,
                         team: teamName,
-                        icon: teamLogo ? `<img src="${teamLogo}" class="team-logo-mini" alt="${teamName}" onerror="this.src='⚽';this.classList.add('error')">` : '⚽',
+                        icon: teamLogo ? `<img src="${teamLogo}" class="team-logo-mini" alt="${teamName}" onerror="this.src='âڑ½';this.classList.add('error')">` : 'âڑ½',
                         played: s.all?.played || 0,
                         won: s.all?.win || 0,
                         drawn: s.all?.draw || 0,
@@ -406,7 +412,7 @@ function loadStandingsTable(apiData) {
         container.appendChild(groupsGrid);
 
         const grouped = standings.reduce((acc, team) => {
-            const groupName = team.group || (currentLang === 'en' ? 'Other' : 'أخرى');
+            const groupName = team.group || (currentLang === 'en' ? 'Other' : 'ط£ط®ط±ظ‰');
             if (!acc[groupName]) acc[groupName] = [];
             acc[groupName].push(team);
             return acc;
@@ -480,8 +486,8 @@ function loadStandingsTable(apiData) {
         row.style.animationDelay = `${animationIndex * 0.05}s`;
         
         const teamIcon = (team.icon && team.icon.startsWith('http'))
-            ? `<img src="${team.icon}" class="team-logo-mini" alt="${team.team}" onerror="this.outerHTML='⚽'">`
-            : `<span class="team-emoji-icon">${team.icon || '⚽'}</span>`;
+            ? `<img src="${team.icon}" class="team-logo-mini" alt="${team.team}" onerror="this.outerHTML='âڑ½'">`
+            : `<span class="team-emoji-icon">${team.icon || 'âڑ½'}</span>`;
 
         row.innerHTML = `
             <div class="rank">${team.rank}</div>
@@ -563,7 +569,7 @@ function loadTopScorers(apiData) {
         item.style.animationDelay = `${index * 0.05}s`;
         
         const playerImg = scorer.photo 
-            ? `<img src="${scorer.photo}" class="scorer-photo" alt="${scorer.name}" onerror="this.src='⚽'">`
+            ? `<img src="${scorer.photo}" class="scorer-photo" alt="${scorer.name}" onerror="this.outerHTML='<div class=\\'scorer-photo-placeholder\\'>👤</div>'">`
             : '<div class="scorer-photo-placeholder">👤</div>';
             
         const teamLogo = scorer.teamLogo
@@ -592,3 +598,270 @@ function loadTopScorers(apiData) {
         container.appendChild(item);
     });
 }
+
+// Knockout Stage Data
+const knockoutData = {
+    ucl: {
+        en: {
+            title: 'Knockout Bracket',
+            rounds: [
+                {
+                    name: 'Quarter-finals',
+                    matches: [
+                        { t1: { name: 'Arsenal', score: '2', icon: '🔴', winner: true }, t2: { name: 'Bayern Munich', score: '1', icon: '🔴', winner: false } },
+                        { t1: { name: 'Real Madrid', score: '3', icon: '⚪', winner: true }, t2: { name: 'Man City', score: '2', icon: '🔵', winner: false } },
+                        { t1: { name: 'Barcelona', score: '1', icon: '🔴', winner: false }, t2: { name: 'PSG', score: '4', icon: '🔵', winner: true } },
+                        { t1: { name: 'Atletico', score: '2 (3)', icon: '🔴', winner: false }, t2: { name: 'Dortmund', score: '2 (4)', icon: '🟡', winner: true } }
+                    ]
+                },
+                {
+                    name: 'Semi-finals',
+                    matches: [
+                        { t1: { name: 'Arsenal', score: '1', icon: '🔴', winner: false }, t2: { name: 'Real Madrid', score: '2', icon: '⚪', winner: true } },
+                        { t1: { name: 'PSG', score: '0', icon: '🔵', winner: false }, t2: { name: 'Dortmund', score: '1', icon: '🟡', winner: true } }
+                    ]
+                },
+                {
+                    name: 'Final',
+                    matches: [
+                        { t1: { name: 'Real Madrid', score: '2', icon: '⚪', winner: true }, t2: { name: 'Dortmund', score: '0', icon: '🟡', winner: false } }
+                    ]
+                }
+            ]
+        },
+        ar: {
+            title: 'شجرة التصفيات',
+            rounds: [
+                {
+                    name: 'ربع النهائي',
+                    matches: [
+                        { t1: { name: 'آرسنال', score: '2', icon: '🔴', winner: true }, t2: { name: 'بايرن ميونخ', score: '1', icon: '🔴', winner: false } },
+                        { t1: { name: 'ريال مدريد', score: '3', icon: '⚪', winner: true }, t2: { name: 'مانشستر سيتي', score: '2', icon: '🔵', winner: false } },
+                        { t1: { name: 'برشلونة', score: '1', icon: '🔴', winner: false }, t2: { name: 'باريس س.ج', score: '4', icon: '🔵', winner: true } },
+                        { t1: { name: 'أتلتيكو', score: '2 (3)', icon: '🔴', winner: false }, t2: { name: 'دورتموند', score: '2 (4)', icon: '🟡', winner: true } }
+                    ]
+                },
+                {
+                    name: 'نصف النهائي',
+                    matches: [
+                        { t1: { name: 'آرسنال', score: '1', icon: '🔴', winner: false }, t2: { name: 'ريال مدريد', score: '2', icon: '⚪', winner: true } },
+                        { t1: { name: 'باريس س.ج', score: '0', icon: '🔵', winner: false }, t2: { name: 'دورتموند', score: '1', icon: '🟡', winner: true } }
+                    ]
+                },
+                {
+                    name: 'النهائي',
+                    matches: [
+                        { t1: { name: 'ريال مدريد', score: '2', icon: '⚪', winner: true }, t2: { name: 'دورتموند', score: '0', icon: '🟡', winner: false } }
+                    ]
+                }
+            ]
+        }
+    }
+};
+
+document.addEventListener('DOMContentLoaded', function() {
+    const toggleBtns = document.querySelectorAll('.stage-toggle-btn');
+    toggleBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            toggleBtns.forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            
+            const targetId = this.getAttribute('data-target');
+            document.getElementById('standingsData').style.display = targetId === 'standingsData' ? 'block' : 'none';
+            document.getElementById('knockoutData').style.display = targetId === 'knockoutData' ? 'block' : 'none';
+            
+            if (targetId === 'knockoutData') {
+                renderKnockoutTree();
+            }
+        });
+    });
+});
+
+function renderKnockoutTree() {
+    const container = document.getElementById('knockoutBracket');
+    if (!container) return;
+    
+    // Use API data if loaded, otherwise fallback to static
+    let activeData = null;
+    if (window.currentKnockoutApiData && window.currentKnockoutApiData.rounds && window.currentKnockoutApiData.rounds.length > 0) {
+        activeData = window.currentKnockoutApiData;
+    } else {
+        const kd = knockoutData[selectedLeague];
+        if (kd) activeData = kd[currentLang];
+    }
+    
+    if (!activeData) {
+        container.innerHTML = '<div class="error-msg">' + (currentLang === 'ar' ? 'لا تتوفر أدوار إقصائية لهذه البطولة حالياً' : 'Knockout stages not available for this tournament currently') + '</div>';
+        return;
+    }
+    
+    let html = '<div class="bracket">';
+    
+    activeData.rounds.forEach((round, index) => {
+        // limit large amount of columns logic here if needed
+        const matchesCount = round.matches.length;
+        const colClass = 'bracket-column col-' + matchesCount;
+        
+        html += '<div class="' + colClass + '">';
+        html += '<div class="bracket-column-title">' + round.name + '</div>';
+        
+        round.matches.forEach(match => {
+            const t1Class = match.t1.winner ? 'bracket-team winner' : 'bracket-team';
+            const t2Class = match.t2.winner ? 'bracket-team winner' : 'bracket-team';
+            
+            const t1IconHtml = match.t1.icon && match.t1.icon.startsWith('http') 
+                ? `<img src="${match.t1.icon}" class="bracket-team-logo" alt="${match.t1.name}" onerror="this.outerHTML='<span class=\\'bracket-team-emoji\\'>🛡️</span>'">` 
+                : `<span class="bracket-team-emoji">${match.t1.icon || '🛡️'}</span>`;
+            
+            const t2IconHtml = match.t2.icon && match.t2.icon.startsWith('http') 
+                ? `<img src="${match.t2.icon}" class="bracket-team-logo" alt="${match.t2.name}" onerror="this.outerHTML='<span class=\\'bracket-team-emoji\\'>🛡️</span>'">` 
+                : `<span class="bracket-team-emoji">${match.t2.icon || '🛡️'}</span>`;
+
+            html += '<div class="bracket-match">' +
+                    '<div class="' + t1Class + '">' +
+                        '<div class="bracket-team-info">' +
+                            t1IconHtml +
+                            '<span class="team-name">' + match.t1.name + '</span>' +
+                        '</div>' +
+                        '<span class="team-score">' + (match.t1.score || '-') + '</span>' +
+                    '</div>' +
+                    '<div class="' + t2Class + '">' +
+                        '<div class="bracket-team-info">' +
+                            t2IconHtml +
+                            '<span class="team-name">' + match.t2.name + '</span>' +
+                        '</div>' +
+                        '<span class="team-score">' + (match.t2.score || '-') + '</span>' +
+                    '</div>' +
+                '</div>';
+        });
+        
+        html += '</div>';
+    });
+    
+    html += '</div>';
+    container.innerHTML = html;
+}
+
+// Map API fixtures to our bracket structural requirement
+function parseApiKnockoutData(apiResult) {
+    if (!apiResult || !apiResult.fixtures || apiResult.fixtures.length === 0) return null;
+    
+    const roundsMap = {};
+    
+    apiResult.fixtures.forEach(f => {
+        let roundStr = 'Unknown';
+        if (apiResult.source === 'api-sports') {
+            roundStr = f.league.round || 'Unknown';
+        } else if (apiResult.source === 'football-data') {
+            roundStr = f.stage || 'Unknown';
+        }
+        
+        // Normalize names
+        let roundIdx = 0;
+        let pRoundName = '';
+        if (roundStr.toLowerCase().includes('quarter') || roundStr.toLowerCase().includes('8')) {
+            pRoundName = currentLang === 'ar' ? 'ربع النهائي' : 'Quarter-finals';
+            roundIdx = 1;
+        } else if (roundStr.toLowerCase().includes('semi') || roundStr.toLowerCase().includes('4')) {
+            pRoundName = currentLang === 'ar' ? 'نصف النهائي' : 'Semi-finals';
+            roundIdx = 2;
+        } else if (roundStr.toLowerCase().includes('final')) {
+            pRoundName = currentLang === 'ar' ? 'النهائي' : 'Final';
+            roundIdx = 3;
+        } else {
+            return; // skip non-relevant rounds
+        }
+        
+        if (!roundsMap[roundIdx]) roundsMap[roundIdx] = { name: pRoundName, order: roundIdx, matches: [] };
+        
+        let m1, m2;
+        if (apiResult.source === 'api-sports') {
+            m1 = { 
+                name: f.teams.home.name, 
+                score: f.goals.home !== null ? f.goals.home : '-', 
+                winner: f.teams.home.winner === true,
+                icon: f.teams.home.logo
+            };
+            m2 = { 
+                name: f.teams.away.name, 
+                score: f.goals.away !== null ? f.goals.away : '-', 
+                winner: f.teams.away.winner === true,
+                icon: f.teams.away.logo
+            };
+        } else {
+            m1 = { 
+                name: f.homeTeam.name || f.homeTeam.shortName, 
+                score: f.score?.fullTime?.home !== null ? f.score.fullTime.home : '-', 
+                winner: f.score?.winner === 'HOME_TEAM',
+                icon: f.homeTeam.crest
+            };
+            m2 = { 
+                name: f.awayTeam.name || f.awayTeam.shortName, 
+                score: f.score?.fullTime?.away !== null ? f.score.fullTime.away : '-', 
+                winner: f.score?.winner === 'AWAY_TEAM',
+                icon: f.awayTeam.crest
+            };
+        }
+        
+        const pairId = [m1.name, m2.name].sort().join('-vs-');
+        const existingIdx = roundsMap[roundIdx].matches.findIndex(m => m.pairId === pairId);
+        
+        const matchPayload = { t1: m1, t2: m2, pairId: pairId };
+        
+        if (existingIdx !== -1) {
+            // Replaces the element (likely picking up Leg 2 which theoretically updates Aggregate). Next iter could aggregate manually.
+            roundsMap[roundIdx].matches[existingIdx] = matchPayload;
+        } else {
+            roundsMap[roundIdx].matches.push(matchPayload);
+        }
+    });
+    
+    const sortedRounds = Object.values(roundsMap).sort((a,b) => a.order - b.order);
+    if (sortedRounds.length === 0) return null;
+    return { title: '', rounds: sortedRounds };
+}
+
+// Intercept loadLeaguesContent to show/hide the knockout toggle button and load API data
+const originalLoad = loadLeaguesContent;
+loadLeaguesContent = async function() {
+    await originalLoad();
+    
+    window.currentKnockoutApiData = null; // reset
+    const leagueId = leagueIdMap[selectedLeague];
+    
+    // Also try fetching the knockout data
+    let hasKnockoutBtn = false;
+    const knockoutBtn = document.getElementById('knockoutToggleBtn');
+    
+    if (knockoutData[selectedLeague]) {
+        hasKnockoutBtn = true;
+    }
+    
+    try {
+        const bracketApiData = await FootballAPI.fetchTournamentBracket(leagueId);
+        const parsed = parseApiKnockoutData(bracketApiData);
+        if (parsed) {
+            window.currentKnockoutApiData = parsed;
+            hasKnockoutBtn = true;
+        }
+    } catch (e) {
+        console.warn("Could not fetch API bracket data, using fallback if available");
+    }
+    
+    if (knockoutBtn) {
+        if (hasKnockoutBtn) {
+            knockoutBtn.style.display = 'inline-block';
+        } else {
+            knockoutBtn.style.display = 'none';
+            // Force back to standings if knockout isn't available
+            const standingsBtn = document.querySelector('[data-target="standingsData"]');
+            if (standingsBtn && knockoutBtn.classList.contains('active')) standingsBtn.click();
+        }
+    }
+    
+    // Refresh the bracket if we are already viewing it to display new dynamic data instantly
+    if (knockoutBtn && knockoutBtn.classList.contains('active')) {
+        renderKnockoutTree();
+    }
+};
+

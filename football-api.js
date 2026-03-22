@@ -6,14 +6,14 @@ const FootballAPI = (() => {
     const PRIMARY_API = {
         name: 'API-Football',
         baseUrl: 'https://v3.football.api-sports.io',
-        key: '9fccff2cb2df2727ab9424e52546cffb', // Restoring original API-Sports key
+        key: 'fe30776653c535b8d1958319c5d5a439', 
         header: 'x-apisports-key'
     };
 
     const SECONDARY_API = {
         name: 'Football-Data.org',
         baseUrl: 'https://api.football-data.org/v4',
-        key: '6219455164e8e1a1c176cc8fe3dc2a90', // User's key for Football-Data
+        key: '90087ba1f5914a60b85555f80bfb2d72',
         header: 'X-Auth-Token'
     };
 
@@ -24,9 +24,18 @@ const FootballAPI = (() => {
         39: 4328, 140: 4335, 307: 4668, 2: 4480, 233: 4829
     };
 
-    const ALLOWED_LEAGUES = [39, 140, 307, 2, 233, 12, 6];
+    const ALLOWED_LEAGUES = [39, 140, 307, 2, 233, 12, 6, 61, 135, 78];
     const FBD_LEAGUE_CODES = {
-        39: 'PL', 140: 'PD', 2: 'CL'
+        39: 'PL', 140: 'PD', 2: 'CL', 61: 'FL1', 135: 'SA', 78: 'BL1'
+    };
+
+    const FBD_ID_MAP = {
+        2021: 39,  // Premier League
+        2014: 140, // La Liga
+        2001: 2,   // Champions League
+        2015: 61,  // Ligue 1
+        2019: 135, // Serie A
+        2002: 78   // Bundesliga
     };
 
     const TSDB_NAME_TO_ID = {
@@ -69,38 +78,49 @@ const FootballAPI = (() => {
         try { localStorage.setItem('fapi_' + key, JSON.stringify({ data, ts: Date.now() })); } catch {}
     }
 
-    /**
-     * core fetcher — returns RAW JSON or fallback object
-     */
     async function baseFetch(url, headers = {}, providerName = 'primary') {
+        // Apply CORS Proxy for Football-Data.org (always in dev or if CORS suspected)
+        let finalUrl = url;
+        const isFBD = url.includes('api.football-data.org');
+        
+        if (isFBD) {
+            finalUrl = 'https://corsproxy.io/?' + encodeURIComponent(url);
+            console.log(`[API] Proxying ${providerName} request:`, url);
+        }
+
         const cacheKey = btoa(url.substring(0, 240)); 
         const cached = cacheGet(cacheKey);
-        if (cached) return cached;
+        
+        // Only return from cache if it's NOT a fallback/error object
+        if (cached && !cached._fallback) return cached;
 
         try {
-            const res = await fetch(url, { method: 'GET', headers });
+            const res = await fetch(finalUrl, { method: 'GET', headers });
             
             if (res.status === 429 || res.status === 403 || res.status === 401) {
-                console.warn(`${providerName} error ${res.status}.`);
-                return { _fallback: true, status: res.status };
+                console.warn(`[API] ${providerName} error ${res.status}:`, url);
+                return { _fallback: true, status: res.status, provider: providerName };
             }
 
             if (!res.ok) throw new Error(`API returned ${res.status}`);
             const json = await res.json();
             
-            // API-Sports error check
+            // API-Sports error check (covers limit, subscription, and account suspension)
             if (json.errors && Object.keys(json.errors).length > 0 && url.includes('api-sports')) {
                 const errStr = JSON.stringify(json.errors).toLowerCase();
-                if (errStr.includes('limit') || errStr.includes('subscription')) {
-                    return { _fallback: true, reason: 'limit' };
+                console.warn(`[API] API-Sports internal error:`, json.errors);
+                
+                if (errStr.includes('suspended') || errStr.includes('limit') || errStr.includes('access')) {
+                    return { _fallback: true, reason: 'api-sports-blocked', details: json.errors };
                 }
             }
 
+            // Successfully fetched data
             cacheSet(cacheKey, json);
             return json;
         } catch (err) {
-            console.error('Fetch error:', err);
-            return { _fallback: true, error: err.message };
+            console.error(`[API] Fetch error for ${providerName}:`, err);
+            return { _fallback: true, error: err.message, provider: providerName };
         }
     }
 
@@ -109,48 +129,46 @@ const FootballAPI = (() => {
      */
     async function smartFetch(options) {
         const { primary, secondary } = options;
+        let result = null;
 
-        if (activeProvider === 'primary') {
+        // 1. Try Primary
+        if (primary && PRIMARY_API.key) {
             const qs = new URLSearchParams(primary.params).toString();
             const url = `${PRIMARY_API.baseUrl}/${primary.endpoint}?${qs}`;
-            const result = await baseFetch(url, { [PRIMARY_API.header]: PRIMARY_API.key }, 'primary');
-            
+            result = await baseFetch(url, { [PRIMARY_API.header]: PRIMARY_API.key }, 'primary');
             if (result && !result._fallback) return result;
-
-            if (SECONDARY_API.key) {
-                console.log('API-Football limit reached. Switching provider...');
-                activeProvider = 'secondary';
-            } else {
-                return result; // return the error/fallback object
-            }
         }
 
-        if (activeProvider === 'secondary' && secondary) {
+        // 2. Try Secondary (immediately if primary fails or is skipped)
+        if (secondary && SECONDARY_API.key) {
             const qs = new URLSearchParams(secondary.params).toString();
             const url = `${SECONDARY_API.baseUrl}/${secondary.endpoint}?${qs}`;
-            const result = await baseFetch(url, { [SECONDARY_API.header]: SECONDARY_API.key }, 'secondary');
-            return result;
+            result = await baseFetch(url, { [SECONDARY_API.header]: SECONDARY_API.key }, 'secondary');
+            if (result && !result._fallback) return result;
         }
-        return { _fallback: true };
+
+        return result || { _fallback: true };
     }
 
     // ── Normalization Helpers ────────────────────────────────
 
     function normalizeFBDMatches(matches) {
         if (!matches || !Array.isArray(matches)) return [];
-        return matches.map(m => ({
-            fixture: {
-                id: m.id, date: m.utcDate,
-                timestamp: Math.floor(new Date(m.utcDate).getTime() / 1000),
-                status: { short: m.status === 'FINISHED' ? 'FT' : (m.status === 'IN_PLAY' ? 'LIVE' : 'NS') }
-            },
-            league: { id: null, name: m.competition?.name, logo: m.competition?.emblem },
-            teams: {
-                home: { name: m.homeTeam.name, logo: m.homeTeam.crest },
-                away: { name: m.awayTeam.name, logo: m.awayTeam.crest }
-            },
-            goals: { home: m.score?.fullTime?.home, away: m.score?.fullTime?.away }
-        }));
+        return matches.map(m => {
+            const leagueId = FBD_ID_MAP[m.competition.id] || m.competition.id;
+            return {
+                fixture: {
+                    id: m.id, date: m.utcDate, timestamp: Math.floor(new Date(m.utcDate).getTime() / 1000),
+                    status: { short: m.status === 'FINISHED' ? 'FT' : (m.status === 'IN_PLAY' ? 'LIVE' : 'NS') }
+                },
+                league: { id: leagueId, name: m.competition.name },
+                teams: {
+                    home: { name: m.homeTeam.shortName || m.homeTeam.name, logo: m.homeTeam.crest },
+                    away: { name: m.awayTeam.shortName || m.awayTeam.name, logo: m.awayTeam.crest }
+                },
+                goals: { home: m.score?.fullTime?.home, away: m.score?.fullTime?.away }
+            };
+        });
     }
 
     function normalizeTSDBMatches(events) {
@@ -207,10 +225,10 @@ const FootballAPI = (() => {
             secondary: fbdCode ? { endpoint: `competitions/${fbdCode}/standings`, params: { season: year } } : null
         });
 
-        // 1. Primary Success
+        // 1. Success from API-Sports (now primary)
         if (result?.response) return result.response;
 
-        // 2. Secondary Success
+        // 2. Success from Football-Data (now secondary)
         if (result?.standings) {
             const table = result.standings.find(s => s.type === 'TOTAL')?.table;
             if (table) {
@@ -253,10 +271,13 @@ const FootballAPI = (() => {
             secondary: fbdCode ? { endpoint: `competitions/${fbdCode}/scorers`, params: { season: year } } : null
         });
 
+        // 1. Success from API-Sports (now primary)
         if (result?.response) return result.response;
+
+        // 2. Success from Football-Data (now secondary)
         if (result?.scorers) {
             return result.scorers.map(s => ({
-                player: { name: s.player.name, photo: s.player.photo },
+                player: { name: s.player.name, photo: null },
                 statistics: [{ team: { name: s.team.name, logo: s.team.crest }, goals: { total: s.goals } }]
             }));
         }
@@ -272,6 +293,99 @@ const FootballAPI = (() => {
         return [];
     }
 
+    // ── Match Detail Endpoints ──────────────────────────────
+    async function fetchFixtureLineups(fixtureId) {
+        const result = await smartFetch({
+            primary: { endpoint: 'fixtures/lineups', params: { fixture: fixtureId } },
+            secondary: null
+        });
+        if (result?.response) return result.response;
+        return [];
+    }
+
+    async function fetchFixtureEvents(fixtureId) {
+        const result = await smartFetch({
+            primary: { endpoint: 'fixtures/events', params: { fixture: fixtureId } },
+            secondary: null
+        });
+        if (result?.response) return result.response;
+        return [];
+    }
+
+    async function fetchFixtureStatistics(fixtureId) {
+        const result = await smartFetch({
+            primary: { endpoint: 'fixtures/statistics', params: { fixture: fixtureId } },
+            secondary: null
+        });
+        if (result?.response) return result.response;
+        return [];
+    }
+
+    async function fetchPlayerStats(playerId, season) {
+        const result = await smartFetch({
+            primary: { endpoint: 'players', params: { id: playerId, season: season } },
+            secondary: null
+        });
+        if (result?.response) return result.response;
+        return [];
+    }
+
+    async function fetchPlayerById(playerId) {
+        const year = new Date().getFullYear();
+        let stats = await fetchPlayerStats(playerId, year);
+        if (!stats || stats.length === 0) {
+            // Fallback to previous season if current is empty
+            stats = await fetchPlayerStats(playerId, year - 1);
+        }
+        return stats;
+    }
+
+    async function searchPlayerByName(name, teamId = null) {
+        if (!name || name.length < 4) return [];
+        const params = { search: name };
+        if (teamId) params.team = teamId;
+        const result = await smartFetch({
+            primary: { endpoint: 'players', params },
+            secondary: null
+        });
+        if (result?.response) return result.response;
+        return [];
+    }
+
+    async function fetchTournamentBracket(leagueId) {
+        const year = new Date().getMonth() < 6 ? new Date().getFullYear() - 1 : new Date().getFullYear();
+        const fbdCode = FBD_LEAGUE_CODES[leagueId];
+        
+        const result = await smartFetch({
+            primary: { endpoint: 'fixtures', params: { league: leagueId, season: year } },
+            secondary: fbdCode ? { endpoint: `competitions/${fbdCode}/matches`, params: { season: year } } : null
+        });
+
+        const allowedRounds = ['Quarter-finals', 'Semi-finals', 'Final'];
+        let fixtures = [];
+
+        if (result?.response) {
+            fixtures = result.response.filter(f => {
+                const roundName = f.league.round || '';
+                return allowedRounds.some(r => roundName.includes(r));
+            });
+            return {
+                source: 'api-sports',
+                fixtures: fixtures
+            };
+        }
+        
+        if (result?.matches) {
+            fixtures = result.matches.filter(m => ['QUARTER_FINALS', 'SEMI_FINALS', 'FINAL'].includes(m.stage));
+            return {
+                source: 'football-data',
+                fixtures: fixtures
+            };
+        }
+
+        return { source: 'none', fixtures: [] };
+    }
+
     return {
         fetchTodayFixtures: () => fetchFixturesByDate(todayDate()),
         fetchYesterdayFixtures: () => fetchFixturesByDate(yesterdayDate()),
@@ -280,6 +394,13 @@ const FootballAPI = (() => {
         fetchFixturesByDate,
         fetchStandings,
         fetchTopScorers,
+        fetchTournamentBracket,
+        fetchFixtureLineups,
+        fetchFixtureEvents,
+        fetchFixtureStatistics,
+        fetchPlayerStats,
+        fetchPlayerById,
+        searchPlayerByName,
         ALLOWED_LEAGUES,
         filterByAllowedLeagues: (fixts) => Array.isArray(fixts) ? fixts.filter(f => ALLOWED_LEAGUES.includes(f?.league?.id)) : [],
         transformFixture: (fixture) => {
@@ -302,8 +423,8 @@ const FootballAPI = (() => {
 
             return {
                 id: f.id, league: league?.name, leagueLogo: league?.logo, leagueId: league?.id,
-                homeTeam: teams?.home?.name, homeLogo: teams?.home?.logo, homeScore: goals?.home,
-                awayTeam: teams?.away?.name, awayLogo: teams?.away?.logo, awayScore: goals?.away,
+                homeTeam: teams?.home?.name, homeLogo: teams?.home?.logo, homeId: teams?.home?.id, homeScore: goals?.home,
+                awayTeam: teams?.away?.name, awayLogo: teams?.away?.logo, awayId: teams?.away?.id, awayScore: goals?.away,
                 status, statusKey, time, date: new Date(f.date).toLocaleDateString()
             };
         },
