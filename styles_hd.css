@@ -1489,14 +1489,22 @@ body {
 @media (max-width: 1260px) {
     /* Top Bar for Logo & Language Toggle */
     .main-header {
-        position: absolute !important;
+        position: fixed !important;
         top: 0 !important;
         bottom: auto !important;
         height: 70px !important;
         background: rgba(10, 14, 39, 0.98) !important;
-        backdrop-filter: none !important; /* FIXED: Removed to allow fixed children to anchor to viewport */
+        backdrop-filter: none !important; /* REQUIRED: To allow fixed children (.main-nav) to anchor to viewport bottom! */
         border-bottom: 1px solid rgba(255, 77, 0, 0.4) !important;
         z-index: 5000 !important;
+    }
+
+    .main-header::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        backdrop-filter: blur(15px);
+        z-index: -1;
     }
 
     .main-header .container {

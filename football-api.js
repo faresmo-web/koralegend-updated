@@ -62,8 +62,7 @@ const FootballAPI = (() => {
     }
     
     function getCurrentSeason() {
-        let year = new Date().getMonth() < 6 ? new Date().getFullYear() - 1 : new Date().getFullYear();
-        return year > 2024 ? 2024 : year;
+        return new Date().getMonth() < 6 ? new Date().getFullYear() - 1 : new Date().getFullYear();
     }
 
     function cacheGet(key) {

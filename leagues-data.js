@@ -118,8 +118,8 @@ const leaguesDatabase = {
                 { rank: 2, team: 'Young Africans', icon: 'ًںں¢', played: 3, won: 1, drawn: 1, lost: 1, points: 4, group: 'Group B' },
                 { rank: 1, team: 'Sundowns', icon: 'ًںں،', played: 3, won: 1, drawn: 2, lost: 0, points: 5, group: 'Group C' },
                 { rank: 2, team: 'Al Hilal', icon: 'ًں”µ', played: 3, won: 1, drawn: 2, lost: 0, points: 5, group: 'Group C' },
-                { rank: 1, team: 'Stade Malien', icon: 'âڑھ', played: 3, won: 2, drawn: 1, lost: 0, points: 7, group: 'Group D' },
-                { rank: 2, team: 'Espأ©rance', icon: 'ًں”´', played: 3, won: 1, drawn: 2, lost: 0, points: 5, group: 'Group D' }
+                { rank: 1, team: 'Stade Malien', icon: '⚪', played: 3, won: 2, drawn: 1, lost: 0, points: 7, group: 'Group D' },
+                { rank: 2, team: 'Espérance', icon: '🔴', played: 3, won: 1, drawn: 2, lost: 0, points: 5, group: 'Group D' }
             ],
             scorers: [
                 { rank: 1, name: 'Hussein El Shahat', team: 'Al Ahly', goals: 4 }
@@ -128,87 +128,87 @@ const leaguesDatabase = {
     },
     ar: {
         premier: {
-            name: 'ط§ظ„ط¯ظˆط±ظٹ ط§ظ„ط¥ظ†ط¬ظ„ظٹط²ظٹ',
+            name: 'الدوري الإنجليزي',
             standings: [
-                { rank: 1, team: 'ط¢ط±ط³ظ†ط§ظ„', icon: 'ًں”´', played: 30, won: 20, drawn: 7, lost: 3, points: 67 },
-                { rank: 2, team: 'ظ…ط§ظ†ط´ط³طھط± ط³ظٹطھظٹ', icon: 'ًں”µ', played: 29, won: 18, drawn: 6, lost: 5, points: 60 },
-                { rank: 3, team: 'ظ…ط§ظ†ط´ط³طھط± ظٹظˆظ†ط§ظٹطھط¯', icon: 'ًں”´', played: 29, won: 14, drawn: 9, lost: 6, points: 51 },
-                { rank: 4, team: 'ط£ط³طھظˆظ† ظپظٹظ„ط§', icon: 'ًں”´', played: 29, won: 14, drawn: 9, lost: 6, points: 51 },
-                { rank: 5, team: 'طھط´ظٹظ„ط³ظٹ', icon: 'ًں”µ', played: 29, won: 14, drawn: 6, lost: 9, points: 48 },
-                { rank: 6, team: 'ظ„ظٹظپط±ط¨ظˆظ„', icon: 'ًں”´', played: 29, won: 13, drawn: 9, lost: 7, points: 48 },
-                { rank: 7, team: 'طھظˆطھظ†ظ‡ط§ظ…', icon: 'âڑھ', played: 30, won: 13, drawn: 5, lost: 12, points: 44 },
-                { rank: 8, team: 'ظ†ظٹظˆظƒط§ط³ظ„', icon: 'âڑ«', played: 29, won: 12, drawn: 6, lost: 11, points: 42 },
-                { rank: 9, team: 'ظˆط³طھ ظ‡ط§ظ…', icon: 'âڑ’ï¸ڈ', played: 30, won: 11, drawn: 8, lost: 11, points: 41 },
-                { rank: 10, team: 'ط¨ط±ط§ظٹطھظˆظ†', icon: 'ًں”µ', played: 29, won: 10, drawn: 9, lost: 10, points: 39 }
+                { rank: 1, team: 'آرسنال', icon: '🔴', played: 30, won: 20, drawn: 7, lost: 3, points: 67 },
+                { rank: 2, team: 'مانشستر سيتي', icon: '🔵', played: 29, won: 18, drawn: 6, lost: 5, points: 60 },
+                { rank: 3, team: 'مانشستر يونايتد', icon: '🔴', played: 29, won: 14, drawn: 9, lost: 6, points: 51 },
+                { rank: 4, team: 'أستون فيلا', icon: '🔴', played: 29, won: 14, drawn: 9, lost: 6, points: 51 },
+                { rank: 5, team: 'تشيلسي', icon: '🔵', played: 29, won: 14, drawn: 6, lost: 9, points: 48 },
+                { rank: 6, team: 'ليفربول', icon: '🔴', played: 29, won: 13, drawn: 9, lost: 7, points: 48 },
+                { rank: 7, team: 'توتنهام', icon: '⚪', played: 30, won: 13, drawn: 5, lost: 12, points: 44 },
+                { rank: 8, team: 'نيوكاسل', icon: '⚫', played: 29, won: 12, drawn: 6, lost: 11, points: 42 },
+                { rank: 9, team: 'وست هام', icon: '⚒️', played: 30, won: 11, drawn: 8, lost: 11, points: 41 },
+                { rank: 10, team: 'برايتون', icon: '🔵', played: 29, won: 10, drawn: 9, lost: 10, points: 39 }
             ],
             scorers: [
-                { rank: 1, name: 'ط¨ظˆظƒط§ظٹظˆ ط³ط§ظƒط§', team: 'ط¢ط±ط³ظ†ط§ظ„', goals: 19, photo: 'https://media.api-sports.io/football/players/1460.png' },
-                { rank: 2, name: 'ط¥ظٹط±ظ„ظٹظ†ط¬ ظ‡ط§ظ„ط§ظ†ط¯', team: 'ظ…ط§ظ†ط´ط³طھط± ط³ظٹطھظٹ', goals: 18, photo: 'https://media.api-sports.io/football/players/1100.png' },
-                { rank: 3, name: 'ظ…ط­ظ…ط¯ طµظ„ط§ط­', team: 'ظ„ظٹظپط±ط¨ظˆظ„', goals: 17, photo: 'https://media.api-sports.io/football/players/306.png' },
-                { rank: 4, name: 'ط£ظˆظ„ظٹ ظˆط§طھظƒظٹظ†ط²', team: 'ط£ط³طھظˆظ† ظپظٹظ„ط§', goals: 16, photo: 'https://media.api-sports.io/football/players/19134.png' }
+                { rank: 1, name: 'بوكايو ساكا', team: 'آرسنال', goals: 19, photo: 'https://media.api-sports.io/football/players/1460.png' },
+                { rank: 2, name: 'إيرلينج هالاند', team: 'مانشستر سيتي', goals: 18, photo: 'https://media.api-sports.io/football/players/1100.png' },
+                { rank: 3, name: 'محمد صلاح', team: 'ليفربول', goals: 17, photo: 'https://media.api-sports.io/football/players/306.png' },
+                { rank: 4, name: 'أولي واتكينز', team: 'أستون فيلا', goals: 16, photo: 'https://media.api-sports.io/football/players/19134.png' }
             ]
         },
         laliga: {
-            name: 'ط§ظ„ط¯ظˆط±ظٹ ط§ظ„ط¥ط³ط¨ط§ظ†ظٹ',
+            name: 'الدوري الإسباني',
             standings: [
-                { rank: 1, team: 'ط¨ط±ط´ظ„ظˆظ†ط©', icon: 'ًں”´', played: 27, won: 22, drawn: 1, lost: 4, points: 67 },
-                { rank: 2, team: 'ط±ظٹط§ظ„ ظ…ط¯ط±ظٹط¯', icon: 'âڑھ', played: 27, won: 20, drawn: 3, lost: 4, points: 63 },
-                { rank: 3, team: 'ظپظٹط§ط±ظٹط§ظ„', icon: 'ًںں،', played: 28, won: 17, drawn: 4, lost: 7, points: 55 },
-                { rank: 4, team: 'ط£طھظ„طھظٹظƒظˆ ظ…ط¯ط±ظٹط¯', icon: 'ًں”´', played: 27, won: 16, drawn: 6, lost: 5, points: 54 },
-                { rank: 5, team: 'ط±ظٹط§ظ„ ط¨ظٹطھظٹط³', icon: 'ًںں¢', played: 27, won: 12, drawn: 7, lost: 8, points: 43 },
-                { rank: 6, team: 'ط³ظٹظ„طھط§ ظپظٹط؛ظˆ', icon: 'ًں”µ', played: 27, won: 11, drawn: 7, lost: 9, points: 40 },
-                { rank: 7, team: 'ط¥ط³ط¨ط§ظ†ظٹظˆظ„', icon: 'ًں”µ', played: 27, won: 10, drawn: 7, lost: 10, points: 37 },
-                { rank: 8, team: 'ط±ظٹط§ظ„ ط³ظˆط³ظٹط¯ط§ط¯', icon: 'ًں”µ', played: 27, won: 9, drawn: 8, lost: 10, points: 35 }
+                { rank: 1, team: 'برشلونة', icon: '🔴', played: 27, won: 22, drawn: 1, lost: 4, points: 67 },
+                { rank: 2, team: 'ريال مدريد', icon: '⚪', played: 27, won: 20, drawn: 3, lost: 4, points: 63 },
+                { rank: 3, team: 'فياريال', icon: '🟡', played: 28, won: 17, drawn: 4, lost: 7, points: 55 },
+                { rank: 4, team: 'أتلتيكو مدريد', icon: '🔴', played: 27, won: 16, drawn: 6, lost: 5, points: 54 },
+                { rank: 5, team: 'ريال بيتيس', icon: '🟢', played: 27, won: 12, drawn: 7, lost: 8, points: 43 },
+                { rank: 6, team: 'سيلتا فيغو', icon: '🔵', played: 27, won: 11, drawn: 7, lost: 9, points: 40 },
+                { rank: 7, team: 'إسبانيول', icon: '🔵', played: 27, won: 10, drawn: 7, lost: 10, points: 37 },
+                { rank: 8, team: 'ريال سوسيداد', icon: '🔵', played: 27, won: 9, drawn: 8, lost: 10, points: 35 }
             ],
             scorers: [
-                { rank: 1, name: 'ط±ظˆط¨ط±طھ ظ„ظٹظپط§ظ†ط¯ظˆظپط³ظƒظٹ', team: 'ط¨ط±ط´ظ„ظˆظ†ط©', goals: 21 },
-                { rank: 2, name: 'ظƒظٹظ„ظٹط§ظ† ظ…ط¨ط§ط¨ظٹ', team: 'ط±ظٹط§ظ„ ظ…ط¯ط±ظٹط¯', goals: 19 }
+                { rank: 1, name: 'روبرت ليفاندوفسكي', team: 'برشلونة', goals: 21 },
+                { rank: 2, name: 'كيليان مبابي', team: 'ريال مدريد', goals: 19 }
             ]
         },
         spl: {
-            name: 'ط¯ظˆط±ظٹ ط±ظˆط´ظ† ط§ظ„ط³ط¹ظˆط¯ظٹ',
+            name: 'دوري روشن',
             standings: [
-                { rank: 1, team: 'ط§ظ„ظ†طµط±', icon: 'ًں’›', played: 25, won: 21, drawn: 1, lost: 3, points: 64 },
-                { rank: 2, team: 'ط§ظ„ط£ظ‡ظ„ظٹ', icon: 'ًں’ڑ', played: 26, won: 19, drawn: 5, lost: 2, points: 62 },
-                { rank: 3, team: 'ط§ظ„ظ‡ظ„ط§ظ„', icon: 'ًں”µ', played: 25, won: 18, drawn: 7, lost: 0, points: 61 },
-                { rank: 4, team: 'ط§ظ„ظ‚ط§ط¯ط³ظٹط©', icon: 'ًں”µ', played: 26, won: 18, drawn: 6, lost: 2, points: 60 },
-                { rank: 5, team: 'ط§ظ„طھط¹ط§ظˆظ†', icon: 'ًں”µ', played: 26, won: 13, drawn: 6, lost: 7, points: 45 },
-                { rank: 6, team: 'ط§ظ„ط§طھط­ط§ط¯', icon: 'âڑ«', played: 26, won: 12, drawn: 6, lost: 8, points: 42 },
-                { rank: 7, team: 'ط§ظ„ط§طھظپط§ظ‚', icon: 'ًںں¢', played: 26, won: 11, drawn: 6, lost: 9, points: 39 }
+                { rank: 1, team: 'النصر', icon: '💛', played: 25, won: 21, drawn: 1, lost: 3, points: 64 },
+                { rank: 2, team: 'الأهلي', icon: '💚', played: 26, won: 19, drawn: 5, lost: 2, points: 62 },
+                { rank: 3, team: 'الهلال', icon: '🔵', played: 25, won: 18, drawn: 7, lost: 0, points: 61 },
+                { rank: 4, team: 'القادسية', icon: '🔵', played: 26, won: 18, drawn: 6, lost: 2, points: 60 },
+                { rank: 5, team: 'التعاون', icon: '🔵', played: 26, won: 13, drawn: 6, lost: 7, points: 45 },
+                { rank: 6, team: 'الاتحاد', icon: '⚫', played: 26, won: 12, drawn: 6, lost: 8, points: 42 },
+                { rank: 7, team: 'الاتفاق', icon: '🟢', played: 26, won: 11, drawn: 6, lost: 9, points: 39 }
             ],
             scorers: [
-                { rank: 1, name: 'ظƒط±ظٹط³طھظٹط§ظ†ظˆ ط±ظˆظ†ط§ظ„ط¯ظˆ', team: 'ط§ظ„ظ†طµط±', goals: 28 },
-                { rank: 2, name: 'ط£ظ„ظƒط³ط§ظ†ط¯ط± ظ…ظٹطھط±ظˆظپظٹطھط´', team: 'ط§ظ„ظ‡ظ„ط§ظ„', goals: 22 }
+                { rank: 1, name: 'كريستيانو رونالدو', team: 'النصر', goals: 28 },
+                { rank: 2, name: 'ألكسندر ميتروفيتش', team: 'الهلال', goals: 22 }
             ]
         },
         ucl: {
-            name: 'ط¯ظˆط±ظٹ ط£ط¨ط·ط§ظ„ ط£ظˆط±ظˆط¨ط§',
+            name: 'دوري أبطال أوروبا',
             standings: [
-                { rank: 1, team: 'ط¢ط±ط³ظ†ط§ظ„', icon: 'ًں”´', played: 8, won: 8, drawn: 0, lost: 0, points: 24, group: 'ظ…ط±ط­ظ„ط© ط§ظ„ط¯ظˆط±ظٹ' },
-                { rank: 2, team: 'ط¨ط§ظٹط±ظ† ظ…ظٹظˆظ†ط®', icon: 'ًں”´', played: 8, won: 7, drawn: 0, lost: 1, points: 21, group: 'ظ…ط±ط­ظ„ط© ط§ظ„ط¯ظˆط±ظٹ' },
-                { rank: 3, team: 'ظ„ظٹظپط±ط¨ظˆظ„', icon: 'ًں”´', played: 8, won: 6, drawn: 0, lost: 2, points: 18, group: 'ظ…ط±ط­ظ„ط© ط§ظ„ط¯ظˆط±ظٹ' },
-                { rank: 4, team: 'طھظˆطھظ†ظ‡ط§ظ…', icon: 'âڑھ', played: 8, won: 5, drawn: 2, lost: 1, points: 17, group: 'ظ…ط±ط­ظ„ط© ط§ظ„ط¯ظˆط±ظٹ' },
-                { rank: 5, team: 'ط¨ط±ط´ظ„ظˆظ†ط©', icon: 'ًں”´', played: 8, won: 5, drawn: 1, lost: 2, points: 16, group: 'ظ…ط±ط­ظ„ط© ط§ظ„ط¯ظˆط±ظٹ' },
-                { rank: 6, team: 'طھط´ظٹظ„ط³ظٹ', icon: 'ًں”µ', played: 8, won: 5, drawn: 1, lost: 2, points: 16, group: 'ظ…ط±ط­ظ„ط© ط§ظ„ط¯ظˆط±ظٹ' }
+                { rank: 1, team: 'آرسنال', icon: '🔴', played: 8, won: 8, drawn: 0, lost: 0, points: 24, group: 'مرحلة الدوري' },
+                { rank: 2, team: 'بايرن ميونخ', icon: '🔴', played: 8, won: 7, drawn: 0, lost: 1, points: 21, group: 'مرحلة الدوري' },
+                { rank: 3, team: 'ليفربول', icon: '🔴', played: 8, won: 6, drawn: 0, lost: 2, points: 18, group: 'مرحلة الدوري' },
+                { rank: 4, team: 'توتنهام', icon: '⚪', played: 8, won: 5, drawn: 2, lost: 1, points: 17, group: 'مرحلة الدوري' },
+                { rank: 5, team: 'برشلونة', icon: '🔴', played: 8, won: 5, drawn: 1, lost: 2, points: 16, group: 'مرحلة الدوري' },
+                { rank: 6, team: 'تشيلسي', icon: '🔵', played: 8, won: 5, drawn: 1, lost: 2, points: 16, group: 'مرحلة الدوري' }
             ],
             scorers: [
-                { rank: 1, name: 'ظ‡ط§ط±ظٹ ظƒظٹظ†', team: 'ط¨ط§ظٹط±ظ†', goals: 9 },
-                { rank: 2, name: 'ط¥ظٹط±ظ„ظٹظ†ط¬ ظ‡ط§ظ„ط§ظ†ط¯', team: 'ظ…ط§ظ†ط´ط³طھط± ط³ظٹطھظٹ', goals: 8 }
+                { rank: 1, name: 'هاري كين', team: 'بايرن', goals: 9 },
+                { rank: 2, name: 'إيرلينج هالاند', team: 'مانشستر سيتي', goals: 8 }
             ]
         },
         egypt: {
-            name: 'ط§ظ„ط¯ظˆط±ظٹ ط§ظ„ظ…طµط±ظٹ',
+            name: 'الدوري المصري',
             standings: [
-                { rank: 1, team: 'ط§ظ„ط²ظ…ط§ظ„ظƒ', icon: 'âڑھ', played: 20, won: 13, drawn: 4, lost: 3, points: 43 },
-                { rank: 2, team: 'ط¨ظٹط±ط§ظ…ظٹط¯ط²', icon: 'ًں”µ', played: 20, won: 13, drawn: 4, lost: 3, points: 43 },
-                { rank: 3, team: 'ط§ظ„ط£ظ‡ظ„ظٹ', icon: 'ًں”´', played: 20, won: 11, drawn: 7, lost: 2, points: 40 },
-                { rank: 4, team: 'ط³ظٹط±ط§ظ…ظٹظƒط§ ظƒظ„ظٹظˆط¨ط§طھط±ط§', icon: 'ًں”´', played: 20, won: 11, drawn: 5, lost: 4, points: 38 },
-                { rank: 5, team: 'ط§ظ„ظ…طµط±ظٹ', icon: 'ًںں¢', played: 20, won: 8, drawn: 8, lost: 4, points: 32 },
-                { rank: 6, team: 'ط³ظ…ظˆط­ط©', icon: 'ًں”µ', played: 20, won: 8, drawn: 7, lost: 5, points: 31 },
-                { rank: 7, team: 'ط¥ظ†ط¨ظٹ', icon: 'ًں”µ', played: 20, won: 7, drawn: 9, lost: 4, points: 30 },
-                { rank: 8, team: 'ظˆط§ط¯ظٹ ط¯ط¬ظ„ط©', icon: 'ًںں،', played: 20, won: 8, drawn: 5, lost: 7, points: 29 },
-                { rank: 9, team: 'ط²ط¯', icon: 'ًںں،', played: 20, won: 7, drawn: 8, lost: 5, points: 29 },
-                { rank: 10, team: 'ط§ظ„ط¬ظˆظ†ط©', icon: 'ًںں ', played: 20, won: 7, drawn: 7, lost: 6, points: 28 }
+                { rank: 1, team: 'الزمالك', icon: '⚪', played: 20, won: 13, drawn: 4, lost: 3, points: 43 },
+                { rank: 2, team: 'بيراميدز', icon: '🔵', played: 20, won: 13, drawn: 4, lost: 3, points: 43 },
+                { rank: 3, team: 'الأهلي', icon: '🔴', played: 20, won: 11, drawn: 7, lost: 2, points: 40 },
+                { rank: 4, team: 'سيراميكا كليوباترا', icon: '🔴', played: 20, won: 11, drawn: 5, lost: 4, points: 38 },
+                { rank: 5, team: 'المصري', icon: '🟢', played: 20, won: 8, drawn: 8, lost: 4, points: 32 },
+                { rank: 6, team: 'سموحة', icon: '🔵', played: 20, won: 8, drawn: 7, lost: 5, points: 31 },
+                { rank: 7, team: 'إنبي', icon: '🔵', played: 20, won: 7, drawn: 9, lost: 4, points: 30 },
+                { rank: 8, team: 'وادي دجلة', icon: '🟡', played: 20, won: 8, drawn: 5, lost: 7, points: 29 },
+                { rank: 9, team: 'زد إف سي', icon: '🟡', played: 20, won: 7, drawn: 8, lost: 5, points: 29 },
+                { rank: 10, team: 'الجونة', icon: '⚪', played: 20, won: 7, drawn: 7, lost: 6, points: 28 }
             ],
             scorers: [
                 { rank: 1, name: 'ناصر ماهر', team: 'الزمالك', goals: 7 },
@@ -219,19 +219,19 @@ const leaguesDatabase = {
             ]
         },
         caf: {
-            name: 'ط¯ظˆط±ظٹ ط£ط¨ط·ط§ظ„ ط£ظپط±ظٹظ‚ظٹط§',
+            name: 'دوري أبطال أفريقيا',
             standings: [
-                { rank: 1, team: 'ظ†ظ‡ط¶ط© ط¨ط±ظƒط§ظ†', icon: 'ًںں ', played: 3, won: 2, drawn: 1, lost: 0, points: 7, group: 'ط§ظ„ظ…ط¬ظ…ظˆط¹ط© ط£' },
-                { rank: 2, team: 'ط¨ظٹط±ط§ظ…ظٹط¯ط²', icon: 'ًں”µ', played: 3, won: 2, drawn: 1, lost: 0, points: 7, group: 'ط§ظ„ظ…ط¬ظ…ظˆط¹ط© ط£' },
-                { rank: 1, team: 'ط§ظ„ط£ظ‡ظ„ظٹ', icon: 'ًں”´', played: 3, won: 2, drawn: 1, lost: 0, points: 7, group: 'ط§ظ„ظ…ط¬ظ…ظˆط¹ط© ط¨' },
-                { rank: 2, team: 'ظٹط§ظ†ط؛ ط£ظپط±ظٹظƒط§ظ†ط²', icon: 'ًںں¢', played: 3, won: 1, drawn: 1, lost: 1, points: 4, group: 'ط§ظ„ظ…ط¬ظ…ظˆط¹ط© ط¨' },
-                { rank: 1, team: 'طµظ†ط¯ط§ظˆظ†ط²', icon: 'ًںں،', played: 3, won: 1, drawn: 2, lost: 0, points: 5, group: 'ط§ظ„ظ…ط¬ظ…ظˆط¹ط© ط¬' },
-                { rank: 2, team: 'ط§ظ„ظ‡ظ„ط§ظ„ ط§ظ„ط³ظˆط¯ط§ظ†ظٹ', icon: 'ًں”µ', played: 3, won: 1, drawn: 2, lost: 0, points: 5, group: 'ط§ظ„ظ…ط¬ظ…ظˆط¹ط© ط¬' },
-                { rank: 1, team: 'ط³طھط§ط¯ ظ…ط§ظ„ظٹ', icon: 'âڑھ', played: 3, won: 2, drawn: 1, lost: 0, points: 7, group: 'ط§ظ„ظ…ط¬ظ…ظˆط¹ط© ط¯' },
-                { rank: 2, team: 'ط§ظ„طھط±ط¬ظٹ ط§ظ„ط¨ط¯ظٹظ„', icon: 'ًں”´', played: 3, won: 1, drawn: 2, lost: 0, points: 5, group: 'ط§ظ„ظ…ط¬ظ…ظˆط¹ط© ط¯' }
+                { rank: 1, team: 'نهضة بركان', icon: '🟠', played: 3, won: 2, drawn: 1, lost: 0, points: 7, group: 'المجموعة أ' },
+                { rank: 2, team: 'بيراميدز', icon: '🔵', played: 3, won: 2, drawn: 1, lost: 0, points: 7, group: 'المجموعة أ' },
+                { rank: 1, team: 'الأهلي', icon: '🔴', played: 3, won: 2, drawn: 1, lost: 0, points: 7, group: 'المجموعة ب' },
+                { rank: 2, team: 'يانغ أفريكانز', icon: '🟢', played: 3, won: 1, drawn: 1, lost: 1, points: 4, group: 'المجموعة ب' },
+                { rank: 1, team: 'صنداونز', icon: '🟡', played: 3, won: 1, drawn: 2, lost: 0, points: 5, group: 'المجموعة ج' },
+                { rank: 2, team: 'الهلال السوداني', icon: '🔵', played: 3, won: 1, drawn: 2, lost: 0, points: 5, group: 'المجموعة ج' },
+                { rank: 1, team: 'ستاد مالي', icon: '⚪', played: 3, won: 2, drawn: 1, lost: 0, points: 7, group: 'المجموعة د' },
+                { rank: 2, team: 'الترجي', icon: '🔴', played: 3, won: 1, drawn: 2, lost: 0, points: 5, group: 'المجموعة د' }
             ],
             scorers: [
-                { rank: 1, name: 'ط­ط³ظٹظ† ط§ظ„ط´ط­ط§طھ', team: 'ط§ظ„ط£ظ‡ظ„ظٹ', goals: 4 }
+                { rank: 1, name: 'حسين الشحات', team: 'الأهلي', goals: 4 }
             ]
         }
     }
@@ -757,15 +757,22 @@ function parseApiKnockoutData(apiResult) {
         }
         
         // Normalize names
+        let rs = roundStr.toLowerCase();
         let roundIdx = 0;
         let pRoundName = '';
-        if (roundStr.toLowerCase().includes('quarter') || roundStr.toLowerCase().includes('8')) {
+        
+        // Skip obvious league phase or matchday matches
+        if (rs.includes('regular') || rs.includes('league phase') || rs.includes('group') || rs.includes('matchday')) {
+            return;
+        }
+
+        if (rs.includes('quarter') || rs.includes('1/4')) {
             pRoundName = currentLang === 'ar' ? 'ربع النهائي' : 'Quarter-finals';
             roundIdx = 1;
-        } else if (roundStr.toLowerCase().includes('semi') || roundStr.toLowerCase().includes('4')) {
+        } else if (rs.includes('semi') || rs.includes('1/2')) {
             pRoundName = currentLang === 'ar' ? 'نصف النهائي' : 'Semi-finals';
             roundIdx = 2;
-        } else if (roundStr.toLowerCase().includes('final')) {
+        } else if (rs === 'final' || rs === 'finals' || rs === 'final round') {
             pRoundName = currentLang === 'ar' ? 'النهائي' : 'Final';
             roundIdx = 3;
         } else {
