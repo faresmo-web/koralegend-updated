@@ -1,0 +1,15 @@
+# Enable URL Rewriting
+RewriteEngine On
+RewriteBase /
+
+# 1. Redirect /file.html to /file (Optional, for clean URLs)
+RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ /([^.]+)\.html\ HTTP
+RewriteRule ^([^.]+)\.html$ /$1 [R=301,L]
+
+# 2. Map /file to /file.html internally
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}\.html -f
+RewriteRule ^([^/]+)$ $1.html [L]
+
+# Handle Error Pages (Optional)
+ErrorDocument 404 /index.html

@@ -6,7 +6,7 @@ const FootballAPI = (() => {
     const PRIMARY_API = {
         name: 'API-Football',
         baseUrl: 'https://v3.football.api-sports.io',
-        key: 'fe30776653c535b8d1958319c5d5a439', 
+        // key: 'fe30776653c535b8d1958319c5d5a439', 
         header: 'x-apisports-key'
     };
 
