@@ -1,87 +1,55 @@
-let adminToken = '';
-let socket = null;
+// ============================================================
+// Admin Dashboard — Frontend Only (localStorage-based)
+// ============================================================
 
-async function login() {
+const ADMIN_PASSWORD = 'admin';
+
+let adminToken = '';
+
+function login() {
     const pass = document.getElementById('admin-pass').value;
     if (!pass) return alert('يرجى إدخال كلمة المرور');
-    
-    // Add loading state
+
     const btn = document.querySelector('.btn-primary');
     const originalText = btn.innerHTML;
     btn.innerHTML = 'جاري التحقق...';
     btn.disabled = true;
 
-    try {
-        const res = await fetch('/api/login', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ password: pass })
-        });
-        const data = await res.json();
-        if (data.success) {
+    setTimeout(() => {
+        if (pass === ADMIN_PASSWORD) {
             adminToken = pass;
             document.getElementById('login-section').classList.add('hidden');
             document.getElementById('dashboard-section').classList.remove('hidden');
-            
-            // Re-enable body scroll if it was restricted
             document.body.style.overflow = 'auto';
             initDashboard();
         } else {
             alert('كلمة المرور غير صحيحة');
         }
-    } catch (err) {
-        alert('حدث خطأ في الاتصال بالخادم');
-    } finally {
         btn.innerHTML = originalText;
         btn.disabled = false;
-    }
+    }, 400);
 }
 
 document.getElementById('admin-pass').addEventListener('keypress', function (e) {
     if (e.key === 'Enter') login();
 });
 
-async function initDashboard() {
-    socket = io();
-
-    socket.on('active_users', (count) => {
-        const usersEl = document.getElementById('active-users');
-        const oldVal = parseInt(usersEl.innerText);
-        usersEl.innerText = count;
-        
-        // Add a slight animation when number changes
-        if(oldVal !== count) {
-            usersEl.style.transform = 'scale(1.2)';
-            usersEl.style.color = '#38bdf8';
-            setTimeout(() => {
-                usersEl.style.transform = 'scale(1)';
-                usersEl.style.color = 'white';
-            }, 300);
-        }
-    });
-
+function initDashboard() {
     loadStats();
     loadMatches();
 }
 
-async function loadStats() {
-    try {
-        const statsRes = await fetch('/api/stats');
-        const stats = await statsRes.json();
-        document.getElementById('total-views').innerText = stats.totalViews;
-        document.getElementById('active-users').innerText = stats.activeUsers;
-    } catch (e) {
-        console.error("Could not load stats.", e);
-    }
+function loadStats() {
+    // No real-time stats without backend — show static placeholders
+    document.getElementById('total-views').innerText = '—';
+    document.getElementById('active-users').innerText = '—';
 }
 
 async function loadMatches() {
     const list = document.getElementById('matches-list');
     try {
         let matches = await FootballAPI.fetchTodayFixtures();
-        
-        // Show all matches in the admin panel by default to match the homepage when 'all' is selected.
-        
+
         if (!matches || matches.length === 0 || matches._fallback) {
             matches = [
                 {
@@ -107,8 +75,8 @@ async function loadMatches() {
             ];
         }
 
-        const linksRes = await fetch('/api/goal-links');
-        const existingLinks = await linksRes.json();
+        // Load existing links from localStorage
+        const existingLinks = getGoalLinks();
 
         list.innerHTML = '';
         matches.forEach(m => {
@@ -116,7 +84,7 @@ async function loadMatches() {
             const teams = m.teams;
             const matchId = fixt.id;
             const status = fixt.status.short;
-            
+
             const isLive = ['1H', '2H', 'HT', 'LIVE', 'ET', 'P'].includes(status);
             const isUpcoming = !isLive && !['FT', 'AET', 'PEN'].includes(status);
 
@@ -145,8 +113,8 @@ async function loadMatches() {
 
                     <div class="link-control">
                         <input type="text" class="link-input" id="link-${matchId}" placeholder="رابط يوتيوب أو سيرفر مباشر..." value="${currentLink}">
-                        <button class="btn-broadcast" onclick="saveGoalLink(${matchId}, event)">
-                            بث الرابط <span style="font-size:1.1rem; line-height:1;">🚀</span>
+                        <button class="btn-broadcast" onclick="saveGoalLink('${matchId}', event)">
+                            حفظ الرابط <span style="font-size:1.1rem; line-height:1;">💾</span>
                         </button>
                     </div>
                 </div>
@@ -158,73 +126,79 @@ async function loadMatches() {
     }
 }
 
-async function saveGoalLink(matchId, event) {
+// ── localStorage helpers ──────────────────────────────
+function getGoalLinks() {
+    try {
+        return JSON.parse(localStorage.getItem('koralegend_goal_links') || '{}');
+    } catch { return {}; }
+}
+
+function setGoalLinks(links) {
+    try {
+        localStorage.setItem('koralegend_goal_links', JSON.stringify(links));
+    } catch {}
+}
+// ─────────────────────────────────────────────────────
+
+function saveGoalLink(matchId, event) {
     const link = document.getElementById(`link-${matchId}`).value;
     const btn = event.currentTarget;
     const originalText = btn.innerHTML;
-    
-    btn.innerHTML = 'جاري البث... ⏳';
+
+    btn.innerHTML = 'جاري الحفظ... ⏳';
     btn.disabled = true;
 
     try {
-        const res = await fetch('/api/goal-link', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ password: adminToken, matchId, link })
-        });
-        
-        if (res.ok) {
-            btn.style.background = '#3b82f6';
-            btn.innerHTML = 'تم النشر ينجاح ✔';
-            
-            // Add a pulse effect to the row
-            const row = btn.closest('.match-row');
-            if(row) {
-                row.style.boxShadow = '0 0 20px rgba(59, 130, 246, 0.5)';
-                setTimeout(() => row.style.boxShadow = 'none', 1000);
-            }
+        const links = getGoalLinks();
+        links[matchId] = link;
+        setGoalLinks(links);
 
-            setTimeout(() => {
-                btn.style.background = ''; // reset to css default
-                btn.innerHTML = originalText;
-                btn.disabled = false;
-            }, 3000);
-        } else {
-            alert('انتهت صلاحية الجلسة أو يوجد خطأ.');
+        // Also update the live page immediately via renderGoalLink if available
+        if (typeof window.renderGoalLink === 'function') {
+            window.renderGoalLink(matchId, link);
+        }
+
+        btn.style.background = '#3b82f6';
+        btn.innerHTML = 'تم الحفظ ✔';
+
+        const row = btn.closest('.match-row');
+        if (row) {
+            row.style.boxShadow = '0 0 20px rgba(59, 130, 246, 0.5)';
+            setTimeout(() => row.style.boxShadow = 'none', 1000);
+        }
+
+        setTimeout(() => {
+            btn.style.background = '';
             btn.innerHTML = originalText;
             btn.disabled = false;
-        }
+        }, 3000);
     } catch (e) {
-        alert('حدث خطأ في الاتصال');
+        alert('حدث خطأ في الحفظ');
         btn.innerHTML = originalText;
         btn.disabled = false;
     }
 }
 
 function switchTab(tabId) {
-    // Hide all views
     document.querySelectorAll('.view-section').forEach(view => {
         view.classList.add('hidden');
     });
-    
-    // Remove active class from all tabs
+
     document.querySelectorAll('.nav-item').forEach(tab => {
         tab.classList.remove('active');
     });
-    
-    // Show selected view and activate tab
+
     document.getElementById(`view-${tabId}`).classList.remove('hidden');
     document.getElementById(`tab-${tabId}`).classList.add('active');
-    
-    // Update title
+
     const title = document.getElementById('page-head-title');
     const desc = document.getElementById('page-head-desc');
-    
-    if(tabId === 'overview') {
+
+    if (tabId === 'overview') {
         title.innerText = 'النظرة العامة';
-        desc.innerText = 'إحصائيات سريعة للزوار ونشاط الموقع';
-    } else if(tabId === 'matches') {
+        desc.innerText = 'إحصائيات سريعة للموقع';
+    } else if (tabId === 'matches') {
         title.innerText = 'إدارة المباريات';
-        desc.innerText = 'تحكم في إضافة روابط الأهداف والبث اللحظي للمباريات المتاحة';
+        desc.innerText = 'تحكم في إضافة روابط المباريات — تُحفظ في المتصفح محلياً';
     }
 }

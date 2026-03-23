@@ -252,12 +252,8 @@ async function loadTodayResults() {
     }
     
     if (matches.length === 0) {
-        // Restore Static Fallback for Home Page
-        matches = fallbackResults[currentLang] || [];
-        if (matches.length === 0) {
-            renderEmptyState(container, 'No match results available for today.', 'لا توجد نتائج مباريات متاحة لليوم حالياً.');
-            return;
-        }
+        renderEmptyState(container, 'No matches found for today.', 'لا توجد مباريات حاسمة لهذا اليوم.');
+        return;
     }
 
     // Grouping by league
@@ -310,12 +306,8 @@ async function loadUpcomingMatches() {
     }
     
     if (matches.length === 0) {
-        // Restore Static Fallback for Home Page
-        matches = fallbackUpcoming[currentLang] || [];
-        if (matches.length === 0) {
-            renderEmptyState(container, 'No upcoming matches scheduled for tomorrow.', 'لا توجد مباريات قادمة مجدولة لغداً.');
-            return;
-        }
+        renderEmptyState(container, 'No upcoming matches scheduled for tomorrow.', 'لا توجد مباريات قادمة مجدولة لغدٍ.');
+        return;
     }
 
     // Grouping by league

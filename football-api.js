@@ -26,7 +26,7 @@ const FootballAPI = (() => {
         39: 4328, 140: 4335, 307: 4668, 2: 4480, 233: 4829
     };
 
-    const ALLOWED_LEAGUES = [39, 140, 307, 2, 233, 12, 6, 61, 135, 78];
+    const ALLOWED_LEAGUES = [39, 140, 307, 2, 233, 12, 6];
     const FBD_LEAGUE_CODES = {
         39: 'PL', 140: 'PD', 2: 'CL', 61: 'FL1', 135: 'SA', 78: 'BL1'
     };
