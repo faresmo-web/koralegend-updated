@@ -1,63 +1,86 @@
+const express = require('express');
 const http = require('http');
-const fs = require('fs');
 const path = require('path');
+const { Server } = require('socket.io');
+const fs = require('fs');
+const cors = require('cors');
 
-const PORT = 3002;
+const app = express();
+const server = http.createServer(app);
+const io = new Server(server, { cors: { origin: '*' } });
 
-const MIME_TYPES = {
-    '.html': 'text/html',
-    '.js': 'text/javascript',
-    '.css': 'text/css',
-    '.json': 'application/json',
-    '.png': 'image/png',
-    '.jpg': 'image/jpeg',
-    '.gif': 'image/gif',
-    '.svg': 'image/svg+xml',
-    '.wav': 'audio/wav',
-    '.mp4': 'video/mp4',
-    '.woff': 'application/font-woff',
-    '.ttf': 'application/font-ttf',
-    '.eot': 'application/vnd.ms-fontobject',
-    '.otf': 'application/font-otf',
-    '.wasm': 'application/wasm'
-};
+const PORT = 3003;
+const DATA_FILE = path.join(__dirname, 'server-data.json');
 
-const server = http.createServer((req, res) => {
-    let urlPath = req.url === '/' ? '/index' : req.url;
-    let filePath = path.join(__dirname, urlPath);
+// Initialize database
+if (!fs.existsSync(DATA_FILE)) {
+    fs.writeFileSync(DATA_FILE, JSON.stringify({
+        adminPassword: "admin",
+        totalViews: 0,
+        goalLinks: {}
+    }, null, 2));
+}
+
+let db = require(DATA_FILE);
+function saveDb() {
+    fs.writeFileSync(DATA_FILE, JSON.stringify(db, null, 2));
+}
+
+// Middleware
+app.use(cors());
+app.use(express.json());
+app.use(express.static(__dirname, { extensions: ['html'] }));
+
+// API Endpoints
+app.post('/api/login', (req, res) => {
+    const { password } = req.body;
+    if (password === db.adminPassword) {
+        res.json({ success: true });
+    } else {
+        res.status(401).json({ success: false, message: 'Invalid password' });
+    }
+});
+
+app.post('/api/goal-link', (req, res) => {
+    const { password, matchId, link } = req.body;
+    if (password !== db.adminPassword) return res.status(401).json({ error: 'Unauthorized' });
     
-    // Function to serve the file
-    const serveFile = (pathToFile, contentType) => {
-        fs.readFile(pathToFile, (error, content) => {
-            if (error) {
-                res.writeHead(500);
-                res.end(`Server Error: ${error.code}`);
-            } else {
-                res.writeHead(200, { 'Content-Type': contentType });
-                res.end(content, 'utf-8');
-            }
-        });
-    };
+    db.goalLinks[matchId] = link;
+    saveDb();
 
-    // Try the exact path first
-    fs.stat(filePath, (err, stats) => {
-        if (!err && stats.isFile()) {
-            const ext = path.extname(filePath);
-            serveFile(filePath, MIME_TYPES[ext] || 'application/octet-stream');
-        } else {
-            // Try adding .html
-            const htmlPath = filePath + '.html';
-            fs.stat(htmlPath, (errHtml, statsHtml) => {
-                if (!errHtml && statsHtml.isFile()) {
-                    serveFile(htmlPath, 'text/html');
-                } else {
-                    // Final 404
-                    res.writeHead(404, { 'Content-Type': 'text/html' });
-                    res.end('<h1>404 Not Found</h1><p>The requested URL was not found on this server.</p>', 'utf-8');
-                }
-            });
-        }
+    // Broadcast the new goal link to everyone
+    io.emit('new_goal_link', { matchId, link });
+    res.json({ success: true });
+});
+
+app.get('/api/stats', (req, res) => {
+    res.json({
+        totalViews: db.totalViews,
+        activeUsers: io.engine.clientsCount
     });
+});
+
+app.get('/api/goal-links', (req, res) => {
+    res.json(db.goalLinks || {});
+});
+
+// Socket.io for Real-time
+io.on('connection', (socket) => {
+    // A new visitor joined
+    db.totalViews += 1;
+    saveDb();
+    
+    // Broadcast active user count to admins
+    io.emit('active_users', io.engine.clientsCount);
+
+    socket.on('disconnect', () => {
+        io.emit('active_users', io.engine.clientsCount);
+    });
+});
+
+// Fallback for 404
+app.use((req, res) => {
+    res.status(404).send('<h1>404 Not Found</h1><p>The requested URL was not found on this server.</p>');
 });
 
 server.listen(PORT, () => {

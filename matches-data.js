@@ -176,12 +176,14 @@ async function loadMatchesContent() {
     let matches = [];
 
     if (raw && Array.isArray(raw) && raw.length > 0) {
-        const filteredRaw = FootballAPI.filterByAllowedLeagues(raw);
+        // Show all matches returned by API if 'All Leagues' is selected
+        let filteredRaw = raw;
+        
         matches = filteredRaw
             .map(f => FootballAPI.transformFixture(f))
             .filter(Boolean);
 
-        // Apply league filter
+        // Apply strict league filter only if a specific tab is clicked
         if (selectedLeague !== 'all' && leagueIdMap[selectedLeague]) {
             const ids = leagueIdMap[selectedLeague];
             matches = matches.filter(m => ids.includes(m.leagueId));
@@ -330,7 +332,7 @@ function createMatchRow(match) {
         `;
     }
 
-    row.innerHTML = `
+    const matchGridMarkup = `
         <div class="yk-team-home">
             <span class="yk-team-name">${match.homeTeam}</span>
             ${homeLogoHtml}
@@ -342,7 +344,18 @@ function createMatchRow(match) {
         </div>
     `;
 
+    // Wrap the row and the goal link together
+    row.innerHTML = `
+        <div class="yk-match-grid" style="display: grid; grid-template-columns: 1fr 100px 1fr; align-items: center; gap: 0.6rem; width: 100%;">
+            ${matchGridMarkup}
+        </div>
+        <div class="goal-link-${match.id}" style="text-align: center; margin-top: 8px; width: 100%;"></div>
+    `;
+
     // Click to open match detail
+    row.style.flexDirection = 'column';
+    row.style.display = 'flex';
+    
     row.addEventListener('click', () => {
         if (typeof openMatchDetail === 'function') {
             openMatchDetail(match);

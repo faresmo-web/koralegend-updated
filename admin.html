@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kora Legend | لوحة الإدارة</title>
+    <link rel="icon" type="image/png" href="logo.png">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap');
+        
+        :root {
+            --bg-dark: #09090b;
+            --bg-sidebar: #121216;
+            --bg-card: rgba(24, 24, 27, 0.7);
+            --border-color: rgba(255, 255, 255, 0.08);
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --accent: #3b82f6;
+            --accent-glow: rgba(59, 130, 246, 0.5);
+            --success: #10b981;
+            --danger: #ef4444;
+            --card-radius: 16px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Tajawal', sans-serif; }
+        
+        body { 
+            background: var(--bg-dark); 
+            color: var(--text-primary); 
+            min-height: 100vh;
+            display: flex;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 15% 50%, rgba(59, 130, 246, 0.05), transparent 25%),
+                radial-gradient(circle at 85% 30%, rgba(16, 185, 129, 0.05), transparent 25%);
+        }
+
+        .hidden { display: none !important; }
+
+        /* Login Screen */
+        .login-wrapper {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            display: flex; justify-content: center; align-items: center;
+            background: var(--bg-dark);
+            z-index: 100;
+        }
+        
+        .login-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 3rem 2rem;
+            border-radius: var(--card-radius);
+            border: 1px solid var(--border-color);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            width: 90%; max-width: 400px;
+            text-align: center;
+            animation: floatIn 0.5s ease-out forwards;
+        }
+
+        .login-logo { width: 80px; margin-bottom: 1rem; filter: drop-shadow(0 0 10px var(--accent-glow)); }
+        
+        .login-input {
+            width: 100%; padding: 14px 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            color: white; font-size: 1.1rem;
+            margin-bottom: 1.5rem; transition: 0.3s;
+            text-align: center;
+            outline: none;
+        }
+        .login-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2); }
+        
+        .btn-primary {
+            width: 100%; background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: white; border: none; padding: 14px;
+            border-radius: 12px; font-size: 1.1rem; font-weight: 700;
+            cursor: pointer; transition: 0.3s;
+            box-shadow: 0 4px 15px var(--accent-glow);
+        }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 25px var(--accent-glow); }
+
+        /* Dashboard Layout */
+        .app-container {
+            display: flex; width: 100%; min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px; background: var(--bg-sidebar);
+            border-left: 1px solid var(--border-color);
+            padding: 2rem; display: flex; flex-direction: column;
+            position: fixed; height: 100vh; right: 0; top: 0;
+            transition: 0.3s;
+        }
+        
+        .sidebar-brand {
+            display: flex; align-items: center; gap: 1rem;
+            margin-bottom: 3rem; padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .sidebar-brand img { width: 45px; }
+        .sidebar-brand h2 { font-size: 1.2rem; font-weight: 800; letter-spacing: 1px; color: white; margin: 0; }
+        .sidebar-brand p { font-size: 0.75rem; color: var(--accent); margin: 0; }
+
+        .nav-menu { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
+        .nav-item {
+            display: flex; align-items: center; gap: 1rem;
+            padding: 12px 16px; border-radius: 10px;
+            color: var(--text-secondary); cursor: pointer;
+            transition: 0.3s; font-weight: 500;
+        }
+        .nav-item:hover, .nav-item.active {
+            background: rgba(59, 130, 246, 0.1); color: var(--accent);
+        }
+        .nav-icon { font-size: 1.2rem; }
+
+        /* Main Content */
+        .main-content {
+            flex: 1; padding: 2rem 3rem; margin-right: 280px;
+        }
+
+        header.topbar {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 3rem;
+        }
+        .page-title h1 { font-size: 1.8rem; font-weight: 800; margin-bottom: 0.3rem; }
+        .page-title p { color: var(--text-secondary); font-size: 0.95rem; }
+        
+        .admin-profile {
+            display: flex; align-items: center; gap: 1rem;
+            background: var(--bg-card); padding: 8px 16px;
+            border-radius: 30px; border: 1px solid var(--border-color);
+        }
+        .admin-avatar {
+            width: 35px; height: 35px; border-radius: 50%;
+            background: linear-gradient(135deg, #10b981, #059669);
+            display: flex; justify-content: center; align-items: center;
+            font-weight: bold;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem; margin-bottom: 3rem;
+        }
+        .stat-card {
+            background: var(--bg-card); backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color); border-radius: var(--card-radius);
+            padding: 1.8rem; display: flex; align-items: center; justify-content: space-between;
+            transition: 0.3s; position: relative; overflow: hidden;
+        }
+        .stat-card:hover { transform: translateY(-5px); border-color: rgba(255,255,255,0.15); }
+        .stat-card::before {
+            content: ''; position: absolute; top: -50px; left: -50px;
+            width: 100px; height: 100px; border-radius: 50%;
+            background: var(--accent); opacity: 0.1; filter: blur(30px);
+        }
+        .stat-info h3 { color: var(--text-secondary); font-size: 1rem; font-weight: 500; margin-bottom: 0.5rem; }
+        .stat-value { font-size: 2.5rem; font-weight: 800; color: white; display: flex; align-items: center; gap: 0.5rem; }
+        .stat-icon-wrapper {
+            width: 60px; height: 60px; border-radius: 16px;
+            display: flex; justify-content: center; align-items: center; font-size: 1.8rem;
+        }
+        .bg-blue { background: rgba(59, 130, 246, 0.1); color: #3b82f6; }
+        .bg-green { background: rgba(16, 185, 129, 0.1); color: #10b981; }
+
+        .live-indicator {
+            width: 12px; height: 12px; background: #ef4444;
+            border-radius: 50%; display: inline-block;
+            animation: pulse-danger 1.5s infinite;
+        }
+
+        /* Matches Panel */
+        .panel {
+            background: var(--bg-card); backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color); border-radius: var(--card-radius);
+            padding: 2rem;
+        }
+        .panel-header {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 2rem;
+        }
+        .panel-title { font-size: 1.3rem; font-weight: 700; display: flex; align-items: center; gap: 0.8rem; }
+        
+        .matches-list { display: flex; flex-direction: column; gap: 1rem; }
+        
+        .match-row {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 1rem 1.5rem; background: rgba(0,0,0,0.2);
+            border: 1px solid var(--border-color); border-radius: 12px;
+            transition: 0.3s; gap: 1.5rem; flex-wrap: wrap;
+        }
+        .match-row:hover { background: rgba(0,0,0,0.4); border-color: rgba(255,255,255,0.1); }
+        .match-row.live-border { border-right: 4px solid #ef4444; border-left: 4px solid #ef4444; }
+
+        .match-teams { flex: 1; display: flex; align-items: center; justify-content: flex-start; gap: 1rem; min-width: 300px; }
+        .team { display: flex; align-items: center; gap: 0.6rem; font-weight: 700; flex: 1; }
+        .home-team { justify-content: flex-end; }
+        .away-team { justify-content: flex-start; }
+        .team img { width: 35px; height: 35px; object-fit: contain; }
+        .vs { flex-shrink: 0; width: 80px; text-align: center; }
+        
+        .match-status { padding: 4px 10px; border-radius: 8px; font-size: 0.85rem; font-weight: bold; }
+        .status-live { background: rgba(239, 68, 68, 0.15); color: #ef4444; }
+        .status-upcoming { background: rgba(255, 255, 255, 0.1); color: var(--text-secondary); }
+        .status-ended { background: rgba(16, 185, 129, 0.1); color: #10b981; }
+
+        .link-control {
+            display: flex; gap: 0.8rem; align-items: center; flex-basis: 400px; flex-shrink: 0;
+        }
+        .link-input {
+            flex: 1; padding: 10px 15px;
+            background: rgba(0,0,0,0.4); border: 1px solid var(--border-color);
+            border-radius: 8px; color: white; font-size: 0.95rem; transition: 0.3s; outline: none;
+        }
+        .link-input:focus { border-color: var(--accent); }
+        
+        .btn-broadcast {
+            background: #10b981; color: white; border: none;
+            padding: 10px 20px; border-radius: 8px; font-weight: bold;
+            cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 0.5rem;
+            white-space: nowrap;
+        }
+        .btn-broadcast:hover { background: #059669; transform: scale(1.05); }
+        .btn-broadcast:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+        @keyframes floatIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes pulse-danger {
+            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        }
+
+        @media (max-width: 1024px) {
+            .match-row { flex-direction: column; gap: 1.5rem; align-items: flex-start; }
+            .match-teams { width: 100%; justify-content: center; }
+            .link-control { width: 100%; justify-content: stretch; }
+            .link-input { max-width: none; }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar { transform: translateX(100%); width: 0; padding: 0; border: none; }
+            .main-content { margin-right: 0; padding: 1.5rem; }
+            .team { flex-direction: column; text-align: center; }
+            .team img { margin-bottom: 5px; width: 40px; height: 40px; }
+            .team span { font-size: 0.85rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Login screen -->
+    <div class="login-wrapper" id="login-section">
+        <div class="login-card">
+            <img src="logo.png" alt="Logo" class="login-logo">
+            <h2 style="margin-bottom: 0.5rem;">تسجيل الدخول</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 2.5rem; font-size: 0.9rem;">لوحة تحكم Kora Legend</p>
+            
+            <input type="password" id="admin-pass" class="login-input" placeholder="كلمة المرور الخاصة بك">
+            <button class="btn-primary" onclick="login()">تأكيد الدخول</button>
+        </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div class="app-container hidden" id="dashboard-section">
+        
+        <aside class="sidebar">
+            <div class="sidebar-brand">
+                <img src="logo.png" alt="Logo">
+                <div>
+                    <h2>Kora Legend</h2>
+                    <p>Admin Dashboard</p>
+                </div>
+            </div>
+            
+            <ul class="nav-menu">
+                <li class="nav-item active" id="tab-overview" onclick="switchTab('overview')"><span class="nav-icon">📊</span> النظرة العامة</li>
+                <li class="nav-item" id="tab-matches" onclick="switchTab('matches')"><span class="nav-icon">⚽</span> إدارة المباريات</li>
+                <li class="nav-item" onclick="location.href='index'"><span class="nav-icon">🌍</span> زيارة الموقع</li>
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            <header class="topbar">
+                <div class="page-title">
+                    <h1 id="page-head-title">النظرة العامة</h1>
+                    <p id="page-head-desc">إحصائيات سريعة للزوار ونشاط الموقع</p>
+                </div>
+                <div class="admin-profile">
+                    <span style="font-weight: 500;">مدير النظام</span>
+                    <div class="admin-avatar">A</div>
+                </div>
+            </header>
+
+            <div class="content">
+                
+                <!-- Stats Overview View -->
+                <div id="view-overview" class="view-section">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-info">
+                                <h3>الزوار في الموقع حالياً</h3>
+                                <div class="stat-value"><span class="live-indicator"></span> <span id="active-users">0</span></div>
+                            </div>
+                            <div class="stat-icon-wrapper bg-blue">👥</div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-info">
+                                <h3>إجمالي مشاهدات الصفحات</h3>
+                                <div class="stat-value" id="total-views">0</div>
+                            </div>
+                            <div class="stat-icon-wrapper bg-green">📈</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Matches Panel View -->
+                <div id="view-matches" class="view-section hidden">
+                    <div class="panel">
+                        <div class="panel-header" style="display: flex; justify-content: space-between; align-items: center;">
+                            <h2 class="panel-title"><span style="color:var(--accent);">🔴</span> مباريات اليوم لمشاركتها</h2>
+                            <button onclick="localStorage.clear(); location.reload();" style="background: rgba(239, 68, 68, 0.1); border: 1px solid #ef4444; color: #ef4444; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 0.85rem; font-weight: bold;">
+                                🔄 تحديث المباريات (مسح الذاكرة)
+                            </button>
+                        </div>
+                        
+                        <div class="matches-list" id="matches-list">
+                            <div style="text-align: center; padding: 3rem; color: var(--text-secondary);">
+                                <div class="nav-icon" style="font-size: 2rem; margin-bottom: 1rem; animation: pulse-danger 1.5s infinite;">⏳</div>
+                                جاري تحميل المباريات من السيرفر...
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="football-api.js"></script>
+    <script src="admin.js"></script>
+</body>
+</html>

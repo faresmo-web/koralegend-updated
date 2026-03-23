@@ -181,6 +181,7 @@ async function openMatchDetail(match) {
     const body = document.getElementById('mdModalBody');
     let lineups = [], events = [], statistics = [];
     let useFallback = false;
+    let goalLink = '';
 
     if (match.id && typeof FootballAPI !== 'undefined') {
         try {
@@ -189,6 +190,16 @@ async function openMatchDetail(match) {
                 FootballAPI.fetchFixtureEvents(match.id),
                 FootballAPI.fetchFixtureStatistics(match.id)
             ]);
+            
+            // Also fetch current goal links
+            try {
+                const linksRes = await fetch('/api/goal-links');
+                if (linksRes.ok) {
+                    const linksData = await linksRes.json();
+                    goalLink = linksData[match.id] || '';
+                }
+            } catch(err) { /* ignore */ }
+            
         } catch (e) {
             console.warn('[MatchDetail] API fetch failed:', e);
         }
@@ -217,7 +228,7 @@ async function openMatchDetail(match) {
     }
 
     // Render the modal content
-    renderMatchDetail(body, match, lineups, events, statistics, useFallback);
+    renderMatchDetail(body, match, lineups, events, statistics, useFallback, goalLink);
 }
 
 function closeMatchDetail() {
@@ -251,7 +262,7 @@ function buildFallbackLineups(data, match) {
 }
 
 // ── Main render function ──
-function renderMatchDetail(container, match, lineups, events, statistics, useFallback) {
+function renderMatchDetail(container, match, lineups, events, statistics, useFallback, goalLink = '') {
     const homeLogo = match.homeLogo?.startsWith('http') ? `<img src="${match.homeLogo}" alt="" class="md-team-logo">` : `<span class="md-team-emoji">${match.homeLogo || '⚽'}</span>`;
     const awayLogo = match.awayLogo?.startsWith('http') ? `<img src="${match.awayLogo}" alt="" class="md-team-logo">` : `<span class="md-team-emoji">${match.awayLogo || '⚽'}</span>`;
 
@@ -320,23 +331,23 @@ function renderMatchDetail(container, match, lineups, events, statistics, useFal
         tab.addEventListener('click', () => {
             container.querySelectorAll('.md-tab').forEach(t => t.classList.remove('active'));
             tab.classList.add('active');
-            renderTabContent(tab.dataset.tab, lineups, events, statistics, match, useFallback);
+            renderTabContent(tab.dataset.tab, lineups, events, statistics, match, useFallback, goalLink);
         });
     });
 
     // Show first tab
-    renderTabContent('lineup', lineups, events, statistics, match, useFallback);
+    renderTabContent('lineup', lineups, events, statistics, match, useFallback, goalLink);
 }
 
 // ── Render tab content ──
-function renderTabContent(tabId, lineups, events, statistics, match, useFallback) {
+function renderTabContent(tabId, lineups, events, statistics, match, useFallback, goalLink = '') {
     const content = document.getElementById('mdTabContent');
     if (!content) return;
 
     if (tabId === 'lineup') {
         renderLineupTab(content, lineups, match);
     } else if (tabId === 'events') {
-        renderEventsTab(content, events, match);
+        renderEventsTab(content, events, match, goalLink);
     } else if (tabId === 'stats') {
         renderStatsTab(content, statistics, useFallback);
     }
@@ -646,7 +657,7 @@ function getFallbackPlayerStats(name) {
 // ============================================================
 // EVENTS TAB — Timeline
 // ============================================================
-function renderEventsTab(container, events, match) {
+function renderEventsTab(container, events, match, goalLink = '') {
     if (!events || events.length === 0) {
         container.innerHTML = `<div class="md-empty">${currentLang === 'en' ? 'No events available' : 'لا توجد أحداث'}</div>`;
         return;
@@ -683,10 +694,23 @@ function renderEventsTab(container, events, match) {
             if (ev.assist) detailText += `<span class="md-event-assist">(${ev.assist})</span>`;
         }
 
+        let iconHtml = `<div class="md-event-icon">${icon}</div>`;
+        
+        // Add clickable TV icon for goals if there's a link available
+        const isGoal = (ev.type && ev.type.toLowerCase().includes('goal')) || icon.includes('⚽');
+        if (isGoal && goalLink) {
+            iconHtml = `
+                <a href="${goalLink}" target="_blank" class="md-event-video-link" title="شاهد الهدف" style="text-decoration: none; display: flex; align-items: center; gap: 6px;">
+                    <span style="font-size: 1.2rem; cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'">📺</span>
+                    <div class="md-event-icon">${icon}</div>
+                </a>
+            `;
+        }
+
         html += `
             <div class="md-event-row ${sideClass}">
                 <div class="md-event-minute">${ev.minute}'</div>
-                <div class="md-event-icon">${icon}</div>
+                ${iconHtml}
                 <div class="md-event-details">${detailText}</div>
             </div>
         `;
