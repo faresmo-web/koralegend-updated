@@ -57,7 +57,13 @@
         <div class="container">
             <div class="yk-matches-header">
                 <button class="yk-nav-arrow yk-nav-prev" id="datePrev">&#10094;</button>
-                <h2 class="yk-matches-title" id="matchesDateTitle" data-en="Today's Matches" data-ar="مباريات اليوم">Today's Matches</h2>
+                <div class="yk-title-group">
+                    <h2 class="yk-matches-title" id="matchesDateTitle" data-en="Today's Matches" data-ar="مباريات اليوم">Today's Matches</h2>
+                    <div class="view-toggle-container">
+                        <button class="view-toggle-btn active" id="btnCustomView" data-en="Custom" data-ar="مخصص">Custom</button>
+                        <button class="view-toggle-btn" id="btnLiveCenter" data-en="Live Center" data-ar="مباريات حية">Live Score</button>
+                    </div>
+                </div>
                 <button class="yk-nav-arrow yk-nav-next" id="dateNext">&#10095;</button>
             </div>
             <div class="yk-filter-tabs">
@@ -83,6 +89,22 @@
         <div class="container">
             <div class="matches-list" id="matchesList">
                 <!-- Matches will be populated by JavaScript -->
+            </div>
+            
+            <!-- Official API-Football Live Score Widget -->
+            <div id="widgetContainer" class="widget-container" style="display: none;">
+                <div class="api_football_widget_wrapper" style="width: 100%; border-radius: 20px; overflow: hidden; background: rgba(10, 14, 39, 0.6); border: 2px solid rgba(255, 77, 0, 0.2); backdrop-filter: blur(15px); min-height: 800px;">
+                    <div id="wg-api-football-livescore"
+                         data-host="v3.football.api-sports.io"
+                         data-key="fe30776653c535b8d1958319c5d5a439"
+                         data-refresh="60"
+                         data-theme="dark"
+                         data-show-errors="false"
+                         class="api_football_loader">
+                    </div>
+                </div>
+                <script type="module" src="https://widgets.api-sports.io/football/1.1.8/widget.js"></script>
+                <p class="widget-credit" style="text-align: center; font-size: 0.75rem; opacity: 0.4; margin-top: 15px; color: #fff; letter-spacing: 1px;">Official API-Sports Real-time Feed</p>
             </div>
         </div>
     </section>

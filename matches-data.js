@@ -104,6 +104,43 @@ document.addEventListener('DOMContentLoaded', function() {
             loadMatchesContent();
         });
     });
+
+    // View Toggle (Custom vs Widget)
+    const btnCustom = document.getElementById('btnCustomView');
+    const btnWidget = document.getElementById('btnLiveCenter');
+    const matchesList = document.getElementById('matchesList');
+    const widgetContainer = document.getElementById('widgetContainer');
+    const filterTabs = document.querySelector('.yk-filter-tabs');
+    const leagueFilterTabs = document.getElementById('leagueFilterTabs');
+
+    if (btnCustom && btnWidget) {
+        btnCustom.addEventListener('click', () => {
+            btnCustom.classList.add('active');
+            btnWidget.classList.remove('active');
+            matchesList.style.display = 'flex';
+            widgetContainer.style.display = 'none';
+            if (filterTabs) filterTabs.style.display = 'flex';
+            if (leagueFilterTabs) leagueFilterTabs.style.display = 'flex';
+        });
+
+        btnWidget.addEventListener('click', () => {
+            btnWidget.classList.add('active');
+            btnCustom.classList.remove('active');
+            matchesList.style.display = 'none';
+            widgetContainer.style.display = 'block';
+            if (filterTabs) filterTabs.style.display = 'none';
+            if (leagueFilterTabs) leagueFilterTabs.style.display = 'none';
+
+            // Official widget handles its own rendering
+            console.log('[LiveCenter] Official API-Sports Widget Activated');
+        });
+
+        // Auto-switch to widget if primary API limit reached
+        window.addEventListener('fapi_limit_reached', (e) => {
+            console.warn(`[LiveCenter] API limit reached for ${e.detail.provider}. Switching to Live Center...`);
+            btnWidget.click();
+        });
+    }
 });
 
 function updateDateTitle() {

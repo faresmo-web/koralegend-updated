@@ -4,23 +4,44 @@
 
 const FootballAPI = (() => {
     const PRIMARY_API = {
-        name: 'API-Football',
-        baseUrl: 'https://v3.football.api-sports.io',
-        // key: 'fe30776653c535b8d1958319c5d5a439', 
-        header: 'x-apisports-key'
+        name: 'Football-Data.org',
+        baseUrl: 'https://api.football-data.org/v4',
+        key: '07245a5da7754673b21dcc575d373dc4', // New Key Provided
+        header: 'X-Auth-Token',
+        // --- Multi-Proxy Support for FBD ---
+        proxies: [
+            'https://api.allorigins.win/raw?url=',
+            'https://thingproxy.freeboard.io/fetch/',
+            'https://cors-proxy.org/?url='
+        ],
+        currentProxyIndex: 0
     };
 
     const SECONDARY_API = {
-        name: 'Football-Data.org',
-        baseUrl: 'https://api.football-data.org/v4',
-        key: '90087ba1f5914a60b85555f80bfb2d72',
-        header: 'X-Auth-Token'
+        name: 'API-Football',
+        baseUrl: 'https://v3.football.api-sports.io',
+        // --- API KEY POOLING (Fallback) ---
+        keys: [
+            'fe30776653c535b8d1958319c5d5a439', // Key 1
+        ], 
+        header: 'x-apisports-key'
     };
 
+    function setLimitReached(provider) {
+        try {
+            const now = new Date();
+            const tomorrowUTC = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + 1, 0, 0, 0, 0);
+            localStorage.setItem('fapi_limit_' + provider, tomorrowUTC.toString());
+            window.dispatchEvent(new CustomEvent('fapi_limit_reached', { detail: { provider } }));
+        } catch {}
+    }
+
     const TSDB_BASE_URL = 'https://www.thesportsdb.com/api/v1/json/3';
-    const TTL_LIVE = 2 * 60 * 1000; // 2 minutes
-    const TTL_FIXTURES = 1 * 60 * 60 * 1000; // 1 hour
-    const TTL_STANDINGS = 24 * 60 * 60 * 1000; // 24 hours
+    
+    // --- Optimized TTL (Time To Live) to save requests ---
+    const TTL_LIVE = 5 * 60 * 1000;       // 5 minutes (Live matches)
+    const TTL_FIXTURES = 4 * 60 * 60 * 1000;  // 4 hours (Today/Tomorrow schedule)
+    const TTL_STANDINGS = 24 * 60 * 60 * 1000; // 24 hours (Leagues/Standings)
 
     const TSDB_LEAGUE_IDS = {
         39: 4328, 140: 4335, 307: 4668, 2: 4480, 233: 4829
@@ -103,28 +124,54 @@ const FootballAPI = (() => {
         return false;
     }
 
-    function setLimitReached(provider) {
+    /**
+     * --- API KEY ROTATION HELPERS ---
+     */
+    function getCurrentKey(keys) {
+        if (!keys || !Array.isArray(keys)) return null;
+        // Find the first key in the pool that hasn't hit its limit today
+        for (let i = 0; i < keys.length; i++) {
+            const key = keys[i];
+            const limitReset = localStorage.getItem('fapi_limit_key_' + key);
+            if (!limitReset || Date.now() > parseInt(limitReset)) {
+                return { key, index: i };
+            }
+        }
+        return null; // All keys exhausted
+    }
+
+    function setKeyLimitReached(key) {
         try {
-            // Block further requests to this provider until Midnight UTC (00:00 GMT), which is when the API quota refreshes.
+            // Block this specific key until Midnight UTC
             const now = new Date();
             const tomorrowUTC = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + 1, 0, 0, 0, 0);
-            localStorage.setItem('fapi_limit_' + provider, tomorrowUTC.toString());
+            localStorage.setItem('fapi_limit_key_' + key, tomorrowUTC.toString());
+            console.warn(`[API] Key ${key.substring(0, 6)}... reached limit. Key blocked until reset.`);
         } catch {}
     }
 
-    async function baseFetch(url, headers = {}, providerName = 'primary', ttl = null) {
-        if (isLimitReached(providerName)) {
-            console.warn(`[API] ${providerName} is currently blocked due to limits. Using fallback immediately.`);
+    async function baseFetch(url, headers = {}, providerName = 'primary', ttl = null, currentKey = null) {
+        if (providerName === 'primary' && PRIMARY_API.name === 'API-Football' && !currentKey) {
+            console.warn(`[API] No active API-Football Keys available in the pool!`);
+            return { _fallback: true, reason: 'no-keys-available' };
+        }
+        
+        if (providerName !== 'primary' && isLimitReached(providerName)) {
+            console.warn(`[API] ${providerName} is currently blocked due to limits.`);
             return { _fallback: true, reason: 'rate-limit-blocked', provider: providerName };
         }
 
-        // Apply CORS Proxy for Football-Data.org (always in dev or if CORS suspected)
+        // Apply CORS Proxy for Football-Data.org (Primary or Secondary)
         let finalUrl = url;
         const isFBD = url.includes('api.football-data.org');
         
         if (isFBD) {
-            finalUrl = 'https://corsproxy.io/?' + encodeURIComponent(url);
-            console.log(`[API] Proxying ${providerName} request:`, url);
+            const cacheBuster = url.includes('?') ? `&_t=${Date.now()}` : `?_t=${Date.now()}`;
+            // Use the proxy from the provider that is actually FBD
+            const fbdProvider = PRIMARY_API.name === 'Football-Data.org' ? PRIMARY_API : SECONDARY_API;
+            const proxyBase = fbdProvider.proxies[fbdProvider.currentProxyIndex];
+            finalUrl = proxyBase + encodeURIComponent(url + cacheBuster);
+            console.log(`[API] Proxying ${providerName} via ${proxyBase}`);
         }
 
         const cacheKey = btoa(url.substring(0, 240)); 
@@ -133,8 +180,18 @@ const FootballAPI = (() => {
         // Only return from cache if it's NOT a fallback/error object
         if (cached && !cached._fallback) return cached;
 
+        // 1. Prepare Headers (Exclude FBD token if it should be in URL for proxy)
+        let finalHeaders = { ...headers };
+        if (isFBD) {
+            const token = finalHeaders['X-Auth-Token'] || PRIMARY_API.key || SECONDARY_API.key;
+            // Move token to URL to avoid CORS preflight header issues
+            finalUrl += (finalUrl.includes('?') ? '&' : '?') + `X-Auth-Token=${token}`;
+            delete finalHeaders['X-Auth-Token'];
+            console.log(`[API] Moved token to URL for ${providerName} to bypass CORS header blocking.`);
+        }
+
         try {
-            const res = await fetch(finalUrl, { method: 'GET', headers });
+            const res = await fetch(finalUrl, { method: 'GET', headers: finalHeaders });
             
             if (res.status === 429) {
                 console.warn(`[API] ${providerName} hit 429 Rate Limit:`, url);
@@ -156,8 +213,12 @@ const FootballAPI = (() => {
                 console.warn(`[API] API-Sports internal error:`, json.errors);
                 
                 if (errStr.includes('suspended') || errStr.includes('limit') || errStr.includes('access') || errStr.includes('reached')) {
-                    setLimitReached(providerName);
-                    return { _fallback: true, reason: 'api-sports-blocked', details: json.errors };
+                    if (currentKey) {
+                        setKeyLimitReached(currentKey);
+                    } else {
+                        setLimitReached(providerName);
+                    }
+                    return { _fallback: true, reason: 'api-blocked', details: json.errors };
                 }
             }
 
@@ -177,18 +238,49 @@ const FootballAPI = (() => {
         const { primary, secondary, ttl } = options;
         let result = null;
 
-        // 1. Try Primary
-        if (primary && PRIMARY_API.key) {
-            const qs = new URLSearchParams(primary.params).toString();
-            const url = `${PRIMARY_API.baseUrl}/${primary.endpoint}?${qs}`;
+        // 1. Try PRIMARY_API (Now Football-Data.org)
+        if (primary && PRIMARY_API.name === 'Football-Data.org' && PRIMARY_API.key) {
+            const qs = new URLSearchParams(primary.params || {}).toString();
+            const url = `${PRIMARY_API.baseUrl}/${primary.endpoint}${qs ? '?' + qs : ''}`;
             result = await baseFetch(url, { [PRIMARY_API.header]: PRIMARY_API.key }, 'primary', ttl);
-            if (result && !result._fallback) return result;
+            
+            // If failed (maybe proxy issue or limit), rotate proxy for next time
+            if (result && result._fallback) {
+                console.warn(`[LiveCenter] Primary Proxy failed. Rotating...`);
+                PRIMARY_API.currentProxyIndex = (PRIMARY_API.currentProxyIndex + 1) % PRIMARY_API.proxies.length;
+            } else if (result && !result._fallback) {
+                return result;
+            }
+        } else if (primary && PRIMARY_API.name === 'API-Football' && PRIMARY_API.keys && PRIMARY_API.keys.length > 0) {
+            // This is the fallback logic if API-Football is Primary
+            const poolInfo = getCurrentKey(PRIMARY_API.keys);
+            if (poolInfo) {
+                const { key, index } = poolInfo;
+                const qs = new URLSearchParams(primary.params || {}).toString();
+                const url = `${PRIMARY_API.baseUrl}/${primary.endpoint}${qs ? '?' + qs : ''}`;
+                result = await baseFetch(url, { [PRIMARY_API.header]: key }, 'primary', ttl, key);
+                if (result && result._fallback) {
+                    setKeyLimitReached(key);
+                    return await smartFetch(options); 
+                }
+                if (result && !result._fallback) return result;
+            }
         }
-
-        // 2. Try Secondary (immediately if primary fails or is skipped)
-        if (secondary && SECONDARY_API.key) {
-            const qs = new URLSearchParams(secondary.params).toString();
-            const url = `${SECONDARY_API.baseUrl}/${secondary.endpoint}?${qs}`;
+        
+        // 2. Try SECONDARY_API (Now API-Football with Pooling Support)
+        if (secondary && SECONDARY_API.name === 'API-Football' && SECONDARY_API.keys.length > 0) {
+            // Find the active key for fallback
+            const poolInfo = getCurrentKey(SECONDARY_API.keys); 
+            if (poolInfo) {
+                const { key } = poolInfo;
+                const qs = new URLSearchParams(secondary.params || {}).toString();
+                const url = `${SECONDARY_API.baseUrl}/${secondary.endpoint}${qs ? '?' + qs : ''}`;
+                result = await baseFetch(url, { [SECONDARY_API.header]: key }, 'secondary', ttl, key);
+                if (result && !result._fallback) return result;
+            }
+        } else if (secondary && SECONDARY_API.name === 'Football-Data.org' && SECONDARY_API.key) {
+            const qs = new URLSearchParams(secondary.params || {}).toString();
+            const url = `${SECONDARY_API.baseUrl}/${secondary.endpoint}${qs ? '?' + qs : ''}`;
             result = await baseFetch(url, { [SECONDARY_API.header]: SECONDARY_API.key }, 'secondary', ttl);
             if (result && !result._fallback) return result;
         }
