@@ -50,27 +50,23 @@ async function loadMatches() {
     try {
         let matches = await FootballAPI.fetchTodayFixtures();
 
-        if (!matches || matches.length === 0 || matches._fallback) {
+        if (!matches || matches.length === 0 || (matches._fallback && matches.length < 2)) {
             matches = [
                 {
                     fixture: { id: 'fallback_0', status: { short: 'FT' } },
-                    teams: { home: { name: 'ليفربول', logo: 'https://media.api-sports.io/football/teams/40.png' }, away: { name: 'مانشستر سيتي', logo: 'https://media.api-sports.io/football/teams/50.png' } }
+                    teams: { home: { name: 'ليفربول', logo: 'https://crests.football-data.org/64.png' }, away: { name: 'مانشستر سيتي', logo: 'https://crests.football-data.org/65.png' } }
                 },
                 {
                     fixture: { id: 'fallback_1', status: { short: 'LIVE' } },
-                    teams: { home: { name: 'أرسنال', logo: 'https://media.api-sports.io/football/teams/42.png' }, away: { name: 'توتنهام', logo: 'https://media.api-sports.io/football/teams/47.png' } }
+                    teams: { home: { name: 'أرسنال', logo: 'https://crests.football-data.org/57.png' }, away: { name: 'توتنهام', logo: 'https://crests.football-data.org/73.png' } }
                 },
                 {
                     fixture: { id: 'fallback_2', status: { short: 'FT' } },
-                    teams: { home: { name: 'ريال مدريد', logo: 'https://media.api-sports.io/football/teams/541.png' }, away: { name: 'برشلونة', logo: 'https://media.api-sports.io/football/teams/529.png' } }
+                    teams: { home: { name: 'ريال مدريد', logo: 'https://crests.football-data.org/86.png' }, away: { name: 'برشلونة', logo: 'https://crests.football-data.org/81.png' } }
                 },
                 {
                     fixture: { id: 'fallback_3', status: { short: 'FT' } },
-                    teams: { home: { name: 'الأهلي', logo: 'https://media.api-sports.io/football/teams/1032.png' }, away: { name: 'الزمالك', logo: 'https://media.api-sports.io/football/teams/1033.png' } }
-                },
-                {
-                    fixture: { id: 'fallback_4', status: { short: 'LIVE' } },
-                    teams: { home: { name: 'بيراميدز', logo: 'https://media.api-sports.io/football/teams/7244.png' }, away: { name: 'الجيش الملكي', logo: 'https://media.api-sports.io/football/teams/960.png' } }
+                    teams: { home: { name: 'بايرن ميونخ', logo: 'https://crests.football-data.org/5.png' }, away: { name: 'دورتموند', logo: 'https://crests.football-data.org/4.png' } }
                 }
             ];
         }

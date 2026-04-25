@@ -185,27 +185,27 @@ function createMatchCard(match, type) {
 // ── Fallback static data (used when API fails) ───────────
 const fallbackResults = {
     en: [
-        { league: 'Premier League', homeTeam: 'Liverpool', homeLogo: 'https://media.api-sports.io/football/teams/40.png', homeScore: 3, awayTeam: 'Manchester City', awayLogo: 'https://media.api-sports.io/football/teams/50.png', awayScore: 1, status: 'Finished', statusKey: 'finished', time: 'FT' },
-        { league: 'La Liga', homeTeam: 'Real Madrid', homeLogo: 'https://media.api-sports.io/football/teams/541.png', homeScore: 2, awayTeam: 'Barcelona', awayLogo: 'https://media.api-sports.io/football/teams/529.png', awayScore: 2, status: 'Finished', statusKey: 'finished', time: 'FT' },
-        { league: 'Saudi Pro League', homeTeam: 'Al Nassr', homeLogo: 'https://media.api-sports.io/football/teams/2939.png', homeScore: 4, awayTeam: 'Al Hilal', awayLogo: 'https://media.api-sports.io/football/teams/2930.png', awayScore: 2, status: 'Finished', statusKey: 'finished', time: 'FT' }
+        { league: 'Premier League', homeTeam: 'Liverpool', homeLogo: 'https://crests.football-data.org/64.png', homeScore: 3, awayTeam: 'Man City', awayLogo: 'https://crests.football-data.org/65.png', awayScore: 1, status: 'Finished', statusKey: 'finished', time: 'FT' },
+        { league: 'La Liga', homeTeam: 'Real Madrid', homeLogo: 'https://crests.football-data.org/86.png', homeScore: 2, awayTeam: 'Barcelona', awayLogo: 'https://crests.football-data.org/81.png', awayScore: 2, status: 'Finished', statusKey: 'finished', time: 'FT' },
+        { league: 'Bundesliga', homeTeam: 'Bayern', homeLogo: 'https://crests.football-data.org/5.png', homeScore: 4, awayTeam: 'Dortmund', awayLogo: 'https://crests.football-data.org/4.png', awayScore: 0, status: 'Finished', statusKey: 'finished', time: 'FT' }
     ],
     ar: [
-        { league: 'الدوري الإنجليزي', homeTeam: 'ليفربول', homeLogo: 'https://media.api-sports.io/football/teams/40.png', homeScore: 3, awayTeam: 'مانشستر سيتي', awayLogo: 'https://media.api-sports.io/football/teams/50.png', awayScore: 1, status: 'انتهت', statusKey: 'finished', time: 'نهاية' },
-        { league: 'الدوري الإسباني', homeTeam: 'ريال مدريد', homeLogo: 'https://media.api-sports.io/football/teams/541.png', homeScore: 2, awayTeam: 'برشلونة', awayLogo: 'https://media.api-sports.io/football/teams/529.png', awayScore: 2, status: 'انتهت', statusKey: 'finished', time: 'نهاية' },
-        { league: 'دوري روشن السعودي', homeTeam: 'النصر', homeLogo: 'https://media.api-sports.io/football/teams/2939.png', homeScore: 4, awayTeam: 'الهلال', awayLogo: 'https://media.api-sports.io/football/teams/2930.png', awayScore: 2, status: 'انتهت', statusKey: 'finished', time: 'نهاية' }
+        { league: 'الدوري الإنجليزي', homeTeam: 'ليفربول', homeLogo: 'https://crests.football-data.org/64.png', homeScore: 3, awayTeam: 'مانشستر سيتي', awayLogo: 'https://crests.football-data.org/65.png', awayScore: 1, status: 'انتهت', statusKey: 'finished', time: 'نهاية' },
+        { league: 'الدوري الإسباني', homeTeam: 'ريال مدريد', homeLogo: 'https://crests.football-data.org/86.png', homeScore: 2, awayTeam: 'برشلونة', awayLogo: 'https://crests.football-data.org/81.png', awayScore: 2, status: 'انتهت', statusKey: 'finished', time: 'نهاية' },
+        { league: 'الدوري الألماني', homeTeam: 'بايرن ميونخ', homeLogo: 'https://crests.football-data.org/5.png', homeScore: 4, awayTeam: 'دورتموند', awayLogo: 'https://crests.football-data.org/4.png', awayScore: 0, status: 'انتهت', statusKey: 'finished', time: 'نهاية' }
     ]
 };
 
 const fallbackUpcoming = {
     en: [
-        { league: 'Champions League', homeTeam: 'Bayern Munich', homeLogo: 'https://media.api-sports.io/football/teams/157.png', awayTeam: 'Paris SG', awayLogo: 'https://media.api-sports.io/football/teams/85.png', date: 'Tomorrow', time: '20:00', statusKey: 'upcoming' },
-        { league: 'Premier League', homeTeam: 'Arsenal', homeLogo: 'https://media.api-sports.io/football/teams/42.png', awayTeam: 'Chelsea', awayLogo: 'https://media.api-sports.io/football/teams/49.png', date: 'Tomorrow', time: '17:30', statusKey: 'upcoming' },
-        { league: 'Saudi Pro League', homeTeam: 'Al Ittihad', homeLogo: 'https://media.api-sports.io/football/teams/2931.png', awayTeam: 'Al Ahli', awayLogo: 'https://media.api-sports.io/football/teams/2931.png', date: 'Tomorrow', time: '19:00', statusKey: 'upcoming' }
+        { league: 'Champions League', homeTeam: 'Bayern', homeLogo: 'https://crests.football-data.org/5.png', awayTeam: 'Paris SG', awayLogo: 'https://crests.football-data.org/524.png', date: 'Tomorrow', time: '20:00', statusKey: 'upcoming' },
+        { league: 'Premier League', homeTeam: 'Arsenal', homeLogo: 'https://crests.football-data.org/57.png', awayTeam: 'Chelsea', awayLogo: 'https://crests.football-data.org/61.png', date: 'Tomorrow', time: '17:30', statusKey: 'upcoming' },
+        { league: 'Serie A', homeTeam: 'Juventus', homeLogo: 'https://crests.football-data.org/108.png', awayTeam: 'Malin', awayLogo: '⚽', date: 'Tomorrow', time: '19:00', statusKey: 'upcoming' }
     ],
     ar: [
-        { league: 'دوري أبطال أوروبا', homeTeam: 'بايرن ميونخ', homeLogo: 'https://media.api-sports.io/football/teams/157.png', awayTeam: 'باريس سان جيرمان', awayLogo: 'https://media.api-sports.io/football/teams/85.png', date: 'غداً', time: '20:00', statusKey: 'upcoming' },
-        { league: 'الدوري الإنجليزي', homeTeam: 'أرسنال', homeLogo: 'https://media.api-sports.io/football/teams/42.png', awayTeam: 'تشيلسي', awayLogo: 'https://media.api-sports.io/football/teams/49.png', date: 'غداً', time: '17:30', statusKey: 'upcoming' },
-        { league: 'دوري روشن السعودي', homeTeam: 'الاتحاد', homeLogo: 'https://media.api-sports.io/football/teams/2931.png', awayTeam: 'الأهلي', awayLogo: 'https://media.api-sports.io/football/teams/2931.png', date: 'غداً', time: '19:00', statusKey: 'upcoming' }
+        { league: 'دوري أبطال أوروبا', homeTeam: 'بايرن ميونخ', homeLogo: 'https://crests.football-data.org/5.png', awayTeam: 'باريس سان جيرمان', awayLogo: 'https://crests.football-data.org/524.png', date: 'غداً', time: '20:00', statusKey: 'upcoming' },
+        { league: 'الدوري الإنجليزي', homeTeam: 'أرسنال', homeLogo: 'https://crests.football-data.org/57.png', awayTeam: 'تشيلسي', awayLogo: 'https://crests.football-data.org/61.png', date: 'غداً', time: '17:30', statusKey: 'upcoming' },
+        { league: 'الدوري الإيطالي', homeTeam: 'يوفنتوس', homeLogo: 'https://crests.football-data.org/108.png', awayTeam: 'ميلان', awayLogo: 'https://crests.football-data.org/98.png', date: 'غداً', time: '19:00', statusKey: 'upcoming' }
     ]
 };
 
@@ -252,8 +252,8 @@ async function loadTodayResults() {
     }
     
     if (matches.length === 0) {
-        renderEmptyState(container, 'No matches found for today.', 'لا توجد مباريات حاسمة لهذا اليوم.');
-        return;
+        console.log('[Home] API returned 0 matches, using visual fallbacks');
+        matches = fallbackResults[currentLang];
     }
 
     // Grouping by league

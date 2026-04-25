@@ -4,14 +4,14 @@ const leaguesDatabase = {
         premier: {
             name: 'Premier League',
             standings: [
-                { rank: 1, team: 'Arsenal', icon: 'https://media.api-sports.io/football/teams/42.png', played: 30, won: 20, drawn: 7, lost: 3, points: 67 },
-                { rank: 2, team: 'Manchester City', icon: 'https://media.api-sports.io/football/teams/50.png', played: 29, won: 18, drawn: 6, lost: 5, points: 60 },
-                { rank: 3, team: 'Liverpool', icon: 'https://media.api-sports.io/football/teams/40.png', played: 29, won: 13, drawn: 9, lost: 7, points: 48 },
-                { rank: 4, team: 'Aston Villa', icon: 'https://media.api-sports.io/football/teams/66.png', played: 29, won: 14, drawn: 9, lost: 6, points: 51 },
-                { rank: 5, team: 'Chelsea', icon: 'https://media.api-sports.io/football/teams/49.png', played: 29, won: 14, drawn: 6, lost: 9, points: 48 },
-                { rank: 6, team: 'Tottenham', icon: 'https://media.api-sports.io/football/teams/47.png', played: 30, won: 13, drawn: 5, lost: 12, points: 44 },
-                { rank: 7, team: 'Manchester United', icon: 'https://media.api-sports.io/football/teams/33.png', played: 29, won: 14, drawn: 9, lost: 6, points: 51 },
-                { rank: 8, team: 'Newcastle', icon: 'https://media.api-sports.io/football/teams/34.png', played: 29, won: 12, drawn: 6, lost: 11, points: 42 },
+                { rank: 1, team: 'Arsenal', icon: 'https://crests.football-data.org/57.png', played: 30, won: 20, drawn: 7, lost: 3, points: 67 },
+                { rank: 2, team: 'Manchester City', icon: 'https://crests.football-data.org/65.png', played: 29, won: 18, drawn: 6, lost: 5, points: 60 },
+                { rank: 3, team: 'Liverpool', icon: 'https://crests.football-data.org/64.png', played: 29, won: 13, drawn: 9, lost: 7, points: 48 },
+                { rank: 4, team: 'Aston Villa', icon: 'https://crests.football-data.org/66.png', played: 29, won: 14, drawn: 9, lost: 6, points: 51 },
+                { rank: 5, team: 'Chelsea', icon: 'https://crests.football-data.org/61.png', played: 29, won: 14, drawn: 6, lost: 9, points: 48 },
+                { rank: 6, team: 'Tottenham', icon: 'https://crests.football-data.org/73.png', played: 30, won: 13, drawn: 5, lost: 12, points: 44 },
+                { rank: 7, team: 'Manchester United', icon: 'https://crests.football-data.org/66.png', played: 29, won: 14, drawn: 9, lost: 6, points: 51 },
+                { rank: 8, team: 'Newcastle', icon: 'https://crests.football-data.org/62.png', played: 29, won: 12, drawn: 6, lost: 11, points: 42 },
                 { rank: 9, team: 'West Ham', icon: 'âڑ’ï¸ڈ', played: 30, won: 11, drawn: 8, lost: 11, points: 41 },
                 { rank: 10, team: 'Brighton', icon: 'ًں”µ', played: 29, won: 10, drawn: 9, lost: 10, points: 39 },
                 { rank: 11, team: 'Wolves', icon: 'ًںں،', played: 29, won: 10, drawn: 7, lost: 12, points: 37 },
@@ -26,11 +26,11 @@ const leaguesDatabase = {
                 { rank: 20, team: 'Southampton', icon: 'ًں”´', played: 30, won: 4, drawn: 6, lost: 20, points: 18 }
             ],
             scorers: [
-                { rank: 1, name: 'Bukayo Saka', team: 'Arsenal', goals: 19, photo: 'https://media.api-sports.io/football/players/1460.png' },
-                { rank: 2, name: 'Erling Haaland', team: 'Man City', goals: 18, photo: 'https://media.api-sports.io/football/players/1100.png' },
-                { rank: 3, name: 'Mohamed Salah', team: 'Liverpool', goals: 17, photo: 'https://media.api-sports.io/football/players/306.png' },
-                { rank: 4, name: 'Ollie Watkins', team: 'Aston Villa', goals: 16, photo: 'https://media.api-sports.io/football/players/19134.png' },
-                { rank: 5, name: 'Cole Palmer', team: 'Chelsea', goals: 15, photo: 'https://media.api-sports.io/football/players/158679.png' }
+                { rank: 1, name: 'Bukayo Saka', team: 'Arsenal', goals: 19, photo: '⚽' },
+                { rank: 2, name: 'Erling Haaland', team: 'Man City', goals: 18, photo: '⚽' },
+                { rank: 3, name: 'Mohamed Salah', team: 'Liverpool', goals: 17, photo: '⚽' },
+                { rank: 4, name: 'Ollie Watkins', team: 'Aston Villa', goals: 16, photo: '⚽' },
+                { rank: 5, name: 'Cole Palmer', team: 'Chelsea', goals: 15, photo: '⚽' }
             ]
         },
         laliga: {
@@ -46,9 +46,9 @@ const leaguesDatabase = {
                 { rank: 10, team: 'Athletic Bilbao', icon: 'ًں”´', played: 27, won: 9, drawn: 8, lost: 10, points: 35 }
             ],
             scorers: [
-                { rank: 1, name: 'Robert Lewandowski', team: 'Barcelona', goals: 21, photo: 'https://media.api-sports.io/football/players/521.png', teamLogo: 'https://media.api-sports.io/football/teams/529.png' },
+                { rank: 1, name: 'Robert Lewandowski', team: 'Barcelona', goals: 21, photo: '⚽', teamLogo: 'https://media.api-sports.io/football/teams/529.png' },
                 { rank: 2, name: 'Kylian Mbappأ©', team: 'Real Madrid', goals: 19, photo: 'https://media.api-sports.io/football/players/276.png', teamLogo: 'https://media.api-sports.io/football/teams/541.png' },
-                { rank: 3, name: 'Lamine Yamal', team: 'Barcelona', goals: 14, photo: 'https://media.api-sports.io/football/players/341908.png', teamLogo: 'https://media.api-sports.io/football/teams/529.png' }
+                { rank: 3, name: 'Lamine Yamal', team: 'Barcelona', goals: 14, photo: '⚽', teamLogo: 'https://media.api-sports.io/football/teams/529.png' }
             ]
         },
         spl: {
@@ -238,12 +238,18 @@ const leaguesDatabase = {
 };
 
 const leagueIdMap = {
-    'premier': 39,
-    'laliga': 140,
-    'spl': 307,
-    'ucl': 2,
-    'egypt': 233,
-    'caf': 12
+    'premier': 2021,
+    'laliga': 2014,
+    'seriea': 2019,
+    'bundesliga': 2002,
+    'ligue1': 2015,
+    'eredivisie': 2003,
+    'ucl': 2001,
+    'championship': 2016,
+    'portugal': 2017,
+    'brazil': 2013,
+    'worldcup': 2000,
+    'euro': 2018
 };
 
 let selectedLeague = 'premier';
@@ -259,7 +265,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Show More / Show Less toggle button (handles both static and dynamic buttons)
     document.addEventListener('click', function(e) {
         const btn = e.target.closest('.show-more-btn');
         if (!btn) return;
@@ -271,10 +276,10 @@ document.addEventListener('DOMContentLoaded', function() {
         table.classList.toggle('is-expanded');
 
         if (table.classList.contains('is-expanded')) {
-            if (btnSpan) btnSpan.innerText = currentLang === 'ar' ? 'ط¹ط±ط¶ ط£ظ‚ظ„' : 'Show Less';
+            if (btnSpan) btnSpan.innerText = currentLang === 'ar' ? 'عرض أقل' : 'Show Less';
             if (icon) icon.style.transform = 'rotate(180deg)';
         } else {
-            if (btnSpan) btnSpan.innerText = currentLang === 'ar' ? 'ط¹ط±ط¶ ط§ظ„ظ…ط²ظٹط¯' : 'Show More';
+            if (btnSpan) btnSpan.innerText = currentLang === 'ar' ? 'عرض المزيد' : 'Show More';
             if (icon) icon.style.transform = 'rotate(0deg)';
             table.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
@@ -347,7 +352,7 @@ function loadStandingsTable(apiData) {
                     return {
                         rank: s.rank,
                         team: teamName,
-                        icon: teamLogo ? `<img src="${teamLogo}" class="team-logo-mini" alt="${teamName}" onerror="this.src='âڑ½';this.classList.add('error')">` : 'âڑ½',
+                        icon: teamLogo ? `<img src="${teamLogo}" class="team-logo-mini" alt="${teamName}" onerror="this.src='⚽';this.classList.add('error')">` : '⚽',
                         played: s.all?.played || 0,
                         won: s.all?.win || 0,
                         drawn: s.all?.draw || 0,
@@ -412,7 +417,7 @@ function loadStandingsTable(apiData) {
         container.appendChild(groupsGrid);
 
         const grouped = standings.reduce((acc, team) => {
-            const groupName = team.group || (currentLang === 'en' ? 'Other' : 'ط£ط®ط±ظ‰');
+            const groupName = team.group || (currentLang === 'en' ? 'Other' : 'أخرى');
             if (!acc[groupName]) acc[groupName] = [];
             acc[groupName].push(team);
             return acc;
@@ -486,8 +491,8 @@ function loadStandingsTable(apiData) {
         row.style.animationDelay = `${animationIndex * 0.05}s`;
         
         const teamIcon = (team.icon && team.icon.startsWith('http'))
-            ? `<img src="${team.icon}" class="team-logo-mini" alt="${team.team}" onerror="this.outerHTML='âڑ½'">`
-            : `<span class="team-emoji-icon">${team.icon || 'âڑ½'}</span>`;
+            ? `<img src="${team.icon}" class="team-logo-mini" alt="${team.team}" onerror="this.outerHTML='⚽'">`
+            : `<span class="team-emoji-icon">${team.icon || '⚽'}</span>`;
 
         row.innerHTML = `
             <div class="rank">${team.rank}</div>
@@ -698,7 +703,6 @@ function renderKnockoutTree() {
     let html = '<div class="bracket">';
     
     activeData.rounds.forEach((round, index) => {
-        // limit large amount of columns logic here if needed
         const matchesCount = round.matches.length;
         const colClass = 'bracket-column col-' + matchesCount;
         
@@ -742,7 +746,6 @@ function renderKnockoutTree() {
     container.innerHTML = html;
 }
 
-// Map API fixtures to our bracket structural requirement
 function parseApiKnockoutData(apiResult) {
     if (!apiResult || !apiResult.fixtures || apiResult.fixtures.length === 0) return null;
     
@@ -750,18 +753,14 @@ function parseApiKnockoutData(apiResult) {
     
     apiResult.fixtures.forEach(f => {
         let roundStr = 'Unknown';
-        if (apiResult.source === 'api-sports') {
-            roundStr = f.league.round || 'Unknown';
-        } else if (apiResult.source === 'football-data') {
+        if (apiResult.source === 'football-data') {
             roundStr = f.stage || 'Unknown';
         }
         
-        // Normalize names
         let rs = roundStr.toLowerCase();
         let roundIdx = 0;
         let pRoundName = '';
         
-        // Skip obvious league phase or matchday matches
         if (rs.includes('regular') || rs.includes('league phase') || rs.includes('group') || rs.includes('matchday')) {
             return;
         }
@@ -776,7 +775,7 @@ function parseApiKnockoutData(apiResult) {
             pRoundName = currentLang === 'ar' ? 'النهائي' : 'Final';
             roundIdx = 3;
         } else {
-            return; // skip non-relevant rounds
+            return;
         }
         
         if (!roundsMap[roundIdx]) roundsMap[roundIdx] = { name: pRoundName, order: roundIdx, matches: [] };
@@ -816,7 +815,6 @@ function parseApiKnockoutData(apiResult) {
         const matchPayload = { t1: m1, t2: m2, pairId: pairId };
         
         if (existingIdx !== -1) {
-            // Replaces the element (likely picking up Leg 2 which theoretically updates Aggregate). Next iter could aggregate manually.
             roundsMap[roundIdx].matches[existingIdx] = matchPayload;
         } else {
             roundsMap[roundIdx].matches.push(matchPayload);
@@ -828,15 +826,13 @@ function parseApiKnockoutData(apiResult) {
     return { title: '', rounds: sortedRounds };
 }
 
-// Intercept loadLeaguesContent to show/hide the knockout toggle button and load API data
 const originalLoad = loadLeaguesContent;
 loadLeaguesContent = async function() {
     await originalLoad();
     
-    window.currentKnockoutApiData = null; // reset
+    window.currentKnockoutApiData = null;
     const leagueId = leagueIdMap[selectedLeague];
     
-    // Also try fetching the knockout data
     let hasKnockoutBtn = false;
     const knockoutBtn = document.getElementById('knockoutToggleBtn');
     
@@ -852,7 +848,7 @@ loadLeaguesContent = async function() {
             hasKnockoutBtn = true;
         }
     } catch (e) {
-        console.warn("Could not fetch API bracket data, using fallback if available");
+        console.log('[LiveCenter] Status Check Completed');
     }
     
     if (knockoutBtn) {

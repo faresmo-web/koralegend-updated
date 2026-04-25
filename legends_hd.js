@@ -9,7 +9,7 @@ const legendsDatabase = {
                 position: 'Forward', 
                 nationality: 'Brazil', 
                 years: '1956-1977', 
-                photo: 'https://media.api-sports.io/football/players/2281.png', 
+                photo: '⚽', 
                 bio: 'The only player to win 3 World Cups. Pelé is the ultimate symbol of "Joga Bonito", scoring over 1,200 career goals.', 
                 achievements: ['3× World Cup winner', 'FIFA Player of the Century', '1283 Goals', '6× Brazilian Champion'], 
                 type: 'international', 
@@ -21,7 +21,7 @@ const legendsDatabase = {
                 position: 'Attacking Midfielder', 
                 nationality: 'Argentina', 
                 years: '1976-1997', 
-                photo: 'https://media.api-sports.io/football/players/2282.png', 
+                photo: '⚽', 
                 bio: 'A footballing deity in Argentina and Naples. His "Hand of God" and "Goal of the Century" in 1986 defined a legacy of absolute genius.', 
                 achievements: ['World Cup 1986', '2× Serie A Champion', 'World Cup Golden Ball 1986', 'Argentine Legend'], 
                 type: 'international', 
@@ -33,7 +33,7 @@ const legendsDatabase = {
                 position: 'Forward', 
                 nationality: 'Argentina', 
                 years: '2004-Present', 
-                photo: 'https://media.api-sports.io/football/players/154.png', 
+                photo: '⚽', 
                 bio: 'The greatest of his generation. Messi won 8 Ballon d\'Ors and led Argentina to the 2022 World Cup glory.', 
                 achievements: ['8× Ballon d\'Or', 'World Cup 2022', '4× UCL winner', '10× La Liga'], 
                 type: 'international', 
@@ -45,7 +45,7 @@ const legendsDatabase = {
                 position: 'Forward', 
                 nationality: 'Portugal', 
                 years: '2002-Present', 
-                photo: 'https://media.api-sports.io/football/players/874.png', 
+                photo: '⚽', 
                 bio: 'The highest goalscorer in football history. A machine of physical excellence and clinical finishing in multiple leagues.', 
                 achievements: ['5× Ballon d\'Or', '5× UCL winner', 'All-time Top Scorer', 'Euro 2016 winner'], 
                 type: 'international', 
@@ -57,7 +57,7 @@ const legendsDatabase = {
                 position: 'Midfielder', 
                 nationality: 'France', 
                 years: '1989-2006', 
-                photo: 'https://media.api-sports.io/football/players/2283.png', 
+                photo: '⚽', 
                 bio: 'Elegance personified. Zidane led France to their first World Cup title in 1998 and scored the greatest volley in UCL history.', 
                 achievements: ['World Cup 1998', 'Ballon d\'Or 1998', 'Euro 2000 winner', 'UCL 2002 winner'], 
                 type: 'international', 
@@ -71,7 +71,7 @@ const legendsDatabase = {
                 position: 'Forward', 
                 nationality: 'Egypt', 
                 years: '1972-1988', 
-                photo: 'https://img.kooora.com/?i=repro%2fegypt%2fbibo.jpg', 
+                photo: '⚽', 
                 bio: 'The African Player of the Year in 1983 and Al Ahly\'s ultimate icon. Known as "Bibo", he remains a symbol of loyalty and excellence.', 
                 achievements: ['African Player of the Year 1983', '10× Egyptian League Champion', '2× African Cup of Champions', 'Egyptian Legend'], 
                 type: 'egypt-arab', 
@@ -83,7 +83,7 @@ const legendsDatabase = {
                 position: 'Midfielder', 
                 nationality: 'Egypt', 
                 years: '1997-2013', 
-                photo: 'https://img.kooora.com/?i=repro%2f_news%2f2013%2f12%2f1387635671.jpg', 
+                photo: '⚽', 
                 bio: 'The "King of Hearts". Aboutrika was the soul of the "Golden Generation" of Egyptian football, winning multiple titles.', 
                 achievements: ['2× AFCON winner', '5× CAF Champions League', '4× African Blogger of the Year', 'Club World Cup Bronze'], 
                 type: 'egypt-arab', 
@@ -95,7 +95,7 @@ const legendsDatabase = {
                 position: 'Forward', 
                 nationality: 'Egypt', 
                 years: '2010-Present', 
-                photo: 'https://media.api-sports.io/football/players/306.png', 
+                photo: '⚽', 
                 bio: 'The Egyptian King. A global icon who broke PL records and led Liverpool to UCL and PL success.', 
                 achievements: ['2× PFA Player of the Year', 'CL winner 2019', 'Premier League winner', '3× PL Golden Boot'], 
                 type: 'egypt-arab', 
@@ -106,35 +106,31 @@ const legendsDatabase = {
     ar: {
         all: [
             // --- الخالدون (HD) ---
-            { name: 'بيليه', fullName: 'إدسون أرانتيس دو ناسيمنتو', position: 'مهاجم', nationality: 'البرازيل', years: '1956-1977', photo: 'https://media.api-sports.io/football/players/2281.png', bio: 'اللاعب الوحيد الذي فاز بـ 3 كؤوس عالم. بيليه هو الرمز الأسمى لـ "Joga Bonito".', achievements: ['بطل كأس العالم 3 مرات', 'لاعب القرن من الفيفا', '1283 هدفاً', 'بطل الدوري البرازيلي 6 مرات'], type: 'international', rarity: 'immortal' },
-            { name: 'دييغو مارادونا', fullName: 'دييغو أرماندو مارادونا', position: 'صانع ألعاب', nationality: 'الأرجنتين', years: '1976-1997', photo: 'https://media.api-sports.io/football/players/2282.png', bio: 'إله كرة القدم في الأرجنتين ونابولي. أهدافه التاريخية عام 1986 صنعت إرثاً أسطورياً.', achievements: ['بطل كأس العالم 1986', 'الدوري الإيطالي مرتين', 'الكرة الذهبية للمونديال', 'أسطورة الأرجنتين'], type: 'international', rarity: 'immortal' },
-            { name: 'ليونيل ميسي', fullName: 'ليونيل أندريس ميسي', position: 'مهاجم', nationality: 'الأرجنتين', years: '2004-الحاضر', photo: 'https://media.api-sports.io/football/players/154.png', bio: 'الأعظم في جيله. قاد الأرجنتين لمجد مونديال 2022 وحقق 8 كرات ذهبية.', achievements: ['8 كرات ذهبية', 'بطل العالم 2022', '4 دوري أبطال أوروبا', '10 ألقاب ليغا'], type: 'international', rarity: 'immortal' },
-            { name: 'كريستيانو رونالدو', fullName: 'كريستيانو رونالدو', position: 'مهاجم', nationality: 'البرتغال', years: '2002-الحاضر', photo: 'https://media.api-sports.io/football/players/874.png', bio: 'الهداف التاريخي لكرة القدم. ماكينة من التميز البدني والإنهاء القاتل في أقوى دوريات العالم.', achievements: ['5 كرات ذهبية', '5 دوري أبطال أوروبا', 'الهداف التاريخي الرسمي', 'بطل يورو 2016'], type: 'international', rarity: 'immortal' },
+            { name: 'بيليه', fullName: 'إدسون أرانتيس دو ناسيمنتو', position: 'مهاجم', nationality: 'البرازيل', years: '1956-1977', photo: '⚽', bio: 'اللاعب الوحيد الذي فاز بـ 3 كؤوس عالم. بيليه هو الرمز الأسمى لـ "Joga Bonito".', achievements: ['بطل كأس العالم 3 مرات', 'لاعب القرن من الفيفا', '1283 هدفاً', 'بطل الدوري البرازيلي 6 مرات'], type: 'international', rarity: 'immortal' },
+            { name: 'دييغو مارادونا', fullName: 'دييغو أرماندو مارادونا', position: 'صانع ألعاب', nationality: 'الأرجنتين', years: '1976-1997', photo: '⚽', bio: 'إله كرة القدم في الأرجنتين ونابولي. أهدافه التاريخية عام 1986 صنعت إرثاً أسطورياً.', achievements: ['بطل كأس العالم 1986', 'الدوري الإيطالي مرتين', 'الكرة الذهبية للمونديال', 'أسطورة الأرجنتين'], type: 'international', rarity: 'immortal' },
+            { name: 'ليونيل ميسي', fullName: 'ليونيل أندريس ميسي', position: 'مهاجم', nationality: 'الأرجنتين', years: '2004-الحاضر', photo: '⚽', bio: 'الأعظم في جيله. قاد الأرجنتين لمجد مونديال 2022 وحقق 8 كرات ذهبية.', achievements: ['8 كرات ذهبية', 'بطل العالم 2022', '4 دوري أبطال أوروبا', '10 ألقاب ليغا'], type: 'international', rarity: 'immortal' },
+            { name: 'كريستيانو رونالدو', fullName: 'كريستيانو رونالدو', position: 'مهاجم', nationality: 'البرتغال', years: '2002-الحاضر', photo: '⚽', bio: 'الهداف التاريخي لكرة القدم. ماكينة من التميز البدني والإنهاء القاتل في أقوى دوريات العالم.', achievements: ['5 كرات ذهبية', '5 دوري أبطال أوروبا', 'الهداف التاريخي الرسمي', 'بطل يورو 2016'], type: 'international', rarity: 'immortal' },
 
             // --- أساطير مصر والعرب (HD) ---
-            { name: 'محمود الخطيب', fullName: 'محمود الخطيب (بيبو)', position: 'مهاجم', nationality: 'مصر', years: '1972-1988', photo: 'https://img.kooora.com/?i=repro%2fegypt%2fbibo.jpg', bio: 'أفضل لاعب في أفريقيا عام 1983 وأكبر أيقونة في تاريخ النادي الأهلي. رمز الوفاء والمهارة.', achievements: ['أفضل لاعب في أفريقيا 1983', 'بطل الدوري المصري 10 مرات', 'بطل دوري أبطال أفريقيا مرتين', 'أسطورة مصر'], type: 'egypt-arab', rarity: 'immortal' },
-            { name: 'محمد أبو تريكة', fullName: 'محمد أبو تريكة', position: 'صانع ألعاب', nationality: 'مصر', years: '1997-2013', photo: 'https://img.kooora.com/?i=repro%2f_news%2f2013%2f12%2f1387635671.jpg', bio: 'أمير القلوب. العقل المدبر للجيل الذهبي للكرة المصرية، وحقق بطولات تاريخية للأهلي والمنتخب.', achievements: ['بطل أمم أفريقيا مرتين', 'بطل دوري أبطال أفريقيا 5 مرات', 'أفضل لاعب سمة 4 مرات', 'برونزية المونديال للأندية'], type: 'egypt-arab', rarity: 'immortal' }
+            { name: 'محمود الخطيب', fullName: 'محمود الخطيب (بيبو)', position: 'مهاجم', nationality: 'مصر', years: '1972-1988', photo: '⚽', bio: 'أفضل لاعب في أفريقيا عام 1983 وأكبر أيقونة في تاريخ النادي الأهلي. رمز الوفاء والمهارة.', achievements: ['أفضل لاعب في أفريقيا 1983', 'بطل الدوري المصري 10 مرات', 'بطل دوري أبطال أفريقيا مرتين', 'أسطورة مصر'], type: 'egypt-arab', rarity: 'immortal' },
+            { name: 'محمد أبو تريكة', fullName: 'محمد أبو تريكة', position: 'صانع ألعاب', nationality: 'مصر', years: '1997-2013', photo: '⚽', bio: 'أمير القلوب. العقل المدبر للجيل الذهبي للكرة المصرية، وحقق بطولات تاريخية للأهلي والمنتخب.', achievements: ['بطل أمم أفريقيا مرتين', 'بطل دوري أبطال أفريقيا 5 مرات', 'أفضل لاعب سمة 4 مرات', 'برونزية المونديال للأندية'], type: 'egypt-arab', rarity: 'immortal' }
         ]
     }
 };
 
-// Map remaining 90+ real legends to highly stable Pinterest-style HD renders
+// Map remaining real legends to neutral placeholders
 const hdMapV11 = [
-    { name: 'Franz Beckenbauer', id: 2287 }, { name: 'Johan Cruyff', id: 2285 },
-    { name: 'Gianluigi Buffon', id: 2439 }, { name: 'Paolo Maldini', id: 2296 },
-    { name: 'Xavi Hernandez', id: 2297 }, { name: 'Andres Iniesta', id: 2298 },
-    { name: 'Iker Casillas', id: 2299 }, { name: 'Ronaldo Nazario', id: 2284 },
-    { name: 'Luka Modric', id: 737 }, { name: 'Karim Benzema', id: 759 },
-    { name: 'Robert Lewandowski', id: 521 }, { name: 'Luis Suarez', id: 153 },
-    { name: 'Neymar Jr', id: 276 }, { name: 'Ronaldinho', id: 2286 },
-    { name: 'Kylian Mbappe', id: 278 }, { name: 'Erling Haaland', id: 1100 },
-    { name: 'Kevin De Bruyne', id: 629 }, { name: 'Sergio Ramos', id: 738 },
-    { name: 'Virgil van Dijk', id: 290 }, { name: 'Alisson Becker', id: 158 },
-    { name: 'Manuel Neuer', id: 512 }, { name: 'Harry Kane', id: 184 },
-    { name: 'Riyad Mahrez', id: 187 }, { name: 'Achraf Hakimi', id: 742 },
-    { name: 'Yassine Bounou', id: 1515 }, { name: 'Hakim Ziyech', id: 1391 },
-    { name: 'Sami Al-Jaber', id: 2307 }, { name: 'Yousuf Al-Thunayan', id: 2311 },
-    { name: 'Nawaf Al-Temyat', id: 2310 }, { name: 'Majed Abdullah', id: 2281 }
+    { name: 'Franz Beckenbauer' }, { name: 'Johan Cruyff' },
+    { name: 'Gianluigi Buffon' }, { name: 'Paolo Maldini' },
+    { name: 'Xavi Hernandez' }, { name: 'Andres Iniesta' },
+    { name: 'Iker Casillas' }, { name: 'Ronaldo Nazario' },
+    { name: 'Luka Modric' }, { name: 'Karim Benzema' },
+    { name: 'Robert Lewandowski' }, { name: 'Luis Suarez' },
+    { name: 'Neymar Jr' }, { name: 'Ronaldinho' },
+    { name: 'Kylian Mbappe' }, { name: 'Erling Haaland' },
+    { name: 'Kevin De Bruyne' }, { name: 'Sergio Ramos' },
+    { name: 'Virgil van Dijk' }, { name: 'Alisson Becker' },
+    { name: 'Manuel Neuer' }, { name: 'Harry Kane' }
 ];
 
 function populateMasterHdV11() {
@@ -142,20 +138,18 @@ function populateMasterHdV11() {
         if (!legendsDatabase.en.all.find(l => l.name === p.name)) {
             legendsDatabase.en.all.push({
                 name: p.name, fullName: `${p.name} Legacy`, position: 'Elite Icon', nationality: 'International', years: 'Legendary',
-                photo: `https://media.api-sports.io/football/players/${p.id}.png`,
+                photo: '⚽',
                 bio: 'A world-class elite athlete who reached the absolute pinnacle of global football and reshaped the history of the sport.',
-                achievements: ['Gold Medalist', 'Champions League Hero', 'National Record Holder'], type: p.id > 2300 ? 'egypt-arab' : 'international', rarity: 'legendary'
+                achievements: ['Gold Medalist', 'Champions League Hero', 'National Record Holder'], type: 'international', rarity: 'legendary'
             });
             legendsDatabase.ar.all.push({
                 name: p.name, fullName: `${p.name} الأسطورة`, position: 'أيقونة النخبة', nationality: 'دولي', years: 'أسطوري',
-                photo: `https://media.api-sports.io/football/players/${p.id}.png`,
+                photo: '⚽',
                 bio: 'رياضي من طراز رفيع وصل إلى ذروة كرة القدم العالمية وأعاد تشكيل تاريخ الرياضة ببراعته الفذة.',
-                achievements: ['ميدالية ذهبية', 'بطل دوري الأبطال', 'صاحب رقم قياسي وطني'], type: p.id > 2300 ? 'egypt-arab' : 'international', rarity: 'legendary'
+                achievements: ['ميدالية ذهبية', 'بطل دوري الأبطال', 'صاحب رقم قياسي وطني'], type: 'international', rarity: 'legendary'
             });
         }
     });
-
-
 }
 
 populateMasterHdV11();
@@ -195,7 +189,7 @@ function loadLegendsContent() {
         card.innerHTML = `
             <div class="legend-card-inner">
                 <div class="legend-photo-wrap">
-                    <img src="${legend.photo}" alt="${legend.name}" class="legend-photo" loading="lazy" onerror="this.src='https://www.gravatar.com/avatar/0?d=mp&s=400'">
+                    <img src="${legend.photo}" alt="${legend.name}" class="legend-photo" loading="lazy" onerror="this.src='https://www.gravatar.com/avatar/0?d=mp\u0026s=400'">
                     <div class="legend-badge">${legend.rarity === 'immortal' ? '👑' : '⭐'}</div>
                 </div>
                 <div class="legend-content">

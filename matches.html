@@ -74,12 +74,13 @@
             </div>
             <div class="yk-league-filter-tabs" id="leagueFilterTabs">
                 <button class="yk-league-tab active" data-league="all" data-en="All Leagues" data-ar="جميع البطولات">All Leagues</button>
-                <button class="yk-league-tab" data-league="premier" data-en="Premier League" data-ar="الإنجليزي">Premier League</button>
+                <button class="yk-league-tab" data-league="premier" data-en="Premier" data-ar="الإنجليزي">Premier</button>
                 <button class="yk-league-tab" data-league="laliga" data-en="La Liga" data-ar="الإسباني">La Liga</button>
-                <button class="yk-league-tab" data-league="spl" data-en="Saudi Pro" data-ar="السعودي">Saudi Pro</button>
+                <button class="yk-league-tab" data-league="seriea" data-en="Serie A" data-ar="الإيطالي">Serie A</button>
+                <button class="yk-league-tab" data-league="bundesliga" data-en="Bundesliga" data-ar="الألماني">Bundesliga</button>
                 <button class="yk-league-tab" data-league="ucl" data-en="UCL" data-ar="أبطال أوروبا">UCL</button>
-                <button class="yk-league-tab" data-league="egyptian" data-en="Egyptian" data-ar="المصري">Egyptian</button>
-                <button class="yk-league-tab" data-league="africa" data-en="Africa" data-ar="أفريقيا">Africa</button>
+                <button class="yk-league-tab" data-league="championship" data-en="Champ" data-ar="شامبيونشيب">Champ</button>
+                <button class="yk-league-tab" data-league="portugal" data-en="Portugal" data-ar="البرتغالي">Portugal</button>
             </div>
         </div>
     </section>
@@ -91,20 +92,9 @@
                 <!-- Matches will be populated by JavaScript -->
             </div>
             
-            <!-- Official API-Football Live Score Widget -->
+            <!-- Custom Score View -->
             <div id="widgetContainer" class="widget-container" style="display: none;">
-                <div class="api_football_widget_wrapper" style="width: 100%; border-radius: 20px; overflow: hidden; background: rgba(10, 14, 39, 0.6); border: 2px solid rgba(255, 77, 0, 0.2); backdrop-filter: blur(15px); min-height: 800px;">
-                    <div id="wg-api-football-livescore"
-                         data-host="v3.football.api-sports.io"
-                         data-key="fe30776653c535b8d1958319c5d5a439"
-                         data-refresh="60"
-                         data-theme="dark"
-                         data-show-errors="false"
-                         class="api_football_loader">
-                    </div>
-                </div>
-                <script type="module" src="https://widgets.api-sports.io/football/1.1.8/widget.js"></script>
-                <p class="widget-credit" style="text-align: center; font-size: 0.75rem; opacity: 0.4; margin-top: 15px; color: #fff; letter-spacing: 1px;">Official API-Sports Real-time Feed</p>
+                <p style="text-align: center; padding: 2rem; color: var(--text-secondary);">Real-time feed is currently unavailable through the widget.</p>
             </div>
         </div>
     </section>

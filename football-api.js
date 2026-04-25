@@ -1,78 +1,17 @@
 // ============================================================
-// Football API Service Layer — Multi-Provider Support
+// Football API Service Layer — Football-Data.org Integration
 // ============================================================
 
 const FootballAPI = (() => {
-    const PRIMARY_API = {
-        name: 'Football-Data.org',
-        baseUrl: 'https://api.football-data.org/v4',
-        key: '07245a5da7754673b21dcc575d373dc4', // New Key Provided
-        header: 'X-Auth-Token',
-        // --- Multi-Proxy Support for FBD ---
-        proxies: [
-            'https://api.allorigins.win/raw?url=',
-            'https://thingproxy.freeboard.io/fetch/',
-            'https://cors-proxy.org/?url='
-        ],
-        currentProxyIndex: 0
+    const CORS_PROXY = '/api/proxy?url='; // Strictly using requested local proxy gateway
+
+    const API = {
+        baseUrl: 'https://api.football-data.org/v4'
     };
 
-    const SECONDARY_API = {
-        name: 'API-Football',
-        baseUrl: 'https://v3.football.api-sports.io',
-        // --- API KEY POOLING (Fallback) ---
-        keys: [
-            'fe30776653c535b8d1958319c5d5a439', // Key 1
-        ], 
-        header: 'x-apisports-key'
-    };
-
-    function setLimitReached(provider) {
-        try {
-            const now = new Date();
-            const tomorrowUTC = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + 1, 0, 0, 0, 0);
-            localStorage.setItem('fapi_limit_' + provider, tomorrowUTC.toString());
-            window.dispatchEvent(new CustomEvent('fapi_limit_reached', { detail: { provider } }));
-        } catch {}
-    }
-
-    const TSDB_BASE_URL = 'https://www.thesportsdb.com/api/v1/json/3';
-    
-    // --- Optimized TTL (Time To Live) to save requests ---
-    const TTL_LIVE = 5 * 60 * 1000;       // 5 minutes (Live matches)
-    const TTL_FIXTURES = 4 * 60 * 60 * 1000;  // 4 hours (Today/Tomorrow schedule)
-    const TTL_STANDINGS = 24 * 60 * 60 * 1000; // 24 hours (Leagues/Standings)
-
-    const TSDB_LEAGUE_IDS = {
-        39: 4328, 140: 4335, 307: 4668, 2: 4480, 233: 4829
-    };
-
-    const ALLOWED_LEAGUES = [39, 140, 307, 2, 233, 12, 6];
-    const FBD_LEAGUE_CODES = {
-        39: 'PL', 140: 'PD', 2: 'CL', 61: 'FL1', 135: 'SA', 78: 'BL1'
-    };
-
-    const FBD_ID_MAP = {
-        2021: 39,  // Premier League
-        2014: 140, // La Liga
-        2001: 2,   // Champions League
-        2015: 61,  // Ligue 1
-        2019: 135, // Serie A
-        2002: 78   // Bundesliga
-    };
-
-    const TSDB_NAME_TO_ID = {
-        'English Premier League': 39,
-        'Spanish La Liga': 140,
-        'Saudi Arabian Pro League': 307,
-        'UEFA Champions League': 2,
-        'Egyptian Premier League': 233,
-        'African Nations Cup': 6,
-        'CAF Champions League': 12
-    };
-
-    let activeProvider = 'primary';
-
+    // Football-Data.org IDs: PL: 2021, CL: 2001, BL1: 2002, SA: 2019, PD: 2014, FL1: 2015, DED: 2003, PPL: 2017, ELC: 2016, BSA: 2013, WC: 2000, EC: 2018
+    const ALLOWED_LEAGUES = [2021, 2014, 2001, 2002, 2019, 2015, 2003, 2017, 2016, 2013, 2000, 2018];
+ 
     // ── Helpers ──────────────────────────────────────────────
     function todayDate() { return new Date().toISOString().slice(0, 10); }
     function yesterdayDate() {
@@ -85,455 +24,187 @@ const FootballAPI = (() => {
     }
     
     function getCurrentSeason() {
-        return new Date().getMonth() < 6 ? new Date().getFullYear() - 1 : new Date().getFullYear();
+        // Football-Data uses the START year of the season.
+        // If we are in the first half of the year (Jan-June), the season began last year.
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = now.getMonth(); // 0-indexed
+        return (month < 7) ? (year - 1) : year;
     }
-
-    function cacheGet(key) {
+ 
+    // ── Core Fetch with CORS Proxy Rotation ──────────────────
+    let lastRequestTime = 0;
+    const REQUEST_DELAY = 6100; // 6.1 seconds between requests (Stricter for Football-Data.org Free Tier: 10 calls/min)
+ 
+    async function waitForThrottle() {
+        const now = Date.now();
+        const timeSinceLast = now - lastRequestTime;
+        const delay = Math.max(0, REQUEST_DELAY - timeSinceLast);
+        
+        lastRequestTime = now + delay;
+        
+        if (delay > 0) {
+            await new Promise(resolve => setTimeout(resolve, delay));
+        }
+    }
+ 
+    async function apiFetch(endpoint, params = {}, ttl = null, retryCount = 0) {
+        if (retryCount > 2) {
+            console.error(`[FootballData] Max retries reached for: ${endpoint}`);
+            return null;
+        }
+ 
+        const qs = new URLSearchParams(params).toString();
+        const originalUrl = `${API.baseUrl}/${endpoint}${qs ? '?' + qs : ''}`;
+ 
+        // Wait for throttle
+        await waitForThrottle();
+ 
+        const finalUrl = CORS_PROXY + encodeURIComponent(originalUrl);
+        console.log(`[FootballData] Requesting (Authorized by Proxy): ${endpoint}`);
+ 
         try {
-            const raw = localStorage.getItem('fapi_' + key);
-            if (!raw) return null;
-            const parsed = JSON.parse(raw);
-            if (parsed.ts) {
-                if (Date.now() - parsed.ts > TTL_FIXTURES) {
-                    localStorage.removeItem('fapi_' + key);
-                    return null;
-                }
-                return parsed.data;
+            // Headers are now handled by the server-side proxy
+            const res = await fetch(finalUrl); 
+ 
+            if (res.status === 429) {
+                console.warn(`[FootballData] Rate limited (429)! Waiting 60s...`);
+                await new Promise(resolve => setTimeout(resolve, 60000));
+                return apiFetch(endpoint, params, ttl, retryCount + 1);
             }
-            if (Date.now() > parsed.expiresAt) {
-                localStorage.removeItem('fapi_' + key);
+ 
+            if (!res.ok) {
+                // Check if it's a 403 (could mean key issue or restricted league)
+                if (res.status === 403) {
+                    console.error(`[FootballData] 403 Forbidden - Check API key permissions for ${endpoint}`);
+                }
+                console.error(`[FootballData] API returned ${res.status} for ${endpoint}`);
                 return null;
             }
-            return parsed.data;
-        } catch { return null; }
-    }
-
-    function cacheSet(key, data, ttl) {
-        try { 
-            const expiresAt = Date.now() + (ttl || TTL_FIXTURES);
-            localStorage.setItem('fapi_' + key, JSON.stringify({ data, expiresAt })); 
-        } catch {}
-    }
-
-    function isLimitReached(provider) {
-        try {
-            const resetTime = localStorage.getItem('fapi_limit_' + provider);
-            if (resetTime && Date.now() < parseInt(resetTime)) return true;
-            if (resetTime) localStorage.removeItem('fapi_limit_' + provider);
-        } catch {}
-        return false;
-    }
-
-    /**
-     * --- API KEY ROTATION HELPERS ---
-     */
-    function getCurrentKey(keys) {
-        if (!keys || !Array.isArray(keys)) return null;
-        // Find the first key in the pool that hasn't hit its limit today
-        for (let i = 0; i < keys.length; i++) {
-            const key = keys[i];
-            const limitReset = localStorage.getItem('fapi_limit_key_' + key);
-            if (!limitReset || Date.now() > parseInt(limitReset)) {
-                return { key, index: i };
-            }
-        }
-        return null; // All keys exhausted
-    }
-
-    function setKeyLimitReached(key) {
-        try {
-            // Block this specific key until Midnight UTC
-            const now = new Date();
-            const tomorrowUTC = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + 1, 0, 0, 0, 0);
-            localStorage.setItem('fapi_limit_key_' + key, tomorrowUTC.toString());
-            console.warn(`[API] Key ${key.substring(0, 6)}... reached limit. Key blocked until reset.`);
-        } catch {}
-    }
-
-    async function baseFetch(url, headers = {}, providerName = 'primary', ttl = null, currentKey = null) {
-        if (providerName === 'primary' && PRIMARY_API.name === 'API-Football' && !currentKey) {
-            console.warn(`[API] No active API-Football Keys available in the pool!`);
-            return { _fallback: true, reason: 'no-keys-available' };
-        }
-        
-        if (providerName !== 'primary' && isLimitReached(providerName)) {
-            console.warn(`[API] ${providerName} is currently blocked due to limits.`);
-            return { _fallback: true, reason: 'rate-limit-blocked', provider: providerName };
-        }
-
-        // Apply CORS Proxy for Football-Data.org (Primary or Secondary)
-        let finalUrl = url;
-        const isFBD = url.includes('api.football-data.org');
-        
-        if (isFBD) {
-            const cacheBuster = url.includes('?') ? `&_t=${Date.now()}` : `?_t=${Date.now()}`;
-            // Use the proxy from the provider that is actually FBD
-            const fbdProvider = PRIMARY_API.name === 'Football-Data.org' ? PRIMARY_API : SECONDARY_API;
-            const proxyBase = fbdProvider.proxies[fbdProvider.currentProxyIndex];
-            finalUrl = proxyBase + encodeURIComponent(url + cacheBuster);
-            console.log(`[API] Proxying ${providerName} via ${proxyBase}`);
-        }
-
-        const cacheKey = btoa(url.substring(0, 240)); 
-        const cached = cacheGet(cacheKey);
-        
-        // Only return from cache if it's NOT a fallback/error object
-        if (cached && !cached._fallback) return cached;
-
-        // 1. Prepare Headers (Exclude FBD token if it should be in URL for proxy)
-        let finalHeaders = { ...headers };
-        if (isFBD) {
-            const token = finalHeaders['X-Auth-Token'] || PRIMARY_API.key || SECONDARY_API.key;
-            // Move token to URL to avoid CORS preflight header issues
-            finalUrl += (finalUrl.includes('?') ? '&' : '?') + `X-Auth-Token=${token}`;
-            delete finalHeaders['X-Auth-Token'];
-            console.log(`[API] Moved token to URL for ${providerName} to bypass CORS header blocking.`);
-        }
-
-        try {
-            const res = await fetch(finalUrl, { method: 'GET', headers: finalHeaders });
-            
-            if (res.status === 429) {
-                console.warn(`[API] ${providerName} hit 429 Rate Limit:`, url);
-                setLimitReached(providerName);
-                return { _fallback: true, status: res.status, provider: providerName };
-            }
-
-            if (res.status === 403 || res.status === 401) {
-                console.warn(`[API] ${providerName} error ${res.status}:`, url);
-                return { _fallback: true, status: res.status, provider: providerName };
-            }
-
-            if (!res.ok) throw new Error(`API returned ${res.status}`);
-            const json = await res.json();
-            
-            // API-Sports error check (covers limit, subscription, and account suspension)
-            if (json.errors && Object.keys(json.errors).length > 0 && url.includes('api-sports')) {
-                const errStr = JSON.stringify(json.errors).toLowerCase();
-                console.warn(`[API] API-Sports internal error:`, json.errors);
-                
-                if (errStr.includes('suspended') || errStr.includes('limit') || errStr.includes('access') || errStr.includes('reached')) {
-                    if (currentKey) {
-                        setKeyLimitReached(currentKey);
-                    } else {
-                        setLimitReached(providerName);
-                    }
-                    return { _fallback: true, reason: 'api-blocked', details: json.errors };
-                }
-            }
-
-            // Successfully fetched data
-            cacheSet(cacheKey, json, ttl);
-            return json;
+ 
+            const data = await res.json();
+            return data;
         } catch (err) {
-            console.error(`[API] Fetch error for ${providerName}:`, err);
-            return { _fallback: true, error: err.message, provider: providerName };
+            console.error(`[FootballData] Fetch failed for ${endpoint}:`, err.message);
+            return null;
         }
     }
 
-    /**
-     * Tries primary, falls back to secondary if primary indicates _fallback
-     */
-    async function smartFetch(options) {
-        const { primary, secondary, ttl } = options;
-        let result = null;
+    // ── Normalization ────────────────────────────────────────
+    function normalizeMatches(data) {
+        if (!data || !data.matches) return [];
+        return data.matches.map(m => {
+            const statusMap = {
+                'FINISHED': 'FT',
+                'IN_PLAY': 'LIVE',
+                'PAUSED': 'HT',
+                'SCHEDULED': 'NS',
+                'TIMED': 'NS',
+                'POSTPONED': 'PST',
+                'CANCELLED': 'CANC',
+                'SUSPENDED': 'SUSP'
+            };
 
-        // 1. Try PRIMARY_API (Now Football-Data.org)
-        if (primary && PRIMARY_API.name === 'Football-Data.org' && PRIMARY_API.key) {
-            const qs = new URLSearchParams(primary.params || {}).toString();
-            const url = `${PRIMARY_API.baseUrl}/${primary.endpoint}${qs ? '?' + qs : ''}`;
-            result = await baseFetch(url, { [PRIMARY_API.header]: PRIMARY_API.key }, 'primary', ttl);
-            
-            // If failed (maybe proxy issue or limit), rotate proxy for next time
-            if (result && result._fallback) {
-                console.warn(`[LiveCenter] Primary Proxy failed. Rotating...`);
-                PRIMARY_API.currentProxyIndex = (PRIMARY_API.currentProxyIndex + 1) % PRIMARY_API.proxies.length;
-            } else if (result && !result._fallback) {
-                return result;
-            }
-        } else if (primary && PRIMARY_API.name === 'API-Football' && PRIMARY_API.keys && PRIMARY_API.keys.length > 0) {
-            // This is the fallback logic if API-Football is Primary
-            const poolInfo = getCurrentKey(PRIMARY_API.keys);
-            if (poolInfo) {
-                const { key, index } = poolInfo;
-                const qs = new URLSearchParams(primary.params || {}).toString();
-                const url = `${PRIMARY_API.baseUrl}/${primary.endpoint}${qs ? '?' + qs : ''}`;
-                result = await baseFetch(url, { [PRIMARY_API.header]: key }, 'primary', ttl, key);
-                if (result && result._fallback) {
-                    setKeyLimitReached(key);
-                    return await smartFetch(options); 
-                }
-                if (result && !result._fallback) return result;
-            }
-        }
-        
-        // 2. Try SECONDARY_API (Now API-Football with Pooling Support)
-        if (secondary && SECONDARY_API.name === 'API-Football' && SECONDARY_API.keys.length > 0) {
-            // Find the active key for fallback
-            const poolInfo = getCurrentKey(SECONDARY_API.keys); 
-            if (poolInfo) {
-                const { key } = poolInfo;
-                const qs = new URLSearchParams(secondary.params || {}).toString();
-                const url = `${SECONDARY_API.baseUrl}/${secondary.endpoint}${qs ? '?' + qs : ''}`;
-                result = await baseFetch(url, { [SECONDARY_API.header]: key }, 'secondary', ttl, key);
-                if (result && !result._fallback) return result;
-            }
-        } else if (secondary && SECONDARY_API.name === 'Football-Data.org' && SECONDARY_API.key) {
-            const qs = new URLSearchParams(secondary.params || {}).toString();
-            const url = `${SECONDARY_API.baseUrl}/${secondary.endpoint}${qs ? '?' + qs : ''}`;
-            result = await baseFetch(url, { [SECONDARY_API.header]: SECONDARY_API.key }, 'secondary', ttl);
-            if (result && !result._fallback) return result;
-        }
-
-        return result || { _fallback: true };
-    }
-
-    // ── Normalization Helpers ────────────────────────────────
-
-    function normalizeFBDMatches(matches) {
-        if (!matches || !Array.isArray(matches)) return [];
-        return matches.map(m => {
-            const leagueId = FBD_ID_MAP[m.competition.id] || m.competition.id;
             return {
                 fixture: {
-                    id: m.id, date: m.utcDate, timestamp: Math.floor(new Date(m.utcDate).getTime() / 1000),
-                    status: { short: m.status === 'FINISHED' ? 'FT' : (m.status === 'IN_PLAY' ? 'LIVE' : 'NS') }
+                    id: m.id,
+                    date: m.utcDate,
+                    timestamp: Math.floor(new Date(m.utcDate).getTime() / 1000),
+                    status: { short: statusMap[m.status] || 'NS', elapsed: null } // Free tier doesn't usually provide elapsed minute
                 },
-                league: { id: leagueId, name: m.competition.name },
+                league: {
+                    id: m.competition?.id,
+                    name: m.competition?.name,
+                    logo: m.competition?.emblem || null
+                },
                 teams: {
-                    home: { name: m.homeTeam.shortName || m.homeTeam.name, logo: m.homeTeam.crest },
-                    away: { name: m.awayTeam.shortName || m.awayTeam.name, logo: m.awayTeam.crest }
+                    home: { id: m.homeTeam?.id, name: m.homeTeam?.name, logo: m.homeTeam?.crest || null },
+                    away: { id: m.awayTeam?.id, name: m.awayTeam?.name, logo: m.awayTeam?.crest || null }
                 },
-                goals: { home: m.score?.fullTime?.home, away: m.score?.fullTime?.away }
+                goals: {
+                    home: m.score?.fullTime?.home ?? null,
+                    away: m.score?.fullTime?.away ?? null
+                }
             };
         });
     }
 
-    function normalizeTSDBMatches(events) {
-        if (!events || !Array.isArray(events)) return [];
-        return events.map(e => ({
-            fixture: {
-                id: e.idEvent, date: e.strTimestamp || `${e.dateEvent}T${e.strTime}`,
-                timestamp: e.strTimestamp ? Math.floor(new Date(e.strTimestamp).getTime() / 1000) : null,
-                status: { short: e.strStatus === 'Match Finished' ? 'FT' : 'NS' }
-            },
-            league: { id: TSDB_NAME_TO_ID[e.strLeague] || null, name: e.strLeague },
-            teams: {
-                home: { name: e.strHomeTeam, logo: e.strHomeTeamBadge },
-                away: { name: e.strAwayTeam, logo: e.strAwayTeamBadge }
-            },
-            goals: { home: parseInt(e.intHomeScore), away: parseInt(e.intAwayScore) }
+    function normalizeStandings(data, leagueId) {
+        if (!data || !data.standings || data.standings.length === 0) return [];
+        
+        // Football-Data.org returns multiple types (TOTAL, HOME, AWAY). We want TOTAL.
+        const totalStandings = data.standings.find(s => s.type === 'TOTAL') || data.standings[0];
+        if (!totalStandings || !totalStandings.table) return [];
+
+        return [{
+            league: {
+                id: leagueId,
+                standings: [totalStandings.table.map(s => ({
+                    rank: s.position,
+                    team: { name: s.team.name, logo: s.team.crest || null },
+                    all: { played: s.playedGames, win: s.won, draw: s.draw, lose: s.lost },
+                    points: s.points,
+                    goalsDiff: s.goalDifference
+                }))]
+            }
+        }];
+    }
+
+    function normalizeScorers(data) {
+        if (!data || !data.scorers) return [];
+        return data.scorers.map(s => ({
+            player: { name: s.player.name, photo: null },
+            statistics: [{
+                team: { name: s.team.name, logo: s.team.crest || null },
+                goals: { total: s.goals || 0 }
+            }]
         }));
     }
 
-    // ── Public API ───────────────────────────────────────────
-
+    // ── Public Data Fetchers ─────────────────────────────────
     async function fetchFixturesByDate(dateStr) {
-        const result = await smartFetch({
-            primary: { endpoint: 'fixtures', params: { date: dateStr } },
-            secondary: { endpoint: 'matches', params: { dateFrom: dateStr, dateTo: dateStr } },
-            ttl: dateStr === todayDate() ? TTL_FIXTURES : TTL_STANDINGS
+        const data = await apiFetch('matches', { 
+            dateFrom: dateStr, 
+            dateTo: dateStr,
+            competitions: ALLOWED_LEAGUES.join(',')
         });
-        if (result?.response) return result.response;
-        if (result?.matches) return normalizeFBDMatches(result.matches);
-        
-        // TSDB Fallback
-        const url = `${TSDB_BASE_URL}/eventsday.php?d=${dateStr}`;
-        const tsdb = await baseFetch(url);
-        if (tsdb?.events) return normalizeTSDBMatches(tsdb.events);
-
-        return [];
+        return normalizeMatches(data);
     }
 
     async function fetchLiveFixtures() {
-        const result = await smartFetch({
-            primary: { endpoint: 'fixtures', params: { live: 'all' } },
-            secondary: { endpoint: 'matches', params: { status: 'LIVE' } },
-            ttl: TTL_LIVE
-        });
-        if (result?.response) return result.response;
-        if (result?.matches) return normalizeFBDMatches(result.matches);
-        return [];
+        const data = await apiFetch('matches', { status: 'IN_PLAY' });
+        return normalizeMatches(data);
     }
 
     async function fetchStandings(leagueId) {
-        const year = getCurrentSeason();
-        const fbdCode = FBD_LEAGUE_CODES[leagueId];
-
-        const result = await smartFetch({
-            primary: { endpoint: 'standings', params: { league: leagueId, season: year } },
-            secondary: fbdCode ? { endpoint: `competitions/${fbdCode}/standings`, params: { season: year } } : null,
-            ttl: TTL_STANDINGS
-        });
-
-        // 1. Success from API-Sports (now primary)
-        if (result?.response) return result.response;
-
-        // 2. Success from Football-Data (now secondary)
-        if (result?.standings) {
-            const table = result.standings.find(s => s.type === 'TOTAL')?.table;
-            if (table) {
-                return [{
-                    league: { id: leagueId, season: year, standings: [table.map(t => ({
-                        rank: t.position,
-                        team: { name: t.team.name, logo: t.team.crest },
-                        all: { played: t.playedGames, win: t.won, draw: t.draw, lose: t.lost },
-                        points: t.points, goalsDiff: t.goalDifference
-                    }))] }
-                }];
-            }
-        }
-
-        // 3. Last Resort: TSDB
-        const tsdbId = TSDB_LEAGUE_IDS[leagueId];
-        if (tsdbId) {
-            const s = `${year}-${year+1}`;
-            const url = `${TSDB_BASE_URL}/lookuptable.php?l=${tsdbId}&s=${s}`;
-            const tsdb = await baseFetch(url);
-            if (tsdb?.table) {
-                return [{
-                    league: { id: leagueId, season: year, standings: [tsdb.table.map(t => ({
-                        rank: parseInt(t.intRank), team: { name: t.strTeam, logo: t.strBadge },
-                        all: { played: parseInt(t.intPlayed), win: parseInt(t.intWin), draw: parseInt(t.intDraw), lose: parseInt(t.intLoss) },
-                        points: parseInt(t.intPoints), goalsDiff: parseInt(t.intGoalDifference)
-                    }))] }
-                }];
-            }
-        }
-        return [];
+        const data = await apiFetch(`competitions/${leagueId}/standings`, { season: getCurrentSeason() });
+        return normalizeStandings(data, leagueId);
     }
 
     async function fetchTopScorers(leagueId) {
-        const year = getCurrentSeason();
-        const fbdCode = FBD_LEAGUE_CODES[leagueId];
-
-        const result = await smartFetch({
-            primary: { endpoint: 'players/topscorers', params: { league: leagueId, season: year } },
-            secondary: fbdCode ? { endpoint: `competitions/${fbdCode}/scorers`, params: { season: year } } : null,
-            ttl: TTL_STANDINGS
-        });
-
-        // 1. Success from API-Sports (now primary)
-        if (result?.response) return result.response;
-
-        // 2. Success from Football-Data (now secondary)
-        if (result?.scorers) {
-            return result.scorers.map(s => ({
-                player: { name: s.player.name, photo: null },
-                statistics: [{ team: { name: s.team.name, logo: s.team.crest }, goals: { total: s.goals } }]
-            }));
-        }
-
-        // TSDB Fallback for scorers
-        const tsdbId = TSDB_LEAGUE_IDS[leagueId];
-        if (tsdbId) {
-            // TSDB doesn't have a direct "top scorers" endpoint for all leagues in free version, 
-            // but we can try to look at players in teams or general sports data.
-            // For now, we return empty if primary/secondary fail as TSDB scorers is high-tier or limited.
-        }
-
-        return [];
+        const data = await apiFetch(`competitions/${leagueId}/scorers`, { season: getCurrentSeason() });
+        return normalizeScorers(data);
     }
 
-    // ── Match Detail Endpoints ──────────────────────────────
-    async function fetchFixtureLineups(fixtureId) {
-        const result = await smartFetch({
-            primary: { endpoint: 'fixtures/lineups', params: { fixture: fixtureId } },
-            secondary: null,
-            ttl: TTL_FIXTURES
-        });
-        if (result?.response) return result.response;
-        return [];
-    }
-
-    async function fetchFixtureEvents(fixtureId) {
-        const result = await smartFetch({
-            primary: { endpoint: 'fixtures/events', params: { fixture: fixtureId } },
-            secondary: null,
-            ttl: TTL_FIXTURES
-        });
-        if (result?.response) return result.response;
-        return [];
-    }
-
-    async function fetchFixtureStatistics(fixtureId) {
-        const result = await smartFetch({
-            primary: { endpoint: 'fixtures/statistics', params: { fixture: fixtureId } },
-            secondary: null,
-            ttl: TTL_FIXTURES
-        });
-        if (result?.response) return result.response;
-        return [];
-    }
-
-    async function fetchPlayerStats(playerId, season) {
-        const result = await smartFetch({
-            primary: { endpoint: 'players', params: { id: playerId, season: season } },
-            secondary: null,
-            ttl: TTL_STANDINGS
-        });
-        if (result?.response) return result.response;
-        return [];
-    }
+    // Detail functions - Limited in Free Tier, often 403. UI will use Fallback if these return null.
+    async function fetchFixtureLineups(matchId) { return null; }
+    async function fetchFixtureEvents(matchId) { return null; }
+    async function fetchFixtureStatistics(matchId) { return null; }
 
     async function fetchPlayerById(playerId) {
-        const year = getCurrentSeason();
-        let stats = await fetchPlayerStats(playerId, year);
-        if (!stats || stats.length === 0) {
-            // Fallback to previous season if current is empty
-            stats = await fetchPlayerStats(playerId, year - 1);
-        }
-        return stats;
+        const data = await apiFetch(`persons/${playerId}`);
+        return data ? [{ player: data, statistics: [] }] : null;
     }
 
-    async function searchPlayerByName(name, teamId = null) {
-        if (!name || name.length < 4) return [];
-        const params = { search: name };
-        if (teamId) params.team = teamId;
-        const result = await smartFetch({
-            primary: { endpoint: 'players', params },
-            secondary: null,
-            ttl: TTL_STANDINGS
-        });
-        if (result?.response) return result.response;
-        return [];
-    }
+    async function searchPlayerByName(name) { return []; } 
 
     async function fetchTournamentBracket(leagueId) {
-        const year = getCurrentSeason();
-        const fbdCode = FBD_LEAGUE_CODES[leagueId];
-        
-        const result = await smartFetch({
-            primary: { endpoint: 'fixtures', params: { league: leagueId, season: year } },
-            secondary: fbdCode ? { endpoint: `competitions/${fbdCode}/matches`, params: { season: year } } : null,
-            ttl: TTL_STANDINGS
-        });
-
-        const allowedRounds = ['Quarter-finals', 'Semi-finals', 'Final'];
-        let fixtures = [];
-
-        if (result?.response) {
-            fixtures = result.response.filter(f => {
-                const roundName = f.league.round || '';
-                return allowedRounds.some(r => roundName.includes(r));
-            });
-            return {
-                source: 'api-sports',
-                fixtures: fixtures
-            };
-        }
-        
-        if (result?.matches) {
-            fixtures = result.matches.filter(m => ['QUARTER_FINALS', 'SEMI_FINALS', 'FINAL'].includes(m.stage));
-            return {
-                source: 'football-data',
-                fixtures: fixtures
-            };
-        }
-
         return { source: 'none', fixtures: [] };
     }
 
+    async function fetchTransfers() { return []; }
+
+    // ── Public Interface ─────────────────────────────────────
     return {
         fetchTodayFixtures: () => fetchFixturesByDate(todayDate()),
         fetchYesterdayFixtures: () => fetchFixturesByDate(yesterdayDate()),
@@ -546,11 +217,14 @@ const FootballAPI = (() => {
         fetchFixtureLineups,
         fetchFixtureEvents,
         fetchFixtureStatistics,
-        fetchPlayerStats,
         fetchPlayerById,
         searchPlayerByName,
+        fetchTransfers,
         ALLOWED_LEAGUES,
-        filterByAllowedLeagues: (fixts) => Array.isArray(fixts) ? fixts.filter(f => ALLOWED_LEAGUES.includes(f?.league?.id)) : [],
+        filterByAllowedLeagues: (fixts) => {
+            if (!Array.isArray(fixts)) return [];
+            return fixts.filter(f => ALLOWED_LEAGUES.includes(f?.league?.id));
+        },
         transformFixture: (fixture) => {
             if (!fixture || !fixture.fixture) return null;
             const f = fixture.fixture;
@@ -560,8 +234,8 @@ const FootballAPI = (() => {
             const short = f.status?.short || '';
             let status = 'Upcoming', statusKey = 'upcoming', time = '';
             
-            if (['1H', '2H', 'HT', 'ET', 'P', 'LIVE'].includes(short)) {
-                status = 'Live'; statusKey = 'live'; time = f.status?.elapsed ? `${f.status.elapsed}'` : 'LIVE';
+            if (['LIVE', '1H', '2H', 'HT', 'ET', 'P'].includes(short)) {
+                status = 'Live'; statusKey = 'live'; time = 'LIVE';
             } else if (['FT', 'AET', 'PEN'].includes(short)) {
                 status = 'Finished'; statusKey = 'finished'; time = 'FT';
             } else {

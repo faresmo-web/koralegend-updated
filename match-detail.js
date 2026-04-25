@@ -177,29 +177,44 @@ async function openMatchDetail(match) {
     // Animate in
     requestAnimationFrame(() => modal.classList.add('md-modal-visible'));
 
+    // --- Goal Links — Dual Mode (localStorage + Simulated) ---
+    function loadGoalLinks(matchId) {
+        const linkContainer = document.getElementById('md-goal-links');
+        if (!linkContainer) return;
+
+        // Try to get from localStorage (Admin-saved)
+        try {
+            const data = JSON.parse(localStorage.getItem('koralegend_goal_links') || '{}');
+            const savedLink = data[matchId];
+            if (savedLink) {
+                linkContainer.innerHTML = `
+                    <div class="md-link-card">
+                        <span class="md-link-icon">🎥</span>
+                        <div class="md-link-info">
+                            <h4>شاهد الأهداف</h4>
+                            <p>رابط مباشر للجودة العالية</p>
+                        </div>
+                        <a href="${savedLink}" target="_blank" class="md-link-btn">مشاهدة الآن</a>
+                    </div>
+                `;
+                return;
+            }
+        } catch(e) {}
+    }
+
     // Fetch match detail data
     const body = document.getElementById('mdModalBody');
     let lineups = [], events = [], statistics = [];
     let useFallback = false;
     let goalLink = '';
 
-    if (match.id && typeof FootballAPI !== 'undefined') {
+    if (match.id && !String(match.id).startsWith('fallback_') && typeof FootballAPI !== 'undefined') {
         try {
             [lineups, events, statistics] = await Promise.all([
                 FootballAPI.fetchFixtureLineups(match.id),
                 FootballAPI.fetchFixtureEvents(match.id),
                 FootballAPI.fetchFixtureStatistics(match.id)
             ]);
-            
-            // Also fetch current goal links
-            try {
-                const linksRes = await fetch('/api/goal-links');
-                if (linksRes.ok) {
-                    const linksData = await linksRes.json();
-                    goalLink = linksData[match.id] || '';
-                }
-            } catch(err) { /* ignore */ }
-            
         } catch (e) {
             console.warn('[MatchDetail] API fetch failed:', e);
         }
@@ -624,33 +639,10 @@ function renderPlayerCard(container, data, player, match) {
 function getFallbackPlayerStats(name) {
     const isAr = currentLang === 'ar';
     const fallbacks = {
-        // Al Ahly
-        'Mohamed El Shenawy': { player: { name: 'Mohamed El Shenawy', age: 35, nationality: 'Egypt', photo: 'https://media.api-sports.io/football/players/2281.png' }, statistics: [{ team: { name: 'Al Ahly' }, games: { position: 'Goalkeeper', appearences: 32, rating: '7.5' }, goals: { total: 0, assists: 0 } }] },
-        'محمد الشناوي': { player: { name: 'محمد الشناوي', age: 35, nationality: 'مصر', photo: 'https://media.api-sports.io/football/players/2281.png' }, statistics: [{ team: { name: 'الأهلي' }, games: { position: 'حارس مرمى', appearences: 32, rating: '7.5' }, goals: { total: 0, assists: 0 } }] },
-        'Emam Ashour': { player: { name: 'Emam Ashour', age: 26, nationality: 'Egypt', photo: 'https://media.api-sports.io/football/players/2293.png' }, statistics: [{ team: { name: 'Al Ahly' }, games: { position: 'Midfielder', appearences: 18, rating: '7.8' }, goals: { total: 5, assists: 4 } }] },
-        'إمام عاشور': { player: { name: 'إمام عاشور', age: 26, nationality: 'مصر', photo: 'https://media.api-sports.io/football/players/2293.png' }, statistics: [{ team: { name: 'الأهلي' }, games: { position: 'وسط', appearences: 18, rating: '7.8' }, goals: { total: 5, assists: 4 } }] },
-        'Percy Tau': { player: { name: 'Percy Tau', age: 30, nationality: 'South Africa', photo: 'https://media.api-sports.io/football/players/457.png' }, statistics: [{ team: { name: 'Al Ahly' }, games: { position: 'Forward', appearences: 22, rating: '7.6' }, goals: { total: 8, assists: 3 } }] },
-        'بيرسي تاو': { player: { name: 'بيرسي تاو', age: 30, nationality: 'جنوب أفريقيا', photo: 'https://media.api-sports.io/football/players/457.png' }, statistics: [{ team: { name: 'الأهلي' }, games: { position: 'مهاجم', appearences: 22, rating: '7.6' }, goals: { total: 8, assists: 3 } }] },
-        'Hussein El Shahat': { player: { name: 'Hussein El Shahat', age: 31, nationality: 'Egypt', photo: 'https://media.api-sports.io/football/players/2292.png' }, statistics: [{ team: { name: 'Al Ahly' }, games: { position: 'Forward', appearences: 25, rating: '7.7' }, goals: { total: 7, assists: 6 } }] },
-        'حسين الشحات': { player: { name: 'حسين الشحات', age: 31, nationality: 'مصر', photo: 'https://media.api-sports.io/football/players/2292.png' }, statistics: [{ team: { name: 'الأهلي' }, games: { position: 'مهاجم', appearences: 25, rating: '7.7' }, goals: { total: 7, assists: 6 } }] },
-        'Kahraba': { player: { name: 'Mahmoud Kahraba', age: 30, nationality: 'Egypt', photo: 'https://media.api-sports.io/football/players/2294.png' }, statistics: [{ team: { name: 'Al Ahly' }, games: { position: 'Forward', appearences: 20, rating: '7.4' }, goals: { total: 10, assists: 2 } }] },
-        'كهربا': { player: { name: 'محمود كهربا', age: 30, nationality: 'مصر', photo: 'https://media.api-sports.io/football/players/2294.png' }, statistics: [{ team: { name: 'الأهلي' }, games: { position: 'مهاجم', appearences: 20, rating: '7.4' }, goals: { total: 10, assists: 2 } }] },
-        
-        // Zamalek
-        'Ahmed Sayed Zizo': { player: { name: 'Ahmed Sayed Zizo', age: 28, nationality: 'Egypt', photo: 'https://media.api-sports.io/football/players/2295.png' }, statistics: [{ team: { name: 'Zamalek' }, games: { position: 'Midfielder', appearences: 25, rating: '8.1' }, goals: { total: 12, assists: 12 } }] },
-        'زيزو': { player: { name: 'أحمد سيد زيزو', age: 28, nationality: 'مصر', photo: 'https://media.api-sports.io/football/players/2295.png' }, statistics: [{ team: { name: 'الزمالك' }, games: { position: 'وسط', appearences: 25, rating: '8.1' }, goals: { total: 12, assists: 12 } }] },
-        'Achraf Bencharki': { player: { name: 'Achraf Bencharki', age: 29, nationality: 'Morocco', photo: 'https://media.api-sports.io/football/players/2291.png' }, statistics: [{ team: { name: 'Zamalek/Al Rayyan' }, games: { position: 'Forward', appearences: 20, rating: '7.4' }, goals: { total: 8, assists: 5 } }] },
-        'أشرف بن شرقي': { player: { name: 'أشرف بن شرقي', age: 29, nationality: 'المغرب', photo: 'https://media.api-sports.io/football/players/2291.png' }, statistics: [{ team: { name: 'الزمالك' }, games: { position: 'مهاجم', appearences: 20, rating: '7.4' }, goals: { total: 8, assists: 5 } }] },
-        'Shikabala': { player: { name: 'Shikabala', age: 38, nationality: 'Egypt', photo: 'https://media.api-sports.io/football/players/2307.png' }, statistics: [{ team: { name: 'Zamalek' }, games: { position: 'Midfielder', appearences: 15, rating: '7.2' }, goals: { total: 3, assists: 4 } }] },
-        'شيكابالا': { player: { name: 'شيكابالا', age: 38, nationality: 'مصر', photo: 'https://media.api-sports.io/football/players/2307.png' }, statistics: [{ team: { name: 'الزمالك' }, games: { position: 'وسط', appearences: 15, rating: '7.2' }, goals: { total: 3, assists: 4 } }] },
-
-        // Global Stars
-        'Mohamed Salah': { player: { name: 'Mohamed Salah', age: 31, nationality: 'Egypt', photo: 'https://media.api-sports.io/football/players/306.png' }, statistics: [{ team: { name: 'Liverpool' }, games: { position: 'Attacker', appearences: 28, rating: '8.2' }, goals: { total: 18, assists: 10 } }] },
-        'صلاح': { player: { name: 'محمد صلاح', age: 31, nationality: 'مصر', photo: 'https://media.api-sports.io/football/players/306.png' }, statistics: [{ team: { name: 'ليفربول' }, games: { position: 'مهاجم', appearences: 28, rating: '8.2' }, goals: { total: 18, assists: 10 } }] },
-        'Ali Maaloul': { player: { name: 'Ali Maaloul', age: 34, nationality: 'Tunisia', photo: 'https://media.api-sports.io/football/players/2315.png' }, statistics: [{ team: { name: 'Al Ahly' }, games: { position: 'Defender', appearences: 30, rating: '7.8' }, goals: { total: 5, assists: 15 } }] },
-        'علي معلول': { player: { name: 'علي معلول', age: 34, nationality: 'تونس', photo: 'https://media.api-sports.io/football/players/2315.png' }, statistics: [{ team: { name: 'الأهلي' }, games: { position: 'مدافع', appearences: 30, rating: '7.8' }, goals: { total: 5, assists: 15 } }] }
+        'Mohamed Salah': { player: { name: 'Mohamed Salah', age: 31, nationality: 'Egypt', photo: 'https://crests.football-data.org/64.png' }, statistics: [{ team: { name: 'Liverpool' }, games: { position: 'Attacker', appearences: 30, rating: '8.2' }, goals: { total: 18, assists: 10 } }] },
+        'صلاح': { player: { name: 'محمد صلاح', age: 31, nationality: 'مصر', photo: 'https://crests.football-data.org/64.png' }, statistics: [{ team: { name: 'ليفربول' }, games: { position: 'مهاجم', appearences: 30, rating: '8.2' }, goals: { total: 18, assists: 10 } }] }
     };
-    const defaultPlayer = { player: { name: name, age: 26, nationality: isAr ? 'دولي' : 'International', photo: 'https://www.gravatar.com/avatar/0?d=mp&s=120' }, statistics: [{ team: { name: isAr ? 'غير محدد' : 'Unknown' }, games: { position: isAr ? 'لاعب' : 'Player', appearences: 10, rating: '7.0' }, goals: { total: 0, assists: 0 } }], _simulated: true };
+    const defaultPlayer = { player: { name: name, age: 26, nationality: isAr ? 'دولي' : 'International', photo: '⚽' }, statistics: [{ team: { name: isAr ? 'غير محدد' : 'Unknown' }, games: { position: isAr ? 'لاعب' : 'Player', appearences: 10, rating: '7.0' }, goals: { total: 0, assists: 0 } }], _simulated: true };
     return fallbacks[name] || defaultPlayer;
 }
 
@@ -742,29 +734,7 @@ function renderStatsTab(container, statistics, useFallback) {
         return;
     }
 
-    let stats = [];
-
-    if (useFallback) {
-        // Already in our format
-        stats = statistics;
-    } else {
-        // API-Sports format: array of { team, statistics: [{ type, value }] }
-        if (statistics.length >= 2 && statistics[0].statistics) {
-            const homeStats = statistics[0].statistics;
-            const awayStats = statistics[1].statistics;
-            stats = homeStats.map((hs, i) => {
-                const as = awayStats[i] || {};
-                const homeVal = parseStatValue(hs.value);
-                const awayVal = parseStatValue(as.value);
-                return {
-                    label: translateStatLabel(hs.type),
-                    home: String(hs.value ?? 0),
-                    away: String(as.value ?? 0),
-                    homeVal, awayVal
-                };
-            });
-        }
-    }
+    let stats = statistics;
 
     let html = '<div class="md-stats-list">';
     stats.forEach(stat => {
