@@ -169,7 +169,7 @@ async function loadMatchesContent() {
         
         matches = raw
             .map(f => FootballAPI.transformFixture(f))
-            .filter(m => m && (selectedLeague === 'all' ? allAllowedIds.includes(m.leagueId) : true));
+            .filter(m => m && (selectedLeague === 'all' ? true : allAllowedIds.includes(m.leagueId)));
 
         // Apply specific league filter if a tab is clicked
         if (selectedLeague !== 'all' && leagueIdMap[selectedLeague]) {
